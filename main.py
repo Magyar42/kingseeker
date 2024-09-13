@@ -19,18 +19,8 @@ icon_image = pygame.image.load("assets/graphics/bonfire_icon_new.png")
 
 # Functions
 def mm_newgame():
-    print("Starting Game.")
-    print("ver. 23.5.24")
+    print("Todo: game")
 
-    pygame.mixer.music.stop()
-    # todo: renable intro
-    # if platform.system() == "Windows":
-    #     game.play_intro()
-    # else:
-    pygame.mixer.music.load("assets/audio/DaSo - Firelink Sneakers.mp3")
-    pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(loops = -1)
-    game.run_game()
 
 def mm_exit():
     print("Exiting.")
