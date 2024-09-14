@@ -81,9 +81,9 @@ class Level:
 
     def create_map(self, player_reset, map_id = "0"):
         layouts = {
-            "boundary": import_csv_layout(f"assets/map/{map_id}/map_FloorBlocks.csv"),
+            #"boundary": import_csv_layout(f"assets/map/{map_id}/map_FloorBlocks.csv"),
             #"grass": import_csv_layout("assets/map/map_Grass.csv"),
-            "object": import_csv_layout(f"assets/map/{map_id}/map_LargeObjects.csv"),
+            #"object": import_csv_layout(f"assets/map/{map_id}/map_LargeObjects.csv"),
             "entities": import_csv_layout(f"assets/map/{map_id}/map_Entities.csv"),
         }
         graphics = {
@@ -97,20 +97,20 @@ class Level:
                     if column != "-1":
                         x = column_index * TILESIZE
                         y = row_index * TILESIZE
-                        if style == "boundary":
-                            Tile((x, y), [self.obstacle_sprites], "invisible")
+                        #if style == "boundary":
+                        #    Tile((x, y), [self.obstacle_sprites], "invisible")
                         # if style == "grass":
                         #     random_grass_image = choice(graphics["grass"])
                         #     Tile((x, y), [self.visible_sprites, self.obstacle_sprites, self.attackable_sprites], "grass", random_grass_image)
-                        if style == "object":
-                            surface = graphics["objects"][int(column)]
-                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], "object", surface)
+                        #if style == "object":
+                        #    surface = graphics["objects"][int(column)]
+                        #    Tile((x, y), [self.visible_sprites, self.obstacle_sprites], "object", surface)
                         if style == "entities":
                             if column == "394":
                                 if player_reset:
                                     self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_tool, self.destroy_tool, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect)
-                            elif column == "388":
-                                self.bonfire = Bonfire(0, (x, y), [self.visible_sprites, self.obstacle_sprites, self.interactable_sprites], self.restart_world, self.check_humanity_restored, self.check_bonfire_lit, self.check_bonfire_rest, self.toggle_menu, self.toggle_screen_effect, self.kindle_bonfire_visuals)
+                            #elif column == "388":
+                            #    self.bonfire = Bonfire(0, (x, y), [self.visible_sprites, self.obstacle_sprites, self.interactable_sprites], self.restart_world, self.check_humanity_restored, self.check_bonfire_lit, self.check_bonfire_rest, self.toggle_menu, self.toggle_screen_effect, self.kindle_bonfire_visuals)
                             # elif column == "396":
                             #     item_id = 1
                             #     if ground_item_list[item_id][0] == 0:
@@ -134,42 +134,42 @@ class Level:
                             #     if column == "389":
                             #         enemy_name = "asylum_demon"
                             #         self.boss = Boss(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.update_hurtboxes, self.destroy_hurtboxes, self.check_victory_achieved)
-                            elif column in npc_list:
-                                effect = None
-                                if column == "389": npc_id = "firekeeper"
-                                elif column == "367": npc_id = "crestfallen"
-                                elif column == "345": npc_id = "frampt"
-                                elif column == "323": npc_id = "andre"
-                                elif column == "301": npc_id = "patches"
-                                elif column == "279": npc_id = "petrus"
-                                elif column == "257": npc_id = "reah"
-                                elif column == "368": npc_id = "lautrec"
-                                elif column == "346": npc_id = "siegmeyer"
-                                elif column == "324": npc_id = "solaire"
-                                elif column == "302": npc_id = "ingward"
-                                elif column == "280": npc_id = "laurentius"
-                                elif column == "258": npc_id = "logan"
-                                elif column == "369": npc_id = "merchant"
-                                elif column == "347": npc_id = "kaathe"
-                                elif column == "325": npc_id = "domhnall"
-                                elif column == "303": npc_id = "knightess"
-                                elif column == "281": npc_id = "oscar"
-                                elif column == "259": npc_id = "quelana"
-                                elif column == "366":
-                                    npc_id = "transition_prompt"
-                                    effect = self.load_new_region
-                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], effect)
-                            elif column == "387":
+                            #elif column in npc_list:
+                            #    effect = None
+                            #    if column == "389": npc_id = "firekeeper"
+                            #    elif column == "367": npc_id = "crestfallen"
+                            #    elif column == "345": npc_id = "frampt"
+                            #    elif column == "323": npc_id = "andre"
+                            #    elif column == "301": npc_id = "patches"
+                            #    elif column == "279": npc_id = "petrus"
+                            #    elif column == "257": npc_id = "reah"
+                            #    elif column == "368": npc_id = "lautrec"
+                            #    elif column == "346": npc_id = "siegmeyer"
+                            #    elif column == "324": npc_id = "solaire"
+                            #    elif column == "302": npc_id = "ingward"
+                            #    elif column == "280": npc_id = "laurentius"
+                            #    elif column == "258": npc_id = "logan"
+                            #    elif column == "369": npc_id = "merchant"
+                            #    elif column == "347": npc_id = "kaathe"
+                            #    elif column == "325": npc_id = "domhnall"
+                            #    elif column == "303": npc_id = "knightess"
+                            #    elif column == "281": npc_id = "oscar"
+                            #    elif column == "259": npc_id = "quelana"
+                            #    elif column == "366":
+                            #        npc_id = "transition_prompt"
+                            #        effect = self.load_new_region
+                            #    NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], effect)
+                            #elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
-                                covenant_sign = "warriors_of_sunlight"
-                                SummonSign(covenant_sign, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
-                            else:
-                                if column == "390": enemy_name = "bamboo"
-                                elif column == "391": enemy_name = "spirit"
-                                elif column == "392": enemy_name = "raccoon"
-                                elif column == "393": enemy_name = "squid"
-                                else: enemy_name = "bamboo" # todo: change
-                                Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp)
+                            #    covenant_sign = "warriors_of_sunlight"
+                            #    SummonSign(covenant_sign, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
+                            #else:
+                            #    if column == "390": enemy_name = "bamboo"
+                            #    elif column == "391": enemy_name = "spirit"
+                            #    elif column == "392": enemy_name = "raccoon"
+                            #    elif column == "393": enemy_name = "squid"
+                            #    else: enemy_name = "bamboo" # todo: change
+                            #    Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp)
 
     def update_map(self, pos):       # triggered on player death, enemy death, item pickup
         self.bloodstain = Bloodstain(pos, [self.visible_sprites, self.interactable_sprites], self.check_souls_retrieval)
@@ -446,7 +446,7 @@ class Level:
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
-        if self.map_id != "0": self.ui.display(self.player)
+        # if self.map_id != "0": self.ui.display(self.player) # prototype 2
         # self.boss.display(self.player)
         self.visible_sprites.update()
         self.screen_sprites.update()
@@ -463,7 +463,7 @@ class Level:
         getSlotData(right_hand_data, weapon_data)
         getSlotData(left_hand_data, tool_data)
 
-        self.bonfire.bonfire_popup_update(self.player)
+        #self.bonfire.bonfire_popup_update(self.player)
         self.update_player_stats()
 
         if self.show_screen_effect:

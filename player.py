@@ -341,25 +341,25 @@ class Player(Entity):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if self.can_toggle_menu and not self.submenu_open:
-            if keys[pygame.K_ESCAPE] and not self.menu_open:
-                self.menu_open = True
-                self.can_toggle_menu = False
-                self.menu_toggle_time = pygame.time.get_ticks()
-                #self.resting = True
-            elif keys[pygame.K_ESCAPE] and self.menu_open:
-                self.menu_open = False
-                self.can_toggle_menu = False
-                self.menu_toggle_time = pygame.time.get_ticks()
-                self.resting = False
+        # if self.can_toggle_menu and not self.submenu_open:
+        #     if keys[pygame.K_ESCAPE] and not self.menu_open:
+        #         self.menu_open = True
+        #         self.can_toggle_menu = False
+        #         self.menu_toggle_time = pygame.time.get_ticks()
+        #         #self.resting = True
+        #     elif keys[pygame.K_ESCAPE] and self.menu_open:
+        #         self.menu_open = False
+        #         self.can_toggle_menu = False
+        #         self.menu_toggle_time = pygame.time.get_ticks()
+        #         self.resting = False
         
-        if self.submenu_open:
-            if keys[pygame.K_ESCAPE]:
-                self.menu_inventory = False
-                self.menu_status = False
-                self.menu_system = False
-                self.menu_equipment = False
-                self.submenu_open = False
+        # if self.submenu_open:
+        #     if keys[pygame.K_ESCAPE]:
+        #         self.menu_inventory = False
+        #         self.menu_status = False
+        #         self.menu_system = False
+        #         self.menu_equipment = False
+        #         self.submenu_open = False
 
         if not self.attacking and not self.using_tool and not self.resting and not self.rolling and not self.stunned:
             if not self.dead:
@@ -429,51 +429,51 @@ class Player(Entity):
                         #self.speed /= 2
 
                 # attack input - light
-                if player_inputs["light attack"]:
-                    if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
-                        self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
+                # if player_inputs["light attack"]:
+                #     if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
+                #         self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
 
-                        self.attacking = True
-                        self.attack_time = pygame.time.get_ticks()
-                        self.create_attack()
-                        self.weapon_attack_sound.play()
-                        player_inputs["light attack"] = False
+                #         self.attacking = True
+                #         self.attack_time = pygame.time.get_ticks()
+                #         self.create_attack()
+                #         self.weapon_attack_sound.play()
+                #         player_inputs["light attack"] = False
 
-                # attack input - heavy
-                if player_inputs["heavy attack"]:
-                    if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
-                        self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
+                # # attack input - heavy
+                # if player_inputs["heavy attack"]:
+                #     if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
+                #         self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
 
-                        self.attacking = True
-                        self.attack_time = pygame.time.get_ticks()
-                        self.create_attack()
-                        self.weapon_attack_sound.play()
-                        player_inputs["heavy attack"] = False
+                #         self.attacking = True
+                #         self.attack_time = pygame.time.get_ticks()
+                #         self.create_attack()
+                #         self.weapon_attack_sound.play()
+                #         player_inputs["heavy attack"] = False
 
                 # todo: skill effect
                 
                 # tool input
-                if keys[pygame.K_LCTRL]:
-                    if self.stamina_target - (self.stamina_tool_mult * self.tool_weight) >= 0:
-                        self.stamina_target -= (self.stamina_tool_mult * self.tool_weight) # Effect on stamina
+                # if keys[pygame.K_LCTRL]:
+                #     if self.stamina_target - (self.stamina_tool_mult * self.tool_weight) >= 0:
+                #         self.stamina_target -= (self.stamina_tool_mult * self.tool_weight) # Effect on stamina
 
-                        self.using_tool = True
-                        self.tool_time = pygame.time.get_ticks()
-                        self.create_tool()
-                        self.weapon_attack_sound.play()
+                #         self.using_tool = True
+                #         self.tool_time = pygame.time.get_ticks()
+                #         self.create_tool()
+                #         self.weapon_attack_sound.play()
 
-                        print(self.tool_type)
-                        # Effects
-                        if "catalyst" in self.tool_type:
-                            if self.stamina_target - (self.stamina_magic_mult * self.magic_weight) >= 0:
-                                self.stamina_target -= (self.stamina_magic_mult * self.magic_weight)
+                #         print(self.tool_type)
+                #         # Effects
+                #         if "catalyst" in self.tool_type:
+                #             if self.stamina_target - (self.stamina_magic_mult * self.magic_weight) >= 0:
+                #                 self.stamina_target -= (self.stamina_magic_mult * self.magic_weight)
                                                 
-                                self.attacking = True
-                                self.attack_time = pygame.time.get_ticks()
-                                style = list(magic_data.keys())[self.magic_index]
-                                strength = list(magic_data.values())[self.magic_index]["strength"] + player_data['dependent_variables']['magic damage'] + list(left_hand_data.values())[self.tool_index]["damage"]
-                                cost = list(magic_data.values())[self.magic_index]["cost"]
-                                self.create_magic(style, strength, cost)
+                #                 self.attacking = True
+                #                 self.attack_time = pygame.time.get_ticks()
+                #                 style = list(magic_data.keys())[self.magic_index]
+                #                 strength = list(magic_data.values())[self.magic_index]["strength"] + player_data['dependent_variables']['magic damage'] + list(left_hand_data.values())[self.tool_index]["damage"]
+                #                 cost = list(magic_data.values())[self.magic_index]["cost"]
+                #                 self.create_magic(style, strength, cost)
 
                 # Below removed for KINGSEEKER, as items and weapons cannot be switched
                 # during a run anyway, and the UI isn't seen at Firelink

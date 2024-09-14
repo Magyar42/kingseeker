@@ -20,7 +20,6 @@ icon_image = pygame.image.load("assets/graphics/bonfire_icon_new.png")
 # Functions
 def mm_newgame():
     print("Starting Game.")
-    print("ver. 23.5.24")
 
     pygame.mixer.music.stop()
     # todo: renable intro
@@ -69,7 +68,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level("0")
+        self.level = Level("999") # Set to test area (0 is firelink)
 
         self.frames_list = import_folder('assets/graphics/menu_animations/mainmenu_bonfire')
         self.frame_speed = 0.12
