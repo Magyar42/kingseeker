@@ -92,7 +92,7 @@ class Game:
                         print("Skill used")
                         player_inputs["skill"] = True
 
-            self.screen.fill(WATER_COLOUR)
+            self.screen.fill(MM_COLOUR)
             self.level.run()
             
             pygame.display.update()
