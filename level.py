@@ -163,13 +163,13 @@ class Level:
                                 # covenant_sign = choice(covenants) # todo: set to random
                             #    covenant_sign = "warriors_of_sunlight"
                             #    SummonSign(covenant_sign, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
-                            #else:
-                            #    if column == "390": enemy_name = "bamboo"
-                            #    elif column == "391": enemy_name = "spirit"
-                            #    elif column == "392": enemy_name = "raccoon"
-                            #    elif column == "393": enemy_name = "squid"
-                            #    else: enemy_name = "bamboo" # todo: change
-                            #    Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp)
+                            else:
+                               if column == "390": enemy_name = "bamboo"
+                               elif column == "391": enemy_name = "spirit"
+                               elif column == "392": enemy_name = "raccoon"
+                               elif column == "393": enemy_name = "squid"
+                               else: enemy_name = "bamboo" # todo: change
+                               Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp)
 
     def update_map(self, pos):       # triggered on player death, enemy death, item pickup
         self.bloodstain = Bloodstain(pos, [self.visible_sprites, self.interactable_sprites], self.check_souls_retrieval)

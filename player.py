@@ -429,26 +429,26 @@ class Player(Entity):
                         #self.speed /= 2
 
                 # attack input - light
-                # if player_inputs["light attack"]:
-                #     if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
-                #         self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
+                if player_inputs["light attack"]:
+                    if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
+                        self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
 
-                #         self.attacking = True
-                #         self.attack_time = pygame.time.get_ticks()
-                #         self.create_attack()
-                #         self.weapon_attack_sound.play()
-                #         player_inputs["light attack"] = False
+                        self.attacking = True
+                        self.attack_time = pygame.time.get_ticks()
+                        self.create_attack()
+                        self.weapon_attack_sound.play()
+                        player_inputs["light attack"] = False
 
-                # # attack input - heavy
-                # if player_inputs["heavy attack"]:
-                #     if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
-                #         self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
+                # attack input - heavy
+                if player_inputs["heavy attack"]:
+                    if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
+                        self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
 
-                #         self.attacking = True
-                #         self.attack_time = pygame.time.get_ticks()
-                #         self.create_attack()
-                #         self.weapon_attack_sound.play()
-                #         player_inputs["heavy attack"] = False
+                        self.attacking = True
+                        self.attack_time = pygame.time.get_ticks()
+                        self.create_attack()
+                        self.weapon_attack_sound.play()
+                        player_inputs["heavy attack"] = False
 
                 # todo: skill effect
                 
