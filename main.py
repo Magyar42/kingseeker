@@ -126,7 +126,7 @@ class Game:
             mainMenuSprites.draw(self.screen)
             mainMenuSprites.update(pygame.event.get())
 
-            header_surf = subTitleFont.render("Stigmata Studios Presents", 1, "white")
+            header_surf = subTitleFont.render("Kristof Konig Presents", 1, "white")
             x, y = centreImage(header_surf)
             self.screen.blit(header_surf, (x, y - 270))
 
