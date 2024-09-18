@@ -26,9 +26,9 @@ def mm_newgame():
     # if platform.system() == "Windows":
     #     game.play_intro()
     # else:
-    pygame.mixer.music.load("assets/audio/DaSo - Firelink Sneakers.mp3")
-    pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(loops = -1)
+    # pygame.mixer.music.load("assets/audio/DaSo - Firelink Sneakers.mp3")
+    # pygame.mixer.music.set_volume(0.1)
+    # pygame.mixer.music.play(loops = -1)
     game.run_game()
 
 def mm_exit():
