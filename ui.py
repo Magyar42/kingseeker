@@ -175,7 +175,7 @@ class UI:
     
     # KINGSEEKER STUFF #
     def item_display(self, player, has_switched, uses):
-        bg_rect = self.selection_box(120, 610, has_switched)
+        bg_rect = self.selection_box(170, 635, has_switched)
         item_surface = self.qitems_graphics[0]
         item_rect = item_surface.get_rect(center = bg_rect.center)
 
@@ -184,22 +184,29 @@ class UI:
         text_rect = text_surface.get_rect(midright = item_rect.bottomright + pygame.math.Vector2(3, -5))
         self.display_surface.blit(text_surface, text_rect)
 
-    def weapon_display(self, player, has_switched):
-        bg_rect = self.selection_box(170, 565, has_switched)
+    def primary_attack_display(self, player, has_switched):
+        bg_rect = self.selection_box(70, 545, has_switched)
+        weapon_surface = self.weapon_graphics[0]
+        weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
+
+        self.display_surface.blit(weapon_surface, weapon_rect)
+    
+    def secondary_attack_display(self, player, has_switched):
+        bg_rect = self.selection_box(120, 590, has_switched)
         weapon_surface = self.weapon_graphics[0]
         weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(weapon_surface, weapon_rect)
 
     def tool_display(self, player, has_switched):
-        bg_rect = self.selection_box(70, 565, has_switched)
+        bg_rect = self.selection_box(170, 545, has_switched)
         tool_surface = self.tool_graphics[1]
         tool_rect = tool_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(tool_surface, tool_rect)
 
     def skill_display(self, player, has_switched):
-        bg_rect = self.selection_box(120, 520, has_switched)
+        bg_rect = self.selection_box(220, 590, has_switched)
         skill_surface = self.magic_graphics[1]
         skill_rect = skill_surface.get_rect(center = bg_rect.center)
 
@@ -211,13 +218,13 @@ class UI:
             for slot in range(7):
                 # if slot % 2 == 1: y_add = 45
                 # else: y_add = 0
-                boon_rect = pygame.Rect(900 + (slot * 45), 10, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+                boon_rect = pygame.Rect(1180 - (slot * 35), 10, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
                 self.display_surface.blit(boon_surf, boon_rect)
         
     def show_spells(self, player):
         spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/item_box.png"), (60, 60)).convert_alpha()
-        for slot in range(5):
-            spell_rect = pygame.Rect(20, 160 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+        for slot in range(4):
+            spell_rect = pygame.Rect(20, 200 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
             self.display_surface.blit(spell_surf, spell_rect)
 
     def enkindled_ui_overlay(self, rect):
@@ -238,7 +245,8 @@ class UI:
 
         self.skill_display(player, not player.can_switch_magic)
         self.tool_display(player, not player.can_switch_tool)
-        self.weapon_display(player, not player.can_switch_weapon)
+        self.primary_attack_display(player, not player.can_switch_weapon)
+        self.secondary_attack_display(player, not player.can_switch_weapon)
         self.item_display(player, not player.can_switch_qitems, player.qitems_uses[player.qitems_index])
 
         self.show_xp(player_data['values']['souls'])
