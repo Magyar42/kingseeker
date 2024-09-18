@@ -446,7 +446,7 @@ class Level:
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
-        # if self.map_id != "0": self.ui.display(self.player) # prototype 2
+        if self.map_id != "0": self.ui.display(self.player)
         # self.boss.display(self.player)
         self.visible_sprites.update()
         self.screen_sprites.update()

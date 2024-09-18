@@ -341,17 +341,17 @@ class Player(Entity):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        # if self.can_toggle_menu and not self.submenu_open:
-        #     if keys[pygame.K_ESCAPE] and not self.menu_open:
-        #         self.menu_open = True
-        #         self.can_toggle_menu = False
-        #         self.menu_toggle_time = pygame.time.get_ticks()
-        #         #self.resting = True
-        #     elif keys[pygame.K_ESCAPE] and self.menu_open:
-        #         self.menu_open = False
-        #         self.can_toggle_menu = False
-        #         self.menu_toggle_time = pygame.time.get_ticks()
-        #         self.resting = False
+        if self.can_toggle_menu and not self.submenu_open:
+            if keys[pygame.K_ESCAPE] and not self.menu_open:
+                self.menu_open = True
+                self.can_toggle_menu = False
+                self.menu_toggle_time = pygame.time.get_ticks()
+                #self.resting = True
+            elif keys[pygame.K_ESCAPE] and self.menu_open:
+                self.menu_open = False
+                self.can_toggle_menu = False
+                self.menu_toggle_time = pygame.time.get_ticks()
+                self.resting = False
         
         # if self.submenu_open:
         #     if keys[pygame.K_ESCAPE]:
