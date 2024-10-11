@@ -54,6 +54,28 @@ class UI:
 
         self.human_form_overlay = pygame.transform.scale(pygame.image.load("assets/graphics/ui/enkindled.png"), (110, 110)).convert_alpha()
 
+        # KINGSEEKER
+        # TODO: move to somewhere else so that it updates after each loading from firelink, as well as after each boon gained
+        self.estus_surf = pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png")
+        self.input_types = []
+        for input_type in ["light_attack", "heavy_attack", "skill", "catalyst"]:
+            current_tool = interface_details[f"{input_type}"]["name"]
+            current_tool_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
+            self.input_types.append(current_tool_surf)
+            # f"self.{input_type}_img" = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
+        
+        self.spells = []
+        for spell_num in range(1, 5):
+            current_spell = interface_details["spells"][f"{spell_num}"]
+            current_spell_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/spells/{current_spell}.png")
+            self.spells.append(current_spell_surf)
+
+        self.boons = []
+        for boon_num in range(1, 8):
+            current_boon = interface_details["boons"][f"{boon_num}"]
+            current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+            self.boons.append(current_boon_surf)
+
     def update_bars(self):
         self.health_bar_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
         self.mana_bar_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
@@ -119,19 +141,6 @@ class UI:
 
         self.enkindled_ui_overlay(text_rect)
 
-    def selection_box(self, left, top, has_switched):
-        bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-        # pygame.draw.rect(self.display_surface, UI_BG_COLOUR, bg_rect)
-        if has_switched:
-            itembox_surf = pygame.image.load(f"{self.box_path}/item_box_selected.png").convert_alpha()
-            self.display_surface.blit(itembox_surf, bg_rect)
-            # pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, bg_rect, 3)
-        else:
-            itembox_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
-            self.display_surface.blit(itembox_surf, bg_rect)
-            # pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, bg_rect, 3)
-        return bg_rect
-
     def weapon_overlay(self, weapon_index, has_switched):
         bg_rect = self.selection_box(170, 565, has_switched)
         weapon_surface = self.weapon_graphics[weapon_index]
@@ -174,40 +183,51 @@ class UI:
         self.display_surface.blit(text_surface, text_rect)
     
     # KINGSEEKER STUFF #
-    def item_display(self, player, has_switched, uses):
-        bg_rect = self.selection_box(170, 635, has_switched)
-        item_surface = self.qitems_graphics[0]
+    def selection_box(self, left, top, triggered):
+        bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+
+        if triggered: itembox_surf = pygame.image.load(f"{self.box_path}/item_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
+        self.display_surface.blit(itembox_surf, bg_rect)
+        
+        return bg_rect
+    
+    def item_display(self, player, triggered, uses): # Estus
+        bg_rect = self.selection_box(170, 635, triggered)
+        item_surface = self.estus_surf
         item_rect = item_surface.get_rect(center = bg_rect.center)
 
-        self.display_surface.blit(item_surface, item_rect)
         text_surface = self.tooltip_font.render(str(uses), False, TEXT_COLOUR)
         text_rect = text_surface.get_rect(midright = item_rect.bottomright + pygame.math.Vector2(3, -5))
+
+        self.display_surface.blit(item_surface, item_rect)
         self.display_surface.blit(text_surface, text_rect)
 
-    def primary_attack_display(self, player, has_switched):
-        bg_rect = self.selection_box(70, 545, has_switched)
-        weapon_surface = self.weapon_graphics[0]
-        weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
+    def primary_attack_display(self, player, triggered):
+        bg_rect = self.selection_box(70, 545, triggered)
+        # weapon_surface = self.weapon_graphics[0]
+        light_attack_surface = self.input_types[0]
+        light_attack_rect = light_attack_surface.get_rect(center = bg_rect.center)
 
-        self.display_surface.blit(weapon_surface, weapon_rect)
+        self.display_surface.blit(light_attack_surface, light_attack_rect)
     
-    def secondary_attack_display(self, player, has_switched):
-        bg_rect = self.selection_box(120, 590, has_switched)
-        weapon_surface = self.weapon_graphics[0]
-        weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
+    def secondary_attack_display(self, player, triggered):
+        bg_rect = self.selection_box(120, 590, triggered)
+        heavy_attack_surface = self.input_types[1]
+        heavy_attack_rect = heavy_attack_surface.get_rect(center = bg_rect.center)
 
-        self.display_surface.blit(weapon_surface, weapon_rect)
+        self.display_surface.blit(heavy_attack_surface, heavy_attack_rect)
 
-    def tool_display(self, player, has_switched):
-        bg_rect = self.selection_box(170, 545, has_switched)
-        tool_surface = self.tool_graphics[1]
-        tool_rect = tool_surface.get_rect(center = bg_rect.center)
+    def catalyst_display(self, player, triggered):
+        bg_rect = self.selection_box(170, 545, triggered)
+        catalyst_surface = self.input_types[3]
+        catalyst_rect = catalyst_surface.get_rect(center = bg_rect.center)
 
-        self.display_surface.blit(tool_surface, tool_rect)
+        self.display_surface.blit(catalyst_surface, catalyst_rect)
 
-    def skill_display(self, player, has_switched):
-        bg_rect = self.selection_box(220, 590, has_switched)
-        skill_surface = self.magic_graphics[1]
+    def skill_display(self, player, triggered):
+        bg_rect = self.selection_box(220, 590, triggered)
+        skill_surface = self.input_types[2]
         skill_rect = skill_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(skill_surface, skill_rect)
@@ -220,12 +240,18 @@ class UI:
                 # else: y_add = 0
                 boon_rect = pygame.Rect(1180 - (slot * 35), 10, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
                 self.display_surface.blit(boon_surf, boon_rect)
+
+                boon_img = self.boons[slot]
+                self.display_surface.blit(boon_img, boon_rect)
         
     def show_spells(self, player):
-        spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/item_box.png"), (60, 60)).convert_alpha()
+        spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/spell_box.png"), (60, 60)).convert_alpha()
         for slot in range(4):
             spell_rect = pygame.Rect(20, 200 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
             self.display_surface.blit(spell_surf, spell_rect)
+
+            spell_img = self.spells[slot]
+            self.display_surface.blit(spell_img, spell_rect)
 
     def enkindled_ui_overlay(self, rect):
         if not player_data['status']['hollow']:
@@ -243,10 +269,12 @@ class UI:
         self.show_boons(player) # todo
         self.show_spells(player)
 
-        self.skill_display(player, not player.can_switch_magic)
-        self.tool_display(player, not player.can_switch_tool)
-        self.primary_attack_display(player, not player.can_switch_weapon)
-        self.secondary_attack_display(player, not player.can_switch_weapon)
+        # todo for all inputs: have timer for use time AND cooldown after separate
+        # here, the box outline should go orange for the use time, not the cooldown
+        self.skill_display(player, player.using_skill)
+        self.catalyst_display(player, player.casting_spell)
+        self.primary_attack_display(player, player.light_attacking)
+        self.secondary_attack_display(player, player.heavy_attacking)
         self.item_display(player, not player.can_switch_qitems, player.qitems_uses[player.qitems_index])
 
         self.show_xp(player_data['values']['souls'])

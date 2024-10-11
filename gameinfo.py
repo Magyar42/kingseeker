@@ -43,15 +43,11 @@ resources = {
 
     "souvenirs of reprisal": 2,
     "sunlight medals": 3,
-    "eyes of death": 3,
-    "dragon scales": 7,
 
     "titanite shards": 4,
-    "large titanite shards": 5,
     "titanite chunks": 3,
     "titanite slabs": 0,
     "demon titanite": 1,
-    "twinkling titanite": 2,
 }
 
 # Covenant Ranks
@@ -110,23 +106,26 @@ player_unlocks = {
 
 # Player details for per run
 interface_details = {
-    "main weapon": {
-        "class": "sword", "weapon": "broadsword", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
+    "light_attack": {
+        "class": "sword", "name": "broadsword_light", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
+    },
+    "heavy_attack": {
+        "class": "sword", "name": "broadsword_heavy", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
     },
     "catalyst": {
-        "class": "pyromancy", "weapon": "pyromancy flame", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
+        "class": "pyromancy", "name": "pyromancy_flame", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
     },
-    "weapon skill": {
-        "skill": "basic_thrust", "cooldown": None, "base damage": None, "effects": None, "infusion": None,
+    "skill": {
+        "name": "skill_1", "cooldown": None, "base damage": None, "effects": None, "infusion": None,
     },
     "rings": {
         "ring 1": None, "ring 2": None,
     },
     "boons": {
-        "boon 1:": None, "boon 2:": None, "boon 3:": None, "boon 4:": None, "boon 5:": None, "boon 6:": None, "boon 7:": None
+        "1": "boon_1", "2": "boon_2", "3": "boon_3", "4": "boon_4", "5": "boon_5", "6": "boon_6", "7": "boon_7"
     },
     "spells": {
-        "spell 1": None, "spell 2": None, "spell 3": None, "spell 4": None, "spell 5": None
+        "1": "spell_1", "2": "spell_2", "3": "spell_3", "4": "spell_4",
     },
     "values": {
         "estus level": 1,
@@ -155,6 +154,9 @@ player_data = {
 player_inputs = {
     "light attack": False, "heavy attack": False, "skill": False, "cast spell": False, "roll": False,
 }
+
+
+
 
 
 ### below is old dark soles stuff ###

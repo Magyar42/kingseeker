@@ -275,7 +275,7 @@ class gameMenu:
         bg_rect_size = (150, 215)
         option_rect_size = (25, 25)
         x = (self.display_surface.get_size()[0] - 170) # - (bg_rect_size[0] // 2)
-        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 240
+        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 300
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
 
         title_surface = self.font.render("ITEMS", True, colour)
@@ -289,8 +289,8 @@ class gameMenu:
 
         for resource in self.resource_name_list:
             index = self.resource_name_list.index(resource)
-            if index >= 6:
-                rect = pygame.Rect(x + 90, y + (option_rect_size[1] + 5) * (self.resource_name_list.index(resource) - 6), option_rect_size[0], option_rect_size[1])
+            if index >= 4:
+                rect = pygame.Rect(x + 90, y + (option_rect_size[1] + 5) * (self.resource_name_list.index(resource) - 4), option_rect_size[0], option_rect_size[1])
                 self.menu.display(self.display_surface, self.selection_index, index, resource, rect, self.resource_num_list[index], self.showing_details)
             else:
                 rect = pygame.Rect(x, y + (option_rect_size[1] + 5) * self.resource_name_list.index(resource), option_rect_size[0], option_rect_size[1])

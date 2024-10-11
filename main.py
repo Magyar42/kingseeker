@@ -6,11 +6,11 @@ from support import *
 from button import Button
 from particles import AnimationPlayer
 
-if platform.system() == "Windows":
-    from pyvidplayer2 import Video
-    opening = Video("assets/video/movie_subs.mp4")
-elif platform.system() == "Linux":
-    print(f"{platform.system()} system detected: opening movie will not play")
+# if platform.system() == "Windows":
+#     from pyvidplayer2 import Video
+#     opening = Video("assets/video/movie_subs.mp4")
+# elif platform.system() == "Linux":
+#     print(f"{platform.system()} system detected: opening movie will not play")
 
 # pygame.mouse.set_visible(False)
 # cursor_img = pygame.image.load("assets/graphics/cursor.png").convert_alpha()
@@ -88,8 +88,8 @@ class Game:
                     elif mousekey_pressed[2]:
                         player_inputs["heavy attack"] = True
                     elif mousekey_pressed[1]:
-                        print("Skill used")
-                        player_inputs["skill"] = True
+                        print("Spell cast")
+                        player_inputs["cast spell"] = True
 
             self.screen.fill(WATER_COLOUR)
             self.level.run()

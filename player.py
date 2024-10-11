@@ -41,6 +41,17 @@ class Player(Entity):
         self.tool_cooldown = 400
         self.tool_time = None
 
+        self.using_skill = False
+        self.skill_cooldown = 5000
+        self.skill_use_time = None
+
+        self.casting_spell = False
+        self.spell_cooldown = 2000
+        self.spell_use_time = None
+
+        self.light_attacking = False
+        self.heavy_attacking = False
+
         self.obstacle_sprites = obstacle_sprites
         self.attackable_sprites = attackable_sprites
 
@@ -60,6 +71,7 @@ class Player(Entity):
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.weapon_switch_cooldown = 200
+
 
         # tool
         self.tool_index = 0
@@ -209,6 +221,7 @@ class Player(Entity):
 
         # kingseeker
         self.ongoing_run = False
+        self.selected_spell_index = 0
     
     def resetPlayer(self):
         self.health = player_data['dependent_variables']['health']
@@ -428,12 +441,36 @@ class Player(Entity):
                         self.move(50, self.sprite_type)
                         #self.speed /= 2
 
+                # skill input
+                # todo: skill effect
+                if keys[pygame.K_q] and not self.using_skill:
+                    # todo: check stamina/mana cost and take away as needed
+                    print("Skill used!")
+
+                    self.attacking = True
+                    self.attack_time = pygame.time.get_ticks()
+                    self.using_skill = True
+                    self.skill_use_time = pygame.time.get_ticks()
+
+                # spell cast
+                # todo: spell effect
+                if player_inputs["cast spell"]:
+                    # todo: check stamina/mana cost and take away as needed
+
+                    self.attacking = True
+                    self.attack_time = pygame.time.get_ticks()
+                    self.casting_spell = True
+                    self.spell_use_time = pygame.time.get_ticks()
+
+                    player_inputs["cast spell"] = False
+
                 # attack input - light
                 if player_inputs["light attack"]:
                     if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
                         self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
 
                         self.attacking = True
+                        self.light_attacking = True
                         self.attack_time = pygame.time.get_ticks()
                         self.create_attack()
                         self.weapon_attack_sound.play()
@@ -445,12 +482,12 @@ class Player(Entity):
                         self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
 
                         self.attacking = True
+                        self.heavy_attacking = True
                         self.attack_time = pygame.time.get_ticks()
                         self.create_attack()
                         self.weapon_attack_sound.play()
                         player_inputs["heavy attack"] = False
 
-                # todo: skill effect
                 
                 # tool input
                 # if keys[pygame.K_LCTRL]:
@@ -536,9 +573,11 @@ class Player(Entity):
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
 
-        if self.attacking:
+        if self.attacking: # todo: separate into light and heavy attack cooldowns
             if current_time - self.attack_time >= self.attack_cooldown + right_hand_data[self.weapon_slot]["cooldown"]:
                 self.attacking = False
+                self.light_attacking = False
+                self.heavy_attacking = False
                 self.destroy_attack()
                 #self.destroy_tool()
         
@@ -547,6 +586,14 @@ class Player(Entity):
                 self.using_tool = False
                 #self.destroy_attack()
                 self.destroy_tool()
+        
+        if self.using_skill:
+            if current_time - self.skill_use_time >= self.skill_cooldown:
+                self.using_skill = False
+
+        if self.casting_spell:
+            if current_time - self.spell_use_time >= self.spell_cooldown:
+                self.casting_spell = False
 
         if not self.can_toggle_menu:
             if current_time - self.menu_toggle_time >= self.menu_toggle_cooldown:
