@@ -107,10 +107,10 @@ player_unlocks = {
 # Player details for per run
 interface_details = {
     "light_attack": {
-        "class": "sword", "name": "broadsword_light", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
+        "class": "sword", "name": "broadsword_light", "cooldown": 100, "base damage": 15, "knockback": 1, "weight": 3, "effects": None, "infusion": None,
     },
     "heavy_attack": {
-        "class": "sword", "name": "broadsword_heavy", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
+        "class": "sword", "name": "broadsword_heavy", "cooldown": 200, "base damage": 25, "knockback": 1, "weight": 5, "effects": None, "infusion": None,
     },
     "catalyst": {
         "class": "pyromancy", "name": "pyromancy_flame", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
@@ -125,7 +125,7 @@ interface_details = {
         "1": "boon_1", "2": "boon_2", "3": "boon_3", "4": "boon_4", "5": "boon_5", "6": "boon_6", "7": "boon_7"
     },
     "spells": {
-        "1": "spell_1", "2": "spell_2", "3": "spell_3", "4": "spell_4",
+        "1": "spell_1", "2": "spell_2", "3": "spell_3",
     },
     "values": {
         "estus level": 1,

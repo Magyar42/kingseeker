@@ -343,7 +343,7 @@ class Level:
         current_channel = pygame.mixer.find_channel(True)
         current_channel.play(self.bonfire_sound)
 
-    def use_item_effect(self, index):   #todo: change index system
+    def use_item_effect(self, index=0): # Index is always 0, as only estus can be used
         self.animation_player.create_particles("sparkle", self.player.rect.center + pygame.math.Vector2(0, -40), [self.visible_sprites], "item")
 
         if index == 0:  # Estus
@@ -460,8 +460,8 @@ class Level:
         # debug(f"{self.player.poise} / {self.player.max_poise}")
         # debug(self.displaying_message)
         #get_attribute_num("vitality")
-        getSlotData(right_hand_data, weapon_data)
-        getSlotData(left_hand_data, tool_data)
+        # getSlotData(right_hand_data, weapon_data)
+        # getSlotData(left_hand_data, tool_data)
 
         #self.bonfire.bonfire_popup_update(self.player)
         self.update_player_stats()

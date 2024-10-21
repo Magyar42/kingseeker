@@ -24,34 +24,6 @@ class UI:
         # Extras
         self.humanity_counter_rect = pygame.Rect(20, 15, HUMANITY_BOX_WIDTH, HUMANITY_BOX_HEIGHT)
 
-        # Convert Weapon Dictionary
-        self.weapon_graphics = []
-        for weapon in right_hand_data.values():
-            path = weapon["graphic"]
-            weapon = pygame.image.load(path).convert_alpha()
-            self.weapon_graphics.append(weapon)
-        
-        # Convert Tool Dictionary
-        self.tool_graphics = []
-        for tool in left_hand_data.values():
-            path = tool["graphic"]
-            tool = pygame.image.load(path).convert_alpha()
-            self.tool_graphics.append(tool)
-        
-        # Convert Magic Dictionary
-        self.magic_graphics = []
-        for magic in magic_data.values():
-            path = magic["graphic"]
-            magic = pygame.image.load(path).convert_alpha()
-            self.magic_graphics.append(magic)
-        
-        # Convert Quick Items Dictionary
-        self.qitems_graphics = []
-        for item in qitems_data.values():
-            path = item["graphic"]
-            item = pygame.transform.scale(pygame.image.load(path), (64, 64)).convert_alpha()
-            self.qitems_graphics.append(item)
-
         self.human_form_overlay = pygame.transform.scale(pygame.image.load("assets/graphics/ui/enkindled.png"), (110, 110)).convert_alpha()
 
         # KINGSEEKER
@@ -65,7 +37,7 @@ class UI:
             # f"self.{input_type}_img" = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
         
         self.spells = []
-        for spell_num in range(1, 5):
+        for spell_num in range(1, 4):
             current_spell = interface_details["spells"][f"{spell_num}"]
             current_spell_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/spells/{current_spell}.png")
             self.spells.append(current_spell_surf)
@@ -128,7 +100,6 @@ class UI:
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, text_rect.inflate(20, 20), 3)
     
     def show_humanity(self, humanity):
-        # humanity = int(humanity)
         if humanity < 10:
             humanity = "0" + str(humanity)
 
@@ -140,47 +111,6 @@ class UI:
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, self.humanity_counter_rect.inflate(10, 10), 3)
 
         self.enkindled_ui_overlay(text_rect)
-
-    def weapon_overlay(self, weapon_index, has_switched):
-        bg_rect = self.selection_box(170, 565, has_switched)
-        weapon_surface = self.weapon_graphics[weapon_index]
-        weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(weapon_surface, weapon_rect)
-    
-    def tool_overlay(self, tool_index, has_switched):
-        bg_rect = self.selection_box(70, 565, has_switched)
-        tool_surface = self.tool_graphics[tool_index]
-        tool_rect = tool_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(tool_surface, tool_rect)
-    
-    def magic_overlay(self, magic_index, has_switched, player):
-        bg_rect = self.selection_box(120, 520, has_switched)
-        magic_surface = self.magic_graphics[magic_index]
-        magic_rect = magic_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(magic_surface, magic_rect)
-        if "catalyst" not in player.tool_type:
-            self.display_surface.blit(pygame.image.load("assets/graphics/ui/inactive_overlay.png"), magic_rect)
-    
-    def item_overlay(self, item_index, has_switched, uses):
-        bg_rect = self.selection_box(120, 610, has_switched)
-        item_surface = self.qitems_graphics[item_index]
-        item_rect = item_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(item_surface, item_rect)
-
-        # amount_rect = pygame.Rect(120, 685, ITEM_BOX_SIZE, 25)
-        # pygame.draw.rect(self.display_surface, UI_BG_COLOUR, amount_rect)
-        # if has_switched:
-        #     pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, amount_rect, 3)
-        # else:
-        #     pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, amount_rect, 3)
-        # 
-        text_surface = self.tooltip_font.render(str(uses), False, TEXT_COLOUR)
-        text_rect = text_surface.get_rect(midright = item_rect.bottomright + pygame.math.Vector2(3, -5))
-        self.display_surface.blit(text_surface, text_rect)
     
     # KINGSEEKER STUFF #
     def selection_box(self, left, top, triggered):
@@ -192,7 +122,7 @@ class UI:
         
         return bg_rect
     
-    def item_display(self, player, triggered, uses): # Estus
+    def estus_display(self, player, triggered, uses): # Estus
         bg_rect = self.selection_box(170, 635, triggered)
         item_surface = self.estus_surf
         item_rect = item_surface.get_rect(center = bg_rect.center)
@@ -205,7 +135,6 @@ class UI:
 
     def primary_attack_display(self, player, triggered):
         bg_rect = self.selection_box(70, 545, triggered)
-        # weapon_surface = self.weapon_graphics[0]
         light_attack_surface = self.input_types[0]
         light_attack_rect = light_attack_surface.get_rect(center = bg_rect.center)
 
@@ -246,8 +175,8 @@ class UI:
         
     def show_spells(self, player):
         spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/spell_box.png"), (60, 60)).convert_alpha()
-        for slot in range(4):
-            spell_rect = pygame.Rect(20, 200 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+        for slot in range(3):
+            spell_rect = pygame.Rect(20, 250 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
             self.display_surface.blit(spell_surf, spell_rect)
 
             spell_img = self.spells[slot]
@@ -275,11 +204,7 @@ class UI:
         self.catalyst_display(player, player.casting_spell)
         self.primary_attack_display(player, player.light_attacking)
         self.secondary_attack_display(player, player.heavy_attacking)
-        self.item_display(player, not player.can_switch_qitems, player.qitems_uses[player.qitems_index])
+        self.estus_display(player, player.drinking_estus, interface_details["values"]["current estus"])
 
         self.show_xp(player_data['values']['souls'])
         self.show_humanity(player_data['values']['humanity'])
-        # self.weapon_overlay(player.weapon_index, not player.can_switch_weapon) # Main item display
-        # self.tool_overlay(player.tool_index, not player.can_switch_tool) # Secondary item display
-        # self.magic_overlay(player.magic_index, not player.can_switch_magic, player) # Spell display
-        #self.item_overlay(player.qitems_index, not player.can_switch_qitems, player.qitems_uses[player.qitems_index]) # Quick Item Display

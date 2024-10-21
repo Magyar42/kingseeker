@@ -17,10 +17,10 @@ class Player(Entity):
         self.animation_player = AnimationPlayer()
 
         self.popup = gameMenu(self.toggle_screen_effect)
-        self.inv = invMenu(self.toggle_screen_effect)
-        self.stat = statusMenu(self.toggle_screen_effect)
-        #self.system = systemMenu(self.toggle_screen_effect)
-        self.equip = equipMenu(self.toggle_screen_effect)
+        # self.inv = invMenu(self.toggle_screen_effect)
+        # self.stat = statusMenu(self.toggle_screen_effect)
+        # self.system = systemMenu(self.toggle_screen_effect)
+        # self.equip = equipMenu(self.toggle_screen_effect)
 
         self.prompt_active = False
 
@@ -56,18 +56,20 @@ class Player(Entity):
         self.attackable_sprites = attackable_sprites
 
         # weapon
-        getSlotData(right_hand_data, weapon_data)
-        getSlotData(left_hand_data, tool_data)
+        # getSlotData(right_hand_data, weapon_data)
+        # getSlotData(left_hand_data, tool_data)
 
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
         self.create_tool = create_tool
         self.destroy_tool = destroy_tool
 
-        self.weapon_index = 0
-        self.weapon = list(right_hand_data.values())[self.weapon_index]["item"]
-        self.weapon_slot = list(right_hand_data.keys())[self.weapon_index]
-        self.weapon_weight = list(right_hand_data.values())[self.weapon_index]["weight"]
+        # self.weapon_index = 0
+        # self.weapon = list(right_hand_data.values())[self.weapon_index]["item"]
+        # self.weapon_slot = list(right_hand_data.keys())[self.weapon_index]
+        # self.weapon_weight = list(right_hand_data.values())[self.weapon_index]["weight"]
+        self.weapon = interface_details["light_attack"]["name"].split("_")[0]
+        self.weapon_weight = interface_details["light_attack"]["weight"]
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.weapon_switch_cooldown = 200
@@ -90,19 +92,6 @@ class Player(Entity):
         self.magic_weight = list(magic_data.values())[self.magic_index]["weight"]
         self.can_switch_magic = True
         self.magic_switch_time = None
-
-        # quick items
-        self.qitems_index = 0
-        self.qitems = []
-        self.qitems_uses = []
-        for i in ["slot1", "slot2", "slot3", "slot4"]:
-            if qitems_data[i]['item'] != None:
-                self.qitems.append(qitems_data[i]['item'])
-                self.qitems_uses.append(qitems_data[i]['amount'])
-        
-        self.can_switch_qitems = True
-        self.qitems_switch_cooldown = 200
-        self.qitems_switch_time = None
 
         # stats
         self.stamina_light_attack_mult = 3
@@ -172,8 +161,8 @@ class Player(Entity):
         self.weapon_attack_sound.set_volume(0.1)
         self.death_sound = pygame.mixer.Sound("assets/audio/sfx/death.wav")
         self.death_sound.set_volume(0.1)
-        self.qitems_use_sound = pygame.mixer.Sound("assets/audio/sfx/estus_flask.wav")
-        self.qitems_use_sound.set_volume(0.3)
+        self.estus_sound = pygame.mixer.Sound("assets/audio/sfx/estus_flask.wav")
+        self.estus_sound.set_volume(0.3)
         self.humanity_use_sound = pygame.mixer.Sound("assets/audio/sfx/humanity_used.wav")
         self.humanity_use_sound.set_volume(0.1)
 
@@ -192,10 +181,10 @@ class Player(Entity):
         self.roll_duration = None
         # self.rolling_time = 500
 
-        # item use
-        self.using_item = False
-        self.item_cooldown = 500
-        self.item_use_time = None
+        # Estus use
+        self.drinking_estus = False
+        self.estus_cooldown = 500
+        self.estus_use_time = None
         self.use_item_effect = use_item_effect
         
         self.menu_open = False
@@ -290,42 +279,22 @@ class Player(Entity):
                 else:
                     self.frame_index = 0
                     self.status = self.status + "_roll"
-        elif self.using_item:
+        elif self.drinking_estus:
             self.status = "item"
             self.resting = True
             self.direction.x = 0
             self.direction.y = 0
 
-            current_item_image = pygame.transform.scale(pygame.image.load(list(qitems_data.values())[self.qitems_index]["graphic"]), (40, 40)).convert_alpha()
-            x = (self.display_surface.get_size()[0] // 2) - (current_item_image.get_size()[0] // 2)
-            y = (self.display_surface.get_size()[1] // 2) - (current_item_image.get_size()[1] // 2) - 40
-            self.display_surface.blit(current_item_image, (x, y))
+            estus_image = pygame.transform.scale(pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png"), (60, 60)).convert_alpha()
+            x = (self.display_surface.get_size()[0] // 2) - (estus_image.get_size()[0] // 2)
+            y = (self.display_surface.get_size()[1] // 2) - (estus_image.get_size()[1] // 2) - 40
+            self.display_surface.blit(estus_image, (x, y))
 
         else:
             if "attack" in self.status:
                 self.status = self.status.replace("_attack", "")
             elif "roll" in self.status:
                 self.status = self.status.replace("_roll", "")
-    
-    def reset_qitems_display(self):
-        for qitem in qitems_data.keys():
-            item_name = qitems_data[qitem]["item"]
-            if item_name != None:
-                item_cat = game_items[item_name]["category"]
-
-                index_in_inventory = player_inventory[item_cat].index(item_name)
-                num_in_inventory = player_inventory[f"{item_cat}_num"][index_in_inventory]
-
-                qitems_data[qitem]["amount"] = num_in_inventory
-        
-        # Current display - update this to show changes in the CURRENT quick item
-        # So, find the current item name and display the relevant amount value
-        current_qitem = self.qitems[self.qitems_index]
-        current_cat = game_items[current_qitem]["category"]
-        item_index = player_inventory[current_cat].index(current_qitem)
-        new_value = player_inventory[f"{current_cat}_num"][item_index]
-
-        self.qitems_uses[self.qitems_index] = new_value
 
     def main_menu(self):
         if self.menu_open:
@@ -377,35 +346,18 @@ class Player(Entity):
         if not self.attacking and not self.using_tool and not self.resting and not self.rolling and not self.stunned:
             if not self.dead:
                 # quick item input
-                if keys[pygame.K_f] and not self.using_item:       # Todo: change to not use index, but name, so that any item can be assigned to quick use 
+                if keys[pygame.K_f] and not self.drinking_estus:       # Todo: change to not use index, but name, so that any item can be assigned to quick use 
                     
-                    if self.qitems_uses[self.qitems_index] > 0:
-                        self.using_item = True
-                        self.item_use_time = pygame.time.get_ticks()
+                    if interface_details["values"]["current estus"] > 0:
+                        self.drinking_estus = True
+                        self.estus_use_time = pygame.time.get_ticks()
+                        self.use_item_effect()
 
-                        self.use_item_effect(self.qitems_index)
-
-                        if self.qitems_index == 0:
-                            player_data['status']['current_estus'] -= 1     # Reduces amount in player data
-                            player_inventory["Consumables_num"][player_inventory["Consumables"].index(self.qitems[self.qitems_index])] = player_data['status']['current_estus'] # Update inventory
-                            qitems_data[f'slot{self.qitems_index + 1}']['amount'] = player_inventory["Consumables_num"][player_inventory["Consumables"].index(self.qitems[self.qitems_index])] # Update quick items
-                            self.qitems_uses[self.qitems_index] = qitems_data[f'slot{self.qitems_index + 1}']['amount']  # Update display
-
-                            self.health_increase += 300 # todo: include estus level in amount of hp recovered AND update HP numbers
-                            if self.health_increase >= player_data['dependent_variables']['health']:
-                                self.health_increase = player_data['dependent_variables']['health']
-
-                            self.qitems_use_sound.play()
-
-                        elif self.qitems_index == 1:
-                            player_inventory["Consumables_num"][player_inventory["Consumables"].index(self.qitems[self.qitems_index])] -= 1 # Update inventory
-                            qitems_data[f'slot{self.qitems_index + 1}']['amount'] = player_inventory["Consumables_num"][player_inventory["Consumables"].index(self.qitems[self.qitems_index])]
-                            self.qitems_uses[self.qitems_index] = qitems_data[f'slot{self.qitems_index + 1}']['amount']
-
+                        interface_details["values"]["current estus"] -= 1
+                        self.health_increase += 300 # todo: include estus level in amount of hp recovered AND update HP numbers
+                        if self.health_increase >= player_data['dependent_variables']['health']:
                             self.health_increase = player_data['dependent_variables']['health']
-                            player_data['values']['humanity'] += 1
-
-                            self.humanity_use_sound.play()
+                        self.estus_sound.play()
 
                 # movement input
                 if keys[pygame.K_w]:
@@ -512,69 +464,12 @@ class Player(Entity):
                 #                 cost = list(magic_data.values())[self.magic_index]["cost"]
                 #                 self.create_magic(style, strength, cost)
 
-                # Below removed for KINGSEEKER, as items and weapons cannot be switched
-                # during a run anyway, and the UI isn't seen at Firelink
-                
-                # # weapon switch
-                # if keys[pygame.K_RIGHT] and self.can_switch_weapon:
-                #     self.can_switch_weapon = False
-                #     self.weapon_switch_time = pygame.time.get_ticks()
-
-                #     if self.weapon_index < len(list(right_hand_data.keys())) - 1:
-                #         self.weapon_index += 1
-                #     else:
-                #         self.weapon_index = 0
-                #     # self.weapon = list(weapon_data.keys())[self.weapon_index]
-                #     # self.weapon_weight = list(weapon_data.values())[self.weapon_index]["weight"]
-                #     self.weapon = list(right_hand_data.values())[self.weapon_index]["item"]
-                #     self.weapon_weight = list(right_hand_data.values())[self.weapon_index]["weight"]
-                
-                # # tool switch
-                # if keys[pygame.K_LEFT] and self.can_switch_tool:
-                #     self.can_switch_tool = False
-                #     self.tool_switch_time = pygame.time.get_ticks()
-
-                #     if self.tool_index < len(list(left_hand_data.keys())) - 1:
-                #         self.tool_index += 1
-                #     else:
-                #         self.tool_index = 0
-                #     self.tool = list(left_hand_data.values())[self.tool_index]["item"]
-                #     self.tool_weight = list(left_hand_data.values())[self.tool_index]["weight"]
-                #     self.tool_type = list(left_hand_data.values())[self.tool_index]["type"]
-                
-                # # spell switch
-                # if keys[pygame.K_UP] and self.can_switch_magic:
-                #     self.can_switch_magic = False
-                #     self.magic_switch_time = pygame.time.get_ticks()
-
-                #     if self.magic_index < len(list(magic_data.keys())) - 1:
-                #         self.magic_index += 1
-                #     else:
-                #         self.magic_index = 0
-                #     self.magic = list(magic_data.keys())[self.magic_index]
-                
-                # # quick item switch
-                # if keys[pygame.K_DOWN] and self.can_switch_qitems:
-                #     self.can_switch_qitems = False
-                #     self.qitems_switch_time = pygame.time.get_ticks()
-
-                #     if self.qitems_index < len(self.qitems) - 1:
-                #         self.qitems_index += 1
-                #     else:
-                #         self.qitems_index = 0
-
-                #     self.qitems = []
-                #     self.qitems_uses = []
-                #     for i in ["slot1", "slot2", "slot3", "slot4"]:
-                #         if qitems_data[i]['item'] != None:
-                #             self.qitems.append(qitems_data[i]['item'])
-                #             self.qitems_uses.append(qitems_data[i]['amount'])
                 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
 
         if self.attacking: # todo: separate into light and heavy attack cooldowns
-            if current_time - self.attack_time >= self.attack_cooldown + right_hand_data[self.weapon_slot]["cooldown"]:
+            if current_time - self.attack_time >= self.attack_cooldown + interface_details["light_attack"]["cooldown"]:
                 self.attacking = False
                 self.light_attacking = False
                 self.heavy_attacking = False
@@ -610,10 +505,6 @@ class Player(Entity):
         if not self.can_switch_magic:
             if current_time - self.magic_switch_time >= self.weapon_switch_cooldown:
                 self.can_switch_magic = True
-        
-        if not self.can_switch_qitems:
-            if current_time - self.qitems_switch_time >= self.qitems_switch_cooldown:
-                self.can_switch_qitems = True
 
         if not self.vulnerable:
             if current_time - self.hurt_time >= self.invincibility_duration:
@@ -624,9 +515,9 @@ class Player(Entity):
                 self.rolling = False
                 #self.speed *= 2
         
-        if self.using_item:
-            if current_time - self.item_use_time >= self.item_cooldown:
-                self.using_item = False
+        if self.drinking_estus:
+            if current_time - self.estus_use_time >= self.estus_cooldown:
+                self.drinking_estus = False
                 self.resting = False
                 self.status = "down_idle"
         
@@ -662,7 +553,8 @@ class Player(Entity):
     def get_full_weapon_damage(self):
         base_damage = player_data['dependent_variables']['attack']
         #weapon_damage = weapon_data[self.weapon]["damage"]
-        weapon_damage = right_hand_data[list(right_hand_data.keys())[self.weapon_index]]["damage"]
+        #weapon_damage = right_hand_data[list(right_hand_data.keys())[self.weapon_index]]["damage"]
+        weapon_damage = interface_details["light_attack"]["base damage"]
         
         # todo: add check for light/heavy attack, and alter damage/stamina usage/use time accordingly
 
