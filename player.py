@@ -41,7 +41,12 @@ class Player(Entity):
         self.spell_use_time = None
 
         self.light_attacking = False
+        self.light_attack_cooldown = 520
+        self.light_attack_time = None
+
         self.heavy_attacking = False
+        self.heavy_attack_cooldown = 750
+        self.heavy_attack_time = None
 
         self.obstacle_sprites = obstacle_sprites
         self.attackable_sprites = attackable_sprites
@@ -159,10 +164,6 @@ class Player(Entity):
         self.use_item_effect = use_item_effect
         
         self.menu_open = False
-        self.menu_inventory = False
-        self.menu_status = False
-        self.menu_system = False
-        self.menu_equipment = False
         self.submenu_open = False
 
         self.can_toggle_menu = True
@@ -270,26 +271,6 @@ class Player(Entity):
     def main_menu(self):
         if self.menu_open:
             self.popup.displayMenu(self)
-    
-    def inventory_display(self):
-        if self.menu_inventory:
-            self.inv.displayInventory(self)
-        if self.reset_display:
-            self.inv.resetDisplay()
-            self.reset_display = False
-    
-    def status_display(self):
-        if self.menu_status:
-            self.stat.displayStatus(self)
-    
-    def system_display(self):
-        if self.menu_system:
-            #self.system.displaySystem(self)
-            debug("TODO: System")
-    
-    def equipment_display(self):
-        if self.menu_equipment:
-            self.equip.displayEquipment(self, False)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -305,18 +286,17 @@ class Player(Entity):
                 self.can_toggle_menu = False
                 self.menu_toggle_time = pygame.time.get_ticks()
                 self.resting = False
-        
-        # if self.submenu_open:
-        #     if keys[pygame.K_ESCAPE]:
-        #         self.menu_inventory = False
-        #         self.menu_status = False
-        #         self.menu_system = False
-        #         self.menu_equipment = False
-        #         self.submenu_open = False
+
+        # If the input is pressed during the cooldown, set action to false
+        # Otherwise, the action will be "queued"
+        if self.attacking:
+            player_inputs["cast spell"] = False
+            player_inputs["light attack"] = False
+            player_inputs["heavy attack"] = False
 
         if not self.attacking and not self.resting and not self.rolling and not self.stunned:
             if not self.dead:
-                # quick item input
+                # estus input
                 if keys[pygame.K_f] and not self.drinking_estus:       # Todo: change to not use index, but name, so that any item can be assigned to quick use 
                     
                     if interface_details["values"]["current estus"] > 0:
@@ -394,44 +374,34 @@ class Player(Entity):
 
                         player_inputs["cast spell"] = False
 
-                # If the input is pressed during the cooldown, set action to false
-                # Otherwise, the action will be "queued"
-                elif player_inputs["cast spell"]:
-                    player_inputs["cast spell"] = False
-
                 # attack input - light
                 if player_inputs["light attack"] and not self.light_attacking:
                     if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
                         self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
 
                         self.attacking = True
-                        self.light_attacking = True
                         self.attack_time = pygame.time.get_ticks()
+                        self.light_attacking = True
+                        self.light_attack_time = pygame.time.get_ticks()
+
                         self.create_attack()
                         self.weapon_attack_sound.play()
                         player_inputs["light attack"] = False
 
-                # If the input is pressed during the cooldown, set action to false
-                # Otherwise, the action will be "queued"
-                elif player_inputs["light attack"]:
-                    player_inputs["light attack"] = False
-
                 # attack input - heavy
-                if player_inputs["heavy attack"] and self.heavy_attacking:
+                if player_inputs["heavy attack"] and not self.heavy_attacking:
                     if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
                         self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
 
                         self.attacking = True
-                        self.heavy_attacking = True
                         self.attack_time = pygame.time.get_ticks()
+                        self.heavy_attacking = True
+                        self.heavy_attack_time = pygame.time.get_ticks()
+
                         self.create_attack()
                         self.weapon_attack_sound.play()
                         player_inputs["heavy attack"] = False
 
-                # If the input is pressed during the cooldown, set action to false
-                # Otherwise, the action will be "queued"
-                elif player_inputs["heavy attack"]:
-                    player_inputs["heavy attack"] = False
 
                 # mousewheel - scroll through spells
                 if player_inputs["scroll spell"]:
@@ -452,9 +422,15 @@ class Player(Entity):
         if self.attacking: # todo: separate into light and heavy attack cooldowns
             if current_time - self.attack_time >= self.attack_cooldown + interface_details["light_attack"]["cooldown"]:
                 self.attacking = False
-                self.light_attacking = False
-                self.heavy_attacking = False
                 self.destroy_attack()
+        
+        if self.light_attacking:
+            if current_time - self.light_attack_time >= self.light_attack_cooldown:
+                self.light_attacking = False
+
+        if self.heavy_attacking:
+            if current_time - self.heavy_attack_time >= self.heavy_attack_cooldown:
+                self.heavy_attacking = False
         
         if self.using_skill:
             if current_time - self.skill_use_time >= self.skill_cooldown:
@@ -635,7 +611,3 @@ class Player(Entity):
 
         # Todo: place the following in a method
         if self.menu_open: self.main_menu()
-        if self.menu_inventory: self.inventory_display()
-        if self.menu_status: self.status_display()
-        if self.menu_system: self.system_display()
-        if self.menu_equipment: self.equipment_display()
