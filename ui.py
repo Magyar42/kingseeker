@@ -48,6 +48,8 @@ class UI:
             current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
             self.boons.append(current_boon_surf)
 
+        self.overlay_img = pygame.image.load(f"assets/graphics/ui/interface/item_box_overlay.png")
+
     def update_bars(self):
         self.health_bar_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
         self.mana_bar_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
@@ -121,6 +123,10 @@ class UI:
         self.display_surface.blit(itembox_surf, bg_rect)
         
         return bg_rect
+    
+    def box_cooldown(self, rect, active):
+        if active:
+            self.display_surface.blit(self.overlay_img, rect)
 
     def spell_box(self, rect, selected):
         # bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
@@ -146,6 +152,7 @@ class UI:
         light_attack_rect = light_attack_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(light_attack_surface, light_attack_rect)
+        self.box_cooldown(light_attack_rect, triggered)
     
     def secondary_attack_display(self, player, triggered):
         bg_rect = self.selection_box(120, 590, triggered)
@@ -153,6 +160,7 @@ class UI:
         heavy_attack_rect = heavy_attack_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(heavy_attack_surface, heavy_attack_rect)
+        self.box_cooldown(heavy_attack_rect, triggered)
 
     def catalyst_display(self, player, triggered):
         bg_rect = self.selection_box(170, 545, triggered)
@@ -160,6 +168,7 @@ class UI:
         catalyst_rect = catalyst_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(catalyst_surface, catalyst_rect)
+        self.box_cooldown(catalyst_rect, triggered)
 
     def skill_display(self, player, triggered):
         bg_rect = self.selection_box(220, 590, triggered)
@@ -167,6 +176,7 @@ class UI:
         skill_rect = skill_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(skill_surface, skill_rect)
+        self.box_cooldown(skill_rect, triggered)
     
     def show_boons(self, player):
         if player.menu_open:

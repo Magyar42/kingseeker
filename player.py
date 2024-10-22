@@ -377,7 +377,7 @@ class Player(Entity):
 
                 # spell cast
                 # todo: spell effect
-                if player_inputs["cast spell"]:
+                if player_inputs["cast spell"] and not self.casting_spell:
                     # todo: check stamina/mana cost and take away as needed
                     if self.stamina_target - self.stamina_magic_mult >= 0:
                         self.stamina_target -= self.stamina_magic_mult
@@ -394,8 +394,13 @@ class Player(Entity):
 
                         player_inputs["cast spell"] = False
 
+                # If the input is pressed during the cooldown, set action to false
+                # Otherwise, the action will be "queued"
+                elif player_inputs["cast spell"]:
+                    player_inputs["cast spell"] = False
+
                 # attack input - light
-                if player_inputs["light attack"]:
+                if player_inputs["light attack"] and not self.light_attacking:
                     if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
                         self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
 
@@ -406,8 +411,13 @@ class Player(Entity):
                         self.weapon_attack_sound.play()
                         player_inputs["light attack"] = False
 
+                # If the input is pressed during the cooldown, set action to false
+                # Otherwise, the action will be "queued"
+                elif player_inputs["light attack"]:
+                    player_inputs["light attack"] = False
+
                 # attack input - heavy
-                if player_inputs["heavy attack"]:
+                if player_inputs["heavy attack"] and self.heavy_attacking:
                     if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
                         self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
 
@@ -417,6 +427,11 @@ class Player(Entity):
                         self.create_attack()
                         self.weapon_attack_sound.play()
                         player_inputs["heavy attack"] = False
+
+                # If the input is pressed during the cooldown, set action to false
+                # Otherwise, the action will be "queued"
+                elif player_inputs["heavy attack"]:
+                    player_inputs["heavy attack"] = False
 
                 # mousewheel - scroll through spells
                 if player_inputs["scroll spell"]:
@@ -569,12 +584,12 @@ class Player(Entity):
             self.direction.x = 0
 
             # On death effects
-            player_data['status']['hollow'] = True
-            player_data['values']['lost_souls'] = player_data['values']['souls']
-            player_data['values']['lost_humanity'] = player_data['values']['humanity']
-            player_data['values']['souls'] = 0
-            player_data['values']['humanity'] = 0
-            print(f"{player_data['values']['lost_souls']} souls and {player_data['values']['lost_humanity']} humanity lost")
+            interface_details['values']['hollow'] = True
+            interface_details['values']['lost souls'] = interface_details['values']['souls']
+            interface_details['values']['lost humanities'] = interface_details['values']['active humanities']
+            interface_details['values']['souls'] = 0
+            interface_details['values']['active humanities'] = 0
+            print(f"{interface_details['values']['lost souls']} souls and {interface_details['values']['lost humanities']} humanity lost")
 
     def check_player_poise(self, dmg):
         poise_dmg = round(dmg // 2, 1)

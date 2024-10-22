@@ -142,7 +142,7 @@ interface_details = {
 
 # Hidden numbers which can be affected by boons
 player_data = {
-    "dependent_variables": {"health": 400, "mana": 40, "stamina": 60, "equip load": 21.5,
+    "dependent_variables": {"health": 400, "mana": 100, "stamina": 60, "equip load": 21.5,
         "max equip load": 54.0, "speed": 5, "poise": 42.1,"att. slots": 2, "attack": 10, "magic mult": 1,
         "stamina recovery": 0.2, "mana recovery": 0.005},
 
