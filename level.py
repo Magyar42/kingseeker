@@ -51,7 +51,6 @@ class Level:
         ]
 
         self.current_attack = None
-        self.current_tool = None
         self.hurtbox = None
 
         self.create_map(True, self.map_id)
@@ -108,7 +107,7 @@ class Level:
                         if style == "entities":
                             if column == "394":
                                 if player_reset:
-                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_tool, self.destroy_tool, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect)
+                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect)
                             #elif column == "388":
                             #    self.bonfire = Bonfire(0, (x, y), [self.visible_sprites, self.obstacle_sprites, self.interactable_sprites], self.restart_world, self.check_humanity_restored, self.check_bonfire_lit, self.check_bonfire_rest, self.toggle_menu, self.toggle_screen_effect, self.kindle_bonfire_visuals)
                             # elif column == "396":
@@ -184,27 +183,20 @@ class Level:
 
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
-    
-    def create_tool(self):
-        self.current_tool = Tool(self.player, [self.visible_sprites, self.attack_sprites])
 
-    def create_magic(self, style, strength, cost):
-        if style == "heal":
+    def create_magic(self, name, strength, cost):
+        self.current_attack = Catalyst(self.player, [self.visible_sprites])
+        if name == "heal":
             self.magic_player.heal(self.player, strength, cost, [self.visible_sprites])
-        elif style == "fire_surge":
+        elif name == "fire_surge":
             self.magic_player.fire_surge(self.player, cost, [self.visible_sprites, self.attack_sprites])
-        elif style == "icecrag_burst":
+        elif name == "icecrag_burst":
             self.magic_player.icecrag_burst(self.player, cost, [self.visible_sprites, self.attack_sprites])
 
     def destroy_attack(self):
         if self.current_attack:
             self.current_attack.kill()
         self.current_attack = None
-    
-    def destroy_tool(self):
-        if self.current_tool:
-            self.current_tool.kill()
-        self.current_tool = None
 
     def player_attack_logic(self):
         if self.attack_sprites:
@@ -243,7 +235,7 @@ class Level:
         self.animation_player.create_particles(particle_type, pos, [self.visible_sprites], "ambient")
 
     def add_xp(self, amount):
-        player_data['values']['souls'] += amount
+        interface_details['values']['souls'] += amount
 
     def toggle_menu(self):
         self.levelup_menu_active = not self.levelup_menu_active
@@ -460,8 +452,6 @@ class Level:
         # debug(f"{self.player.poise} / {self.player.max_poise}")
         # debug(self.displaying_message)
         #get_attribute_num("vitality")
-        # getSlotData(right_hand_data, weapon_data)
-        # getSlotData(left_hand_data, tool_data)
 
         #self.bonfire.bonfire_popup_update(self.player)
         self.update_player_stats()

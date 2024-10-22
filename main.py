@@ -88,8 +88,10 @@ class Game:
                     elif mousekey_pressed[2]:
                         player_inputs["heavy attack"] = True
                     elif mousekey_pressed[1]:
-                        print("Spell cast")
                         player_inputs["cast spell"] = True
+                elif event.type == pygame.MOUSEWHEEL:
+                    player_inputs["scroll spell"] = True
+                    player_inputs["scroll direction"] = event.y
 
             self.screen.fill(WATER_COLOUR)
             self.level.run()

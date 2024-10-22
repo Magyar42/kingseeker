@@ -38,13 +38,13 @@ class UI:
         
         self.spells = []
         for spell_num in range(1, 4):
-            current_spell = interface_details["spells"][f"{spell_num}"]
+            current_spell = interface_details["spells"][spell_num]
             current_spell_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/spells/{current_spell}.png")
             self.spells.append(current_spell_surf)
 
         self.boons = []
         for boon_num in range(1, 8):
-            current_boon = interface_details["boons"][f"{boon_num}"]
+            current_boon = interface_details["boons"][boon_num]
             current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
             self.boons.append(current_boon_surf)
 
@@ -121,6 +121,13 @@ class UI:
         self.display_surface.blit(itembox_surf, bg_rect)
         
         return bg_rect
+
+    def spell_box(self, rect, selected):
+        # bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+
+        if selected: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box.png").convert_alpha()
+        self.display_surface.blit(itembox_surf, rect)
     
     def estus_display(self, player, triggered, uses): # Estus
         bg_rect = self.selection_box(170, 635, triggered)
@@ -173,17 +180,20 @@ class UI:
                 boon_img = self.boons[slot]
                 self.display_surface.blit(boon_img, boon_rect)
         
-    def show_spells(self, player):
-        spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/spell_box.png"), (60, 60)).convert_alpha()
+    def show_spells(self, player, index):
+        # spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/spell_box.png"), (60, 60)).convert_alpha()
         for slot in range(3):
+            if index == slot: selected = True
+            else: selected = False
             spell_rect = pygame.Rect(20, 250 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-            self.display_surface.blit(spell_surf, spell_rect)
+            # self.display_surface.blit(spell_surf, spell_rect)
+            self.spell_box(spell_rect, selected)
 
             spell_img = self.spells[slot]
             self.display_surface.blit(spell_img, spell_rect)
 
     def enkindled_ui_overlay(self, rect):
-        if not player_data['status']['hollow']:
+        if not interface_details['values']['hollow']:
             outline_rect = pygame.Rect(self.humanity_counter_rect.x - 26, self.humanity_counter_rect.y - 26, self.humanity_counter_rect.w, self.humanity_counter_rect.h)
 
             self.display_surface.blit(self.human_form_overlay, outline_rect)
@@ -196,7 +206,7 @@ class UI:
         self.show_bar(player, player.mana_target, player_data['dependent_variables']["mana"], self.mana_bar_rect, MANA_COLOUR, self.mana_bar_grad_rect, MANA_COLOUR_GRADIENT)
 
         self.show_boons(player) # todo
-        self.show_spells(player)
+        self.show_spells(player, player.spell_index)
 
         # todo for all inputs: have timer for use time AND cooldown after separate
         # here, the box outline should go orange for the use time, not the cooldown
@@ -206,5 +216,5 @@ class UI:
         self.secondary_attack_display(player, player.heavy_attacking)
         self.estus_display(player, player.drinking_estus, interface_details["values"]["current estus"])
 
-        self.show_xp(player_data['values']['souls'])
-        self.show_humanity(player_data['values']['humanity'])
+        self.show_xp(interface_details['values']['souls'])
+        self.show_humanity(interface_details['values']['active humanities'])

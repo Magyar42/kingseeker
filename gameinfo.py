@@ -113,7 +113,7 @@ interface_details = {
         "class": "sword", "name": "broadsword_heavy", "cooldown": 200, "base damage": 25, "knockback": 1, "weight": 5, "effects": None, "infusion": None,
     },
     "catalyst": {
-        "class": "pyromancy", "name": "pyromancy_flame", "cooldown": None, "base damage": None, "weight": None, "effects": None, "infusion": None,
+        "class": "pyromancy", "name": "pyromancy_flame", "cooldown": 100, "base damage": 5, "weight": 0, "effects": None, "infusion": None,
     },
     "skill": {
         "name": "skill_1", "cooldown": None, "base damage": None, "effects": None, "infusion": None,
@@ -122,10 +122,10 @@ interface_details = {
         "ring 1": None, "ring 2": None,
     },
     "boons": {
-        "1": "boon_1", "2": "boon_2", "3": "boon_3", "4": "boon_4", "5": "boon_5", "6": "boon_6", "7": "boon_7"
+        1: "boon_1", 2: "boon_2", 3: "boon_3", 4: "boon_4", 5: "boon_5", 6: "boon_6", 7: "boon_7"
     },
     "spells": {
-        "1": "spell_1", "2": "spell_2", "3": "spell_3",
+        1: "heal", 2: "fire_surge", 3: "icecrag_burst",
     },
     "values": {
         "estus level": 1,
@@ -136,13 +136,14 @@ interface_details = {
         "max estus": 3,
         "current estus": 3,
         "levelup cost": 1,
+        "hollow": True,
     }
 }
 
 # Hidden numbers which can be affected by boons
 player_data = {
     "dependent_variables": {"health": 400, "mana": 40, "stamina": 60, "equip load": 21.5,
-        "max equip load": 54.0, "speed": 5, "poise": 42.1,"att. slots": 2, "attack": 10, "magic damage": 4,
+        "max equip load": 54.0, "speed": 5, "poise": 42.1,"att. slots": 2, "attack": 10, "magic mult": 1,
         "stamina recovery": 0.2, "mana recovery": 0.005},
 
     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
@@ -152,7 +153,7 @@ player_data = {
 
 # Player inputs (mainly used for mouse)
 player_inputs = {
-    "light attack": False, "heavy attack": False, "skill": False, "cast spell": False, "roll": False,
+    "light attack": False, "heavy attack": False, "skill": False, "cast spell": False, "roll": False, "scroll spell": False, "scroll direction": 0,
 }
 
 
@@ -161,26 +162,26 @@ player_inputs = {
 
 ### below is old dark soles stuff ###
 # # Player Stats # todo: comment out and use new sections
-player_data = {
-    "values": {"level": 7, "souls": 0, "humanity": 3, "lost_souls": 0, "lost_humanity": 0,
-    "levelup_cost": 1},
+# player_data = {
+#     "values": {"level": 7, "souls": 0, "humanity": 3, "lost_souls": 0, "lost_humanity": 0,
+#     "levelup_cost": 1},
     
-    "dependent_variables": {"health": 400, "mana": 40, "stamina": 60, "equip load": 21.5,
-        "max equip load": 54.0, "speed": 5, "poise": 42.1,"att. slots": 2, "attack": 10, "magic damage": 4,
-        "stamina recovery": 0.2, "mana recovery": 0.005},
+#     "dependent_variables": {"health": 400, "mana": 40, "stamina": 60, "equip load": 21.5,
+#         "max equip load": 54.0, "speed": 5, "poise": 42.1,"att. slots": 2, "attack": 10, "magic damage": 4,
+#         "stamina recovery": 0.2, "mana recovery": 0.005},
 
-    "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
+#     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
     
-    "attributes": {"VITALITY": 11, "ATTUNEMENT": 8, "ENDURANCE": 9, "STRENGTH": 12, "PERCEPTION": 6},
+#     "attributes": {"VITALITY": 11, "ATTUNEMENT": 8, "ENDURANCE": 9, "STRENGTH": 12, "PERCEPTION": 6},
 
-    "defense": {"physical def.": 128, "magic def.": 139, "fire def.": 125, "lightning def.": 132},
+#     "defense": {"physical def.": 128, "magic def.": 139, "fire def.": 125, "lightning def.": 132},
 
-    "resistances": {"poise": 0, "bleed res": 100, "poison res": 80, "curse res": 90, "discovery": 120},
+#     "resistances": {"poise": 0, "bleed res": 100, "poison res": 80, "curse res": 90, "discovery": 120},
     
-    "status": {"name": "John Dark", "hollow": True, "estus": 5, "current_estus": 7, "estus_level": 1, "covenant": "None"},
+#     "status": {"name": "John Dark", "hollow": True, "estus": 5, "current_estus": 7, "estus_level": 1, "covenant": "None"},
     
-    "unlocks": {"rite_of_kindling": False, "lordvessel": False, "bell_1": False, "bell_2": False},
-}
+#     "unlocks": {"rite_of_kindling": False, "lordvessel": False, "bell_1": False, "bell_2": False},
+# }
 
 
 # Bonfire Data
@@ -193,24 +194,24 @@ bonfire_menu_options = {
     "Leave": True, "Level Up": True, "Attune Magic": True, "Warp": False, "Kindle": True, "Use Humanity": True,
 }
 
-# Inventory
-player_inventory = {
-    "Consumables": ["Darksign", "Estus Flask", "Humanity"],
-    "Ores": ["Titanite Shard", "Green Titanite Shard"],
-    "Key Items": [],
-    "Spells": ["Fire Surge", "Heal", "Icecrag Burst"],
-    "Weapons": ["Broadsword", "Ricard's Rapier", "Winged Spear", "Giant Hammer", "Dagger", "Sorcerer's Catalyst", "Tower Kite Shield"],
-    "Armour": ["Knight Armour"],
-    "Rings": ["Ring of Favour and Protection", "Tiny Being's Ring"],
+# # Inventory
+# player_inventory = {
+#     "Consumables": ["Darksign", "Estus Flask", "Humanity"],
+#     "Ores": ["Titanite Shard", "Green Titanite Shard"],
+#     "Key Items": [],
+#     "Spells": ["Fire Surge", "Heal", "Icecrag Burst"],
+#     "Weapons": ["Broadsword", "Ricard's Rapier", "Winged Spear", "Giant Hammer", "Dagger", "Sorcerer's Catalyst", "Tower Kite Shield"],
+#     "Armour": ["Knight Armour"],
+#     "Rings": ["Ring of Favour and Protection", "Tiny Being's Ring"],
 
-    "Consumables_num": [1, player_data['status']['current_estus'], 3],
-    "Ores_num": [11, 2],
-    "Key Items_num": [],
-    "Spells_num": [1, 1, 1],
-    "Weapons_num": [1, 1, 1, 1, 1, 1, 1],
-    "Armour_num": [1],
-    "Rings_num": [1, 1],
-}
+#     "Consumables_num": [1, player_data['status']['current_estus'], 3],
+#     "Ores_num": [11, 2],
+#     "Key Items_num": [],
+#     "Spells_num": [1, 1, 1],
+#     "Weapons_num": [1, 1, 1, 1, 1, 1, 1],
+#     "Armour_num": [1],
+#     "Rings_num": [1, 1],
+# }
 
 # Item Dictionary
 game_items = {
@@ -351,37 +352,37 @@ game_items = {
 
 ## Player Data ##
 # Quick Items Data
-qitems_data = {
-    "slot1": {"item": "Estus Flask", "amount": player_inventory['Consumables_num'][1], "graphic": "assets/graphics/inventory/items/Consumables/Estus Flask.png"},
-    "slot2": {"item": "Humanity", "amount": player_inventory['Consumables_num'][2], "graphic": "assets/graphics/inventory/items/Consumables/Humanity.png"},
-    "slot3": {"item": "Darksign", "amount": 1, "graphic": "assets/graphics/inventory/items/Consumables/Darksign.png"},
-    "slot4": {"item": None, "amount": 1, "graphic": "assets/graphics/inventory/items/None.png"},
-    # "slot5": {"item": None, "amount": 11, "graphic": "assets/graphics/inventory/items/None.png"},
-}
-# Current Right Hand
-right_hand_data = {
-    "slot1": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "graphic": None},
-    "slot2": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "graphic": None},
-}
-# Current Left Hand
-left_hand_data = {
-    "slot1": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "type": [], "graphic": None},
-    "slot2": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "type": [], "graphic": None},
-}
-# Attuned Spells
-attuned_spells_data = {
-    "slot1": {"spell": None, "strength": None, "cost": None, "weight": None, "type": None, "graphic": None},
-    "slot2": {"spell": None, "strength": None, "cost": None, "weight": None, "type": None, "graphic": None},
-}
-# Rings Data
-ring_data = {
-    "slot1": {"item": "Ring of Favour and Protection", "graphic": "assets/graphics/inventory/items/Rings/Ring of Favour and Protection.png"},
-    "slot2": {"item": "Tiny Being's Ring", "graphic": "assets/graphics/inventory/items/Rings/Tiny Being's Ring.png"},
-    "slot3": {"item": None, "graphic": None},
-}
-player_armour = {
-    "slot1": {"item": "Knight Armour", "defense": 10, "weight": 22, "graphic": "assets/graphics/inventory/items/Armour/Knight Armour.png"}   
-}
+# qitems_data = {
+#     "slot1": {"item": "Estus Flask", "amount": player_inventory['Consumables_num'][1], "graphic": "assets/graphics/inventory/items/Consumables/Estus Flask.png"},
+#     "slot2": {"item": "Humanity", "amount": player_inventory['Consumables_num'][2], "graphic": "assets/graphics/inventory/items/Consumables/Humanity.png"},
+#     "slot3": {"item": "Darksign", "amount": 1, "graphic": "assets/graphics/inventory/items/Consumables/Darksign.png"},
+#     "slot4": {"item": None, "amount": 1, "graphic": "assets/graphics/inventory/items/None.png"},
+#     # "slot5": {"item": None, "amount": 11, "graphic": "assets/graphics/inventory/items/None.png"},
+# }
+# # Current Right Hand
+# right_hand_data = {
+#     "slot1": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "graphic": None},
+#     "slot2": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "graphic": None},
+# }
+# # Current Left Hand
+# left_hand_data = {
+#     "slot1": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "type": [], "graphic": None},
+#     "slot2": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "type": [], "graphic": None},
+# }
+# # Attuned Spells
+# attuned_spells_data = {
+#     "slot1": {"spell": None, "strength": None, "cost": None, "weight": None, "type": None, "graphic": None},
+#     "slot2": {"spell": None, "strength": None, "cost": None, "weight": None, "type": None, "graphic": None},
+# }
+# # Rings Data
+# ring_data = {
+#     "slot1": {"item": "Ring of Favour and Protection", "graphic": "assets/graphics/inventory/items/Rings/Ring of Favour and Protection.png"},
+#     "slot2": {"item": "Tiny Being's Ring", "graphic": "assets/graphics/inventory/items/Rings/Tiny Being's Ring.png"},
+#     "slot3": {"item": None, "graphic": None},
+# }
+# player_armour = {
+#     "slot1": {"item": "Knight Armour", "defense": 10, "weight": 22, "graphic": "assets/graphics/inventory/items/Armour/Knight Armour.png"}   
+# }
 
 # UI Info
 ui_data = {

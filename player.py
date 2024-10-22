@@ -9,7 +9,7 @@ from particles import AnimationPlayer
 from popups import *
 
 class Player(Entity):
-    def __init__(self, pos, groups, obstacle_sprites, attackable_sprites, create_attack, destroy_attack, create_tool, destroy_tool, create_magic, trigger_death_particles, check_player_death, use_item_effect, toggle_screen_effect):
+    def __init__(self, pos, groups, obstacle_sprites, attackable_sprites, create_attack, destroy_attack, create_magic, trigger_death_particles, check_player_death, use_item_effect, toggle_screen_effect):
         super().__init__(groups)
         self.animation_speed = 0.15
 
@@ -17,11 +17,6 @@ class Player(Entity):
         self.animation_player = AnimationPlayer()
 
         self.popup = gameMenu(self.toggle_screen_effect)
-        # self.inv = invMenu(self.toggle_screen_effect)
-        # self.stat = statusMenu(self.toggle_screen_effect)
-        # self.system = systemMenu(self.toggle_screen_effect)
-        # self.equip = equipMenu(self.toggle_screen_effect)
-
         self.prompt_active = False
 
         self.display_surface = pygame.display.get_surface()
@@ -36,10 +31,6 @@ class Player(Entity):
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None
-
-        self.using_tool = False
-        self.tool_cooldown = 400
-        self.tool_time = None
 
         self.using_skill = False
         self.skill_cooldown = 5000
@@ -56,47 +47,27 @@ class Player(Entity):
         self.attackable_sprites = attackable_sprites
 
         # weapon
-        # getSlotData(right_hand_data, weapon_data)
-        # getSlotData(left_hand_data, tool_data)
-
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
-        self.create_tool = create_tool
-        self.destroy_tool = destroy_tool
 
-        # self.weapon_index = 0
-        # self.weapon = list(right_hand_data.values())[self.weapon_index]["item"]
-        # self.weapon_slot = list(right_hand_data.keys())[self.weapon_index]
-        # self.weapon_weight = list(right_hand_data.values())[self.weapon_index]["weight"]
         self.weapon = interface_details["light_attack"]["name"].split("_")[0]
         self.weapon_weight = interface_details["light_attack"]["weight"]
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.weapon_switch_cooldown = 200
 
-
-        # tool
-        self.tool_index = 0
-        self.tool = list(left_hand_data.values())[self.tool_index]["item"]
-        self.tool_slot = list(left_hand_data.keys())[self.tool_index]
-        self.tool_weight = list(left_hand_data.values())[self.tool_index]["weight"]
-        self.tool_type = list(left_hand_data.values())[self.tool_index]["type"]
-        self.can_switch_tool = True
-        self.tool_switch_time = None
-        self.tool_switch_cooldown = 200
-
         # magic
+        self.catalyst = interface_details["catalyst"]["name"]
         self.create_magic = create_magic
-        self.magic_index = 0
-        self.magic = list(magic_data.keys())[self.magic_index]
-        self.magic_weight = list(magic_data.values())[self.magic_index]["weight"]
-        self.can_switch_magic = True
-        self.magic_switch_time = None
+        self.spell_index = 0
+        self.current_spell = interface_details["spells"][self.spell_index+1]
+        self.scrolling_spells = False
+        self.spell_scroll_cooldown = 200
+        self.spell_scroll_time = None
 
         # stats
         self.stamina_light_attack_mult = 3
         self.stamina_heavy_attack_mult = 5
-        self.stamina_tool_mult = 5
         self.stamina_magic_mult = 4
 
         self.health = player_data['dependent_variables']['health']
@@ -116,7 +87,7 @@ class Player(Entity):
         self.transition_width_m = 0
 
         self.speed = player_data['dependent_variables']['speed']
-        self.xp = player_data['values']['souls']
+        self.xp = interface_details['values']['souls']
         self.stamina_recovery_speed = player_data['dependent_variables']['stamina recovery']
         self.mana_recovery_speed = player_data['dependent_variables']['mana recovery']
         self.stamina_roll = 15
@@ -130,7 +101,7 @@ class Player(Entity):
             "PERCEPTION": 9,
         }
         self.level = 4
-        self.humanity = player_data['values']['humanity']
+        self.humanity = interface_details['values']['active humanities']
 
         self.max_attributes = {
             "VITALITY": 99,
@@ -143,7 +114,7 @@ class Player(Entity):
         self.max_humanity = 99
 
         self.upgrade_equation = get_upgrade_cost(self.level)
-        player_data['values']['levelup_cost'] = round(self.upgrade_equation)
+        interface_details['values']['levelup_cost'] = round(self.upgrade_equation)
 
         # damage timer
         self.vulnerable = True
@@ -260,7 +231,7 @@ class Player(Entity):
             if not "idle" in self.status and not "attack" in self.status and not "roll" in self.status and not "dead" in self.status and not "item" in self.status and not "stunned" in self.status:
                 self.status = self.status + "_idle"
         
-        if self.attacking or self.using_tool:
+        if self.attacking:
             self.direction.x = 0
             self.direction.y = 0
             if not "attack" in self.status:
@@ -343,7 +314,7 @@ class Player(Entity):
         #         self.menu_equipment = False
         #         self.submenu_open = False
 
-        if not self.attacking and not self.using_tool and not self.resting and not self.rolling and not self.stunned:
+        if not self.attacking and not self.resting and not self.rolling and not self.stunned:
             if not self.dead:
                 # quick item input
                 if keys[pygame.K_f] and not self.drinking_estus:       # Todo: change to not use index, but name, so that any item can be assigned to quick use 
@@ -408,13 +379,20 @@ class Player(Entity):
                 # todo: spell effect
                 if player_inputs["cast spell"]:
                     # todo: check stamina/mana cost and take away as needed
+                    if self.stamina_target - self.stamina_magic_mult >= 0:
+                        self.stamina_target -= self.stamina_magic_mult
+                        
+                        spell_name = interface_details["spells"][self.spell_index+1]
+                        spell_power = (magic_data[spell_name]["strength"] + interface_details["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
+                        spell_fp_cost = magic_data[spell_name]["cost"]
+                        self.create_magic(spell_name, spell_power, spell_fp_cost)
 
-                    self.attacking = True
-                    self.attack_time = pygame.time.get_ticks()
-                    self.casting_spell = True
-                    self.spell_use_time = pygame.time.get_ticks()
+                        self.attacking = True
+                        self.attack_time = pygame.time.get_ticks()
+                        self.casting_spell = True
+                        self.spell_use_time = pygame.time.get_ticks()
 
-                    player_inputs["cast spell"] = False
+                        player_inputs["cast spell"] = False
 
                 # attack input - light
                 if player_inputs["light attack"]:
@@ -440,30 +418,18 @@ class Player(Entity):
                         self.weapon_attack_sound.play()
                         player_inputs["heavy attack"] = False
 
-                
-                # tool input
-                # if keys[pygame.K_LCTRL]:
-                #     if self.stamina_target - (self.stamina_tool_mult * self.tool_weight) >= 0:
-                #         self.stamina_target -= (self.stamina_tool_mult * self.tool_weight) # Effect on stamina
+                # mousewheel - scroll through spells
+                if player_inputs["scroll spell"]:
 
-                #         self.using_tool = True
-                #         self.tool_time = pygame.time.get_ticks()
-                #         self.create_tool()
-                #         self.weapon_attack_sound.play()
+                    self.scrolling_spells = True
+                    self.spell_scroll_time = pygame.time.get_ticks()
 
-                #         print(self.tool_type)
-                #         # Effects
-                #         if "catalyst" in self.tool_type:
-                #             if self.stamina_target - (self.stamina_magic_mult * self.magic_weight) >= 0:
-                #                 self.stamina_target -= (self.stamina_magic_mult * self.magic_weight)
-                                                
-                #                 self.attacking = True
-                #                 self.attack_time = pygame.time.get_ticks()
-                #                 style = list(magic_data.keys())[self.magic_index]
-                #                 strength = list(magic_data.values())[self.magic_index]["strength"] + player_data['dependent_variables']['magic damage'] + list(left_hand_data.values())[self.tool_index]["damage"]
-                #                 cost = list(magic_data.values())[self.magic_index]["cost"]
-                #                 self.create_magic(style, strength, cost)
+                    self.spell_index -= player_inputs["scroll direction"]
+                    if self.spell_index > 2: self.spell_index = 0
+                    elif self.spell_index < 0: self.spell_index = 2
 
+                    player_inputs["scroll spell"] = False
+                    player_inputs["scroll direction"] = 0
                 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -474,13 +440,6 @@ class Player(Entity):
                 self.light_attacking = False
                 self.heavy_attacking = False
                 self.destroy_attack()
-                #self.destroy_tool()
-        
-        if self.using_tool:
-            if current_time - self.tool_time >= self.tool_cooldown + left_hand_data[self.tool_slot]["cooldown"]:
-                self.using_tool = False
-                #self.destroy_attack()
-                self.destroy_tool()
         
         if self.using_skill:
             if current_time - self.skill_use_time >= self.skill_cooldown:
@@ -497,14 +456,10 @@ class Player(Entity):
         if not self.can_switch_weapon:
             if current_time - self.weapon_switch_time >= self.weapon_switch_cooldown:
                 self.can_switch_weapon = True
-        
-        if not self.can_switch_tool:
-            if current_time - self.tool_switch_time >= self.tool_switch_cooldown:
-                self.can_switch_tool = True
-        
-        if not self.can_switch_magic:
-            if current_time - self.magic_switch_time >= self.weapon_switch_cooldown:
-                self.can_switch_magic = True
+
+        if self.scrolling_spells:
+            if current_time - self.spell_scroll_time >= self.spell_scroll_cooldown:
+                self.scrolling_spells = False
 
         if not self.vulnerable:
             if current_time - self.hurt_time >= self.invincibility_duration:
@@ -559,18 +514,13 @@ class Player(Entity):
         # todo: add check for light/heavy attack, and alter damage/stamina usage/use time accordingly
 
         return base_damage + weapon_damage
-
-    def get_full_tool_damage(self):
-        base_damage = player_data['dependent_variables']['attack']
-        weapon_damage = left_hand_data[list(left_hand_data.keys())[self.tool_index]]["damage"]
-
-        return base_damage + weapon_damage
     
     def get_full_magic_damage(self):
-        base_damage = player_data['dependent_variables']["magic damage"]
-        spell_damage = magic_data[self.magic]["strength"]
+        base_damage = interface_details["catalyst"]["base damage"]
+        spell_damage = magic_data[self.current_spell]["strength"]
+        dmg_multiplier = player_data['dependent_variables']['magic mult']
 
-        return base_damage + spell_damage
+        return (base_damage + spell_damage) * dmg_multiplier
     
     def get_value_by_index(self, index):
         return list(self.attributes.values())[index]
@@ -662,7 +612,7 @@ class Player(Entity):
         self.get_status()
         self.animate()
         self.move(self.speed, self.sprite_type)
-        player_data['values']['humanity'] = self.on_humanity_increased(player_data['values']['humanity'], 99)
+        interface_details['values']['active humanities'] = self.on_humanity_increased(interface_details['values']['active humanities'], 99)
         self.stamina_recovery()
         self.mana_recovery()
         self.check_death()

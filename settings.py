@@ -74,24 +74,24 @@ INV_BORDER = "#755E30"
 
 # Weapon Data # todo: change for kingseeker
 weapon_data = {
-    "Broadsword": {"cooldown": 100, "damage": 15, "knockback": 2, "weight": 3, "graphic": "assets/graphics/inventory/items/Weapons/Broadsword.png"},
-    "Winged Spear": {"cooldown": 400, "damage": 30, "knockback": 5, "weight": 5, "graphic": "assets/graphics/inventory/items/Weapons/Winged Spear.png"},
-    "Giant Hammer": {"cooldown": 300, "damage": 20, "knockback": 2, "weight": 6, "graphic": "assets/graphics/inventory/items/Weapons/Giant Hammer.png"},
-    "Ricard's Rapier": {"cooldown": 80, "damage": 12, "knockback": 3, "weight": 3, "graphic": "assets/graphics/inventory/items/Weapons/Ricard's Rapier.png"},
-    "Dagger": {"cooldown": 30, "damage": 6, "knockback": 1, "weight": 2, "graphic": "assets/graphics/inventory/items/Weapons/Dagger.png"},
+    "Broadsword": {"cooldown": 100, "damage": 15, "knockback": 2, "weight": 3},
+    # "Winged Spear": {"cooldown": 400, "damage": 30, "knockback": 5, "weight": 5, "graphic": "assets/graphics/inventory/items/Weapons/Winged Spear.png"},
+    # "Giant Hammer": {"cooldown": 300, "damage": 20, "knockback": 2, "weight": 6, "graphic": "assets/graphics/inventory/items/Weapons/Giant Hammer.png"},
+    # "Ricard's Rapier": {"cooldown": 80, "damage": 12, "knockback": 3, "weight": 3, "graphic": "assets/graphics/inventory/items/Weapons/Ricard's Rapier.png"},
+    # "Dagger": {"cooldown": 30, "damage": 6, "knockback": 1, "weight": 2, "graphic": "assets/graphics/inventory/items/Weapons/Dagger.png"},
 }
 
 # Secondary Items Data # todo: change for kingseeker
-tool_data = {
-    "Tower Kite Shield": {"cooldown": 50, "damage": 0, "knockback": 1, "weight": 3, "type": ["shield"], "graphic": "assets/graphics/inventory/items/Weapons/Tower Kite Shield.png"},
-    "Sorcerer's Catalyst": {"cooldown": 100, "damage": 1, "knockback": 1, "weight": 2, "type": ["catalyst", "sorcery_item"], "graphic": "assets/graphics/inventory/items/Weapons/Sorcerer's Catalyst.png"},
-}
+# tool_data = {
+#     "Tower Kite Shield": {"cooldown": 50, "damage": 0, "knockback": 1, "weight": 3, "type": ["shield"], "graphic": "assets/graphics/inventory/items/Weapons/Tower Kite Shield.png"},
+#     "Sorcerer's Catalyst": {"cooldown": 100, "damage": 1, "knockback": 1, "weight": 2, "type": ["catalyst", "sorcery_item"], "graphic": "assets/graphics/inventory/items/Weapons/Sorcerer's Catalyst.png"},
+# }
 
 # Magic Data # todo: change for kingseeker
 magic_data = {
-    "fire_surge": {"strength": 12, "cost": 10, "weight": 5, "type": "Pyromancy", "graphic": "assets/graphics/particles/magic/fire_surge/fire_surge.png"},
-    "heal": {"strength": 5, "cost": 8, "weight": 3, "type": "Miracle", "graphic": "assets/graphics/particles/magic/heal/heal.png"},
-    "icecrag_burst": {"strength": 9, "cost": 14, "weight": 6, "type": "Sorcery", "graphic": "assets/graphics/particles/magic/icecrag_burst/icecrag_burst.png"},
+    "fire_surge": {"strength": 12, "cost": 10, "type": "Pyromancy", "graphic": "assets/graphics/particles/magic/fire_surge/fire_surge.png"},
+    "heal": {"strength": 5, "cost": 8, "type": "Miracle", "graphic": "assets/graphics/particles/magic/heal/heal.png"},
+    "icecrag_burst": {"strength": 9, "cost": 14, "type": "Sorcery", "graphic": "assets/graphics/particles/magic/icecrag_burst/icecrag_burst.png"},
 }
 
 # Enemy Data # todo: change for kingseeker

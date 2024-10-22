@@ -18,13 +18,13 @@ class Weapon(pygame.sprite.Sprite):
         elif direction == "down":
             self.rect = self.image.get_rect(midtop = player.rect.midbottom + pygame.math.Vector2(-10, 0))
 
-class Tool(pygame.sprite.Sprite):
+class Catalyst(pygame.sprite.Sprite):
     def __init__(self, player, groups):
         super().__init__(groups)
-        self.sprite_type = "tool"
+        self.sprite_type = "catalyst"
         direction = player.status.split("_")[0]
 
-        full_path = f"assets/graphics/weapons/{player.tool}/{direction}.png" 
+        full_path = f"assets/graphics/weapons/{player.catalyst}/{direction}.png" 
         self.image = pygame.image.load(full_path).convert_alpha()
 
         if direction == "right":
