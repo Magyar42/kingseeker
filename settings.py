@@ -41,6 +41,7 @@ BOSS_HP_WIDTH = 700
 BOSS_HP_OFFSET = 80
 BAR_HEIGHT = 20
 ITEM_BOX_SIZE = 80
+ITEM_BOX_SIZE_SMALL = 60
 UI_FONT = "assets/fonts/PublicPixel-z84yD.ttf"
 BACKUP_FONT = "assets/fonts/joystix.ttf"
 HUMANITY_BOX_WIDTH = 58

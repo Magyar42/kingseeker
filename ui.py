@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from gameinfo import *
+from support import centreImage, centreImageNum
 
 class UI:
     def __init__(self):
@@ -49,6 +50,9 @@ class UI:
             self.boons.append(current_boon_surf)
 
         self.overlay_img = pygame.image.load(f"assets/graphics/ui/interface/item_box_overlay.png")
+        self.spell_underlay = pygame.image.load(f"assets/graphics/ui/interface/spell_underlay.png")
+        self.input_underlay = pygame.image.load(f"assets/graphics/ui/interface/input_underlay.png")
+        self.estus_counter = pygame.image.load(f"assets/graphics/ui/interface/counter_box.png")
 
     def update_bars(self):
         self.health_bar_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
@@ -124,6 +128,15 @@ class UI:
         
         return bg_rect
     
+    def selection_box_small(self, left, top, triggered):
+        bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE_SMALL, ITEM_BOX_SIZE_SMALL)
+
+        if triggered: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box.png").convert_alpha()
+        self.display_surface.blit(itembox_surf, bg_rect)
+        
+        return bg_rect
+    
     def box_cooldown(self, rect, active):
         if active:
             self.display_surface.blit(self.overlay_img, rect)
@@ -135,16 +148,20 @@ class UI:
         else: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box.png").convert_alpha()
         self.display_surface.blit(itembox_surf, rect)
     
-    def estus_display(self, player, triggered, uses): # Estus
-        bg_rect = self.selection_box(170, 635, triggered)
+    def estus_display(self, player, triggered, uses):
+
+        # Main box
+        bg_rect = self.selection_box_small(30, 590 + 20, triggered)
         item_surface = self.estus_surf
         item_rect = item_surface.get_rect(center = bg_rect.center)
-
-        text_surface = self.tooltip_font.render(str(uses), False, TEXT_COLOUR)
-        text_rect = text_surface.get_rect(midright = item_rect.bottomright + pygame.math.Vector2(3, -5))
-
         self.display_surface.blit(item_surface, item_rect)
-        self.display_surface.blit(text_surface, text_rect)
+
+        # Counter
+        bg_rect = pygame.Rect(item_rect.bottomright[0] - 10, item_rect.bottomright[1] - 10, 30, 30)
+        text_surface = self.tooltip_font.render(str(uses), False, TEXT_COLOUR)
+        num_rect = text_surface.get_rect(center = bg_rect.center)
+        self.display_surface.blit(self.estus_counter, bg_rect)
+        self.display_surface.blit(text_surface, num_rect)
 
     def primary_attack_display(self, player, triggered):
         bg_rect = self.selection_box(70, 545, triggered)
@@ -155,7 +172,7 @@ class UI:
         self.box_cooldown(light_attack_rect, triggered)
     
     def secondary_attack_display(self, player, triggered):
-        bg_rect = self.selection_box(120, 590, triggered)
+        bg_rect = self.selection_box(115, 590, triggered)
         heavy_attack_surface = self.input_types[1]
         heavy_attack_rect = heavy_attack_surface.get_rect(center = bg_rect.center)
 
@@ -163,7 +180,7 @@ class UI:
         self.box_cooldown(heavy_attack_rect, triggered)
 
     def catalyst_display(self, player, triggered):
-        bg_rect = self.selection_box(170, 545, triggered)
+        bg_rect = self.selection_box(175, 545, triggered)
         catalyst_surface = self.input_types[3]
         catalyst_rect = catalyst_surface.get_rect(center = bg_rect.center)
 
@@ -192,11 +209,13 @@ class UI:
         
     def show_spells(self, player, index):
         # spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/spell_box.png"), (60, 60)).convert_alpha()
+        base_y = centreImageNum(60, 60)[1] - 65
+        x = 10 + self.spell_underlay.get_width() // 2 - 30
         for slot in range(3):
             if index == slot: selected = True
             else: selected = False
-            spell_rect = pygame.Rect(20, 250 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-            # self.display_surface.blit(spell_surf, spell_rect)
+
+            spell_rect = pygame.Rect(x, base_y + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
             self.spell_box(spell_rect, selected)
 
             spell_img = self.spells[slot]
@@ -208,8 +227,18 @@ class UI:
 
             self.display_surface.blit(self.human_form_overlay, outline_rect)
     
+    def show_underlays(self):
+        # Spells
+        y = centreImage(self.spell_underlay)[1]
+        self.display_surface.blit(self.spell_underlay, (10, y))
+
+        # Inputs
+        self.display_surface.blit(self.input_underlay, (60, 535))
+        self.display_surface.blit(self.input_underlay, (165, 535))
+    
     def display(self, player):
         self.update_bars()
+        self.show_underlays()
 
         self.show_bar(player, player.health_target, player_data['dependent_variables']["health"], self.health_bar_rect, HEALTH_COLOUR, self.health_bar_grad_rect, HEALTH_COLOUR_GRADIENT)
         self.show_bar(player, player.stamina_target, player_data['dependent_variables']["stamina"], self.stamina_bar_rect, STAMINA_COLOUR, self.stamina_bar_grad_rect, STAMINA_COLOUR_GRADIENT)
