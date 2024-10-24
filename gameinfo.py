@@ -122,7 +122,7 @@ interface_details = {
         "ring 1": None, "ring 2": None,
     },
     "boons": {
-        1: "boon_1", 2: "boon_2", 3: "boon_3", 4: "boon_4", 5: "boon_5", 6: "boon_6", 7: "boon_7"
+        "list": ["boon_1"],
     },
     "spells": {
         1: "heal", 2: "fire_surge", 3: "icecrag_burst",

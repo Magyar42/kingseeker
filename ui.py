@@ -14,18 +14,17 @@ class UI:
         self.transition_speed = 5
 
         # Bars Setup
-        self.health_bar_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
-        self.mana_bar_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
-        self.stamina_bar_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
+        self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
+        self.mana_bar_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
+        self.stamina_bar_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
 
-        self.health_bar_grad_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.mana_bar_grad_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.stamina_bar_grad_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.health_bar_grad_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.mana_bar_grad_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.stamina_bar_grad_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
 
         # Extras
-        self.humanity_counter_rect = pygame.Rect(20, 15, HUMANITY_BOX_WIDTH, HUMANITY_BOX_HEIGHT)
-
-        self.human_form_overlay = pygame.transform.scale(pygame.image.load("assets/graphics/ui/enkindled.png"), (110, 110)).convert_alpha()
+        # self.humanity_counter_rect = pygame.Rect(20, 15, HUMANITY_BOX_WIDTH, HUMANITY_BOX_HEIGHT)
+        # self.human_form_overlay = pygame.transform.scale(pygame.image.load("assets/graphics/ui/enkindled.png"), (110, 110)).convert_alpha()
 
         # KINGSEEKER
         # TODO: move to somewhere else so that it updates after each loading from firelink, as well as after each boon gained
@@ -43,11 +42,10 @@ class UI:
             current_spell_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/spells/{current_spell}.png")
             self.spells.append(current_spell_surf)
 
-        self.boons = []
-        for boon_num in range(1, 8):
-            current_boon = interface_details["boons"][boon_num]
-            current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
-            self.boons.append(current_boon_surf)
+        # self.boons = []
+        # for current_boon in interface_details["boons"]["list"]:
+        #     current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+        #     self.boons.append(current_boon_surf)
 
         self.overlay_img = pygame.image.load(f"assets/graphics/ui/interface/item_box_overlay.png")
         self.spell_underlay = pygame.image.load(f"assets/graphics/ui/interface/spell_underlay.png")
@@ -55,13 +53,13 @@ class UI:
         self.estus_counter = pygame.image.load(f"assets/graphics/ui/interface/counter_box.png")
 
     def update_bars(self):
-        self.health_bar_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
-        self.mana_bar_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
-        self.stamina_bar_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
+        self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
+        self.mana_bar_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
+        self.stamina_bar_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
 
-        self.health_bar_grad_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.mana_bar_grad_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.stamina_bar_grad_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.health_bar_grad_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.mana_bar_grad_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.stamina_bar_grad_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
 
     def show_bar(self, player, current, max, bg_rect, colour, grad, grad_colour):
         pygame.draw.rect(self.display_surface, UI_BG_COLOUR, bg_rect)
@@ -105,18 +103,18 @@ class UI:
         self.display_surface.blit(text_surface, text_rect)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, text_rect.inflate(20, 20), 3)
     
-    def show_humanity(self, humanity):
-        if humanity < 10:
-            humanity = "0" + str(humanity)
+    # def show_humanity(self, humanity):
+    #     if humanity < 10:
+    #         humanity = "0" + str(humanity)
 
-        text_surface = self.humanity_font.render(str(humanity), False, TEXT_COLOUR)
-        text_rect = text_surface.get_rect(center = (self.humanity_counter_rect.centerx + 1, self.humanity_counter_rect.centery - 1))
+    #     text_surface = self.humanity_font.render(str(humanity), False, TEXT_COLOUR)
+    #     text_rect = text_surface.get_rect(center = (self.humanity_counter_rect.centerx + 1, self.humanity_counter_rect.centery - 1))
 
-        pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.humanity_counter_rect.inflate(10, 10))
-        self.display_surface.blit(text_surface, text_rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, self.humanity_counter_rect.inflate(10, 10), 3)
+    #     pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.humanity_counter_rect.inflate(10, 10))
+    #     self.display_surface.blit(text_surface, text_rect)
+    #     pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, self.humanity_counter_rect.inflate(10, 10), 3)
 
-        self.enkindled_ui_overlay(text_rect)
+    #     self.enkindled_ui_overlay(text_rect)
     
     # KINGSEEKER STUFF #
     def selection_box(self, left, top, triggered):
@@ -197,8 +195,12 @@ class UI:
     
     def show_boons(self, player):
         if player.menu_open:
+            # if len(self.boons) > 5: shown_boons = 5
+            # else: shown_boons = len(self.boons)
+            shown_boons = len(self.boons)
             boon_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
-            for slot in range(7):
+            
+            for slot in range(shown_boons):
                 # if slot % 2 == 1: y_add = 45
                 # else: y_add = 0
                 boon_rect = pygame.Rect(1180 - (slot * 35), 10, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
@@ -244,7 +246,7 @@ class UI:
         self.show_bar(player, player.stamina_target, player_data['dependent_variables']["stamina"], self.stamina_bar_rect, STAMINA_COLOUR, self.stamina_bar_grad_rect, STAMINA_COLOUR_GRADIENT)
         self.show_bar(player, player.mana_target, player_data['dependent_variables']["mana"], self.mana_bar_rect, MANA_COLOUR, self.mana_bar_grad_rect, MANA_COLOUR_GRADIENT)
 
-        self.show_boons(player) # todo
+        # self.show_boons(player) # todo
         self.show_spells(player, player.spell_index)
 
         # todo for all inputs: have timer for use time AND cooldown after separate
@@ -256,4 +258,4 @@ class UI:
         self.estus_display(player, player.drinking_estus, interface_details["values"]["current estus"])
 
         self.show_xp(interface_details['values']['souls'])
-        self.show_humanity(interface_details['values']['active humanities'])
+        #self.show_humanity(interface_details['values']['active humanities'])

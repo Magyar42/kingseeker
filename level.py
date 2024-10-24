@@ -335,11 +335,9 @@ class Level:
         current_channel = pygame.mixer.find_channel(True)
         current_channel.play(self.bonfire_sound)
 
-    def use_item_effect(self, index=0): # Index is always 0, as only estus can be used
+    def use_item_effect(self):
         self.animation_player.create_particles("sparkle", self.player.rect.center + pygame.math.Vector2(0, -40), [self.visible_sprites], "item")
-
-        if index == 0:  # Estus
-            self.animation_player.create_particles("estus", self.player.rect.center + pygame.math.Vector2(-3, -30), [self.visible_sprites], "item")
+        self.animation_player.create_particles("estus", self.player.rect.center + pygame.math.Vector2(-3, -30), [self.visible_sprites], "item")
 
     def kindle_bonfire_visuals(self, pos):
         self.animation_player.create_particles("estus", pos, [self.visible_sprites], "bonfire_effect")

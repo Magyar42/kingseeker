@@ -28,22 +28,27 @@ class Player(Entity):
         self.import_player_assets()
         self.status = "down"
 
+        # Determines how long the player "freezes" when performing an attack
         self.attacking = False
-        self.attack_cooldown = 400
+        self.attack_cooldown = 300
         self.attack_time = None
 
+        # Determines the cooldown between skill attacks
         self.using_skill = False
         self.skill_cooldown = 5000
         self.skill_use_time = None
 
+        # Determines the cooldown between magic attacks
         self.casting_spell = False
         self.spell_cooldown = 2000
         self.spell_use_time = None
 
+        # Determines the cooldown between light attacks
         self.light_attacking = False
         self.light_attack_cooldown = 520
         self.light_attack_time = None
 
+        # Determines the cooldown between heavy attacks
         self.heavy_attacking = False
         self.heavy_attack_cooldown = 750
         self.heavy_attack_time = None
@@ -257,10 +262,9 @@ class Player(Entity):
             self.direction.x = 0
             self.direction.y = 0
 
-            estus_image = pygame.transform.scale(pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png"), (60, 60)).convert_alpha()
-            x = (self.display_surface.get_size()[0] // 2) - (estus_image.get_size()[0] // 2)
-            y = (self.display_surface.get_size()[1] // 2) - (estus_image.get_size()[1] // 2) - 40
-            self.display_surface.blit(estus_image, (x, y))
+            estus_image = pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png").convert_alpha()
+            x, y = centreImage(estus_image)
+            self.display_surface.blit(estus_image, (x, y - 40))
 
         else:
             if "attack" in self.status:
@@ -287,12 +291,19 @@ class Player(Entity):
                 self.menu_toggle_time = pygame.time.get_ticks()
                 self.resting = False
 
-        # If the input is pressed during the cooldown, set action to false
+        # If the input is pressed during another attack, set action to false
         # Otherwise, the action will be "queued"
         if self.attacking:
             player_inputs["cast spell"] = False
             player_inputs["light attack"] = False
             player_inputs["heavy attack"] = False
+        
+        # If the SAME input is pressed during the COOLDOWN, set action to false
+        # Otherwise, the action will be "queued"
+        if self.casting_spell: player_inputs["cast spell"] = False
+        elif self.light_attacking: player_inputs["light attack"] = False
+        elif self.heavy_attacking: player_inputs["heavy attack"] = False
+
 
         if not self.attacking and not self.resting and not self.rolling and not self.stunned:
             if not self.dead:
@@ -419,7 +430,7 @@ class Player(Entity):
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
 
-        if self.attacking: # todo: separate into light and heavy attack cooldowns
+        if self.attacking:
             if current_time - self.attack_time >= self.attack_cooldown + interface_details["light_attack"]["cooldown"]:
                 self.attacking = False
                 self.destroy_attack()
