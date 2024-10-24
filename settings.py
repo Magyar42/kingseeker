@@ -88,11 +88,16 @@ weapon_data = {
 #     "Sorcerer's Catalyst": {"cooldown": 100, "damage": 1, "knockback": 1, "weight": 2, "type": ["catalyst", "sorcery_item"], "graphic": "assets/graphics/inventory/items/Weapons/Sorcerer's Catalyst.png"},
 # }
 
+# Boons Data
+boon_data = {
+    "boon_1": {"name": "Lightning Step", "category": "Warriors of Sunlight", "desc1": "erm", "desc2": "what the sigma", "lvl": 1},
+}
+
 # Magic Data # todo: change for kingseeker
 magic_data = {
-    "fire_surge": {"strength": 12, "cost": 10, "type": "Pyromancy", "graphic": "assets/graphics/particles/magic/fire_surge/fire_surge.png"},
-    "heal": {"strength": 5, "cost": 8, "type": "Miracle", "graphic": "assets/graphics/particles/magic/heal/heal.png"},
-    "icecrag_burst": {"strength": 9, "cost": 14, "type": "Sorcery", "graphic": "assets/graphics/particles/magic/icecrag_burst/icecrag_burst.png"},
+    "fire_surge": {"strength": 12, "cost": 10, "type": "Pyromancy"},
+    "heal": {"strength": 5, "cost": 8, "type": "Miracle"},
+    "icecrag_burst": {"strength": 9, "cost": 14, "type": "Sorcery"},
 }
 
 # Enemy Data # todo: change for kingseeker

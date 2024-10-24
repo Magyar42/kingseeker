@@ -56,10 +56,6 @@ covenant_ranks = {
     "blades of the darkmoon": 0,
     "darkwraiths": 0,
     "chaos servants": 0,
-    "gravelord servants": 0,
-    "path of the dragon": 0,
-    "royal guard": 0,
-    "way of white": 0,
 }
 
 # Resource Info
@@ -122,7 +118,7 @@ interface_details = {
         "ring 1": None, "ring 2": None,
     },
     "boons": {
-        "list": ["boon_1"],
+        "list": ["boon_1", "boon_2", "boon_3"],
     },
     "spells": {
         1: "heal", 2: "fire_surge", 3: "icecrag_burst",
@@ -156,34 +152,6 @@ player_inputs = {
     "light attack": False, "heavy attack": False, "skill": False, "cast spell": False, "roll": False, "scroll spell": False, "scroll direction": 0,
 }
 
-
-
-
-
-### below is old dark soles stuff ###
-# # Player Stats # todo: comment out and use new sections
-# player_data = {
-#     "values": {"level": 7, "souls": 0, "humanity": 3, "lost_souls": 0, "lost_humanity": 0,
-#     "levelup_cost": 1},
-    
-#     "dependent_variables": {"health": 400, "mana": 40, "stamina": 60, "equip load": 21.5,
-#         "max equip load": 54.0, "speed": 5, "poise": 42.1,"att. slots": 2, "attack": 10, "magic damage": 4,
-#         "stamina recovery": 0.2, "mana recovery": 0.005},
-
-#     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
-    
-#     "attributes": {"VITALITY": 11, "ATTUNEMENT": 8, "ENDURANCE": 9, "STRENGTH": 12, "PERCEPTION": 6},
-
-#     "defense": {"physical def.": 128, "magic def.": 139, "fire def.": 125, "lightning def.": 132},
-
-#     "resistances": {"poise": 0, "bleed res": 100, "poison res": 80, "curse res": 90, "discovery": 120},
-    
-#     "status": {"name": "John Dark", "hollow": True, "estus": 5, "current_estus": 7, "estus_level": 1, "covenant": "None"},
-    
-#     "unlocks": {"rite_of_kindling": False, "lordvessel": False, "bell_1": False, "bell_2": False},
-# }
-
-
 # Bonfire Data
 bonfire_data = {
     0: {'kindle_level': 1, 'warp_target': True, 'warp_node': True, 'can_warp': False, 'active': False},
@@ -193,196 +161,6 @@ bonfire_data = {
 bonfire_menu_options = {
     "Leave": True, "Level Up": True, "Attune Magic": True, "Warp": False, "Kindle": True, "Use Humanity": True,
 }
-
-# # Inventory
-# player_inventory = {
-#     "Consumables": ["Darksign", "Estus Flask", "Humanity"],
-#     "Ores": ["Titanite Shard", "Green Titanite Shard"],
-#     "Key Items": [],
-#     "Spells": ["Fire Surge", "Heal", "Icecrag Burst"],
-#     "Weapons": ["Broadsword", "Ricard's Rapier", "Winged Spear", "Giant Hammer", "Dagger", "Sorcerer's Catalyst", "Tower Kite Shield"],
-#     "Armour": ["Knight Armour"],
-#     "Rings": ["Ring of Favour and Protection", "Tiny Being's Ring"],
-
-#     "Consumables_num": [1, player_data['status']['current_estus'], 3],
-#     "Ores_num": [11, 2],
-#     "Key Items_num": [],
-#     "Spells_num": [1, 1, 1],
-#     "Weapons_num": [1, 1, 1, 1, 1, 1, 1],
-#     "Armour_num": [1],
-#     "Rings_num": [1, 1],
-# }
-
-# Item Dictionary
-game_items = {
-    # Consumables
-    "Estus Flask": {
-        "short_desc": "Fill with Estus at Bonfire. Fills HP.",
-        "short_desc2": "The Undead treasure these dull green flasks.",
-        "max": 20,
-        "category": "Consumables",
-    },
-    "Humanity": {
-        "short_desc": "Rare tiny black sprite found on corpses.",
-        "short_desc2": "Use to gain 1 humanity and restore HP.",
-        "max": 99,
-        "category": "Consumables",
-    },
-    "Darksign": {
-        "short_desc": "The Darksign signifies an accursed Undead.",
-        "short_desc2": "Those branded with it are reborn after death.",
-        "max": 1,
-        "category": "Consumables",
-    },
-    # Armour
-    "Knight Armour": {
-        "short_desc": "Equipment of a lower rank knight. Despite the",
-        "short_desc2": "thin metal, the grooves give added protection.",
-        "max": 1,
-        "category": "Armour",
-    },
-    # Rings
-    "Ring of Favour and Protection": {
-        "short_desc": "A ring symbolizing the favour and",
-        "short_desc2": "protection of the goddess Fina.",
-        "max": 1,
-        "category": "Rings",
-    },
-    "Tiny Being's Ring": {
-        "short_desc": "Ring made of an ancient tiny red jewel.",
-        "short_desc2": "Grants small increase to HP.",
-        "max": 1,
-        "category": "Rings",
-    },
-    "Darkmoon Seance Ring": {
-        "short_desc": "Ring given to disciples of the Darkmoon deity.",
-        "short_desc2": "Grants an extra magic attunement slot.",
-        "max": 1,
-        "category": "Rings",
-    },
-    # Ores
-    "Titanite Shard": {
-        "short_desc": "Most common material for weapon reinforcement.",
-        "short_desc2": "Reinforce standard weapons to +5.",
-        "max": 99,
-        "category": "Ores",
-    },
-    "Green Titanite Shard": {
-        "short_desc": "Titanite shard imbued with special power.",
-        "short_desc2": "Reinforce magic and divine weapons to +5.",
-        "max": 99,
-        "category": "Ores",
-    },
-    # Weapons
-    "Broadsword": {
-        "short_desc": "The blade of this sword emphasizes slicing.",
-        "short_desc2": "Very effective against multiple enemies.",
-        "max": 1,
-        "category": "Weapons",
-    },
-    "Ricard's Rapier": {
-        "short_desc": "A rapier with intricate decorations.",
-        "short_desc2": "Weapon of the famous Undead Prince Ricard.",
-        "max": 1,
-        "category": "Weapons",
-    },
-    "Winged Spear": {
-        "short_desc": "Long weapon effective against hard exteriors.",
-        "short_desc2": "But the radius is blocked easily by shields.",
-        "max": 1,
-        "category": "Weapons",
-    },
-    "Giant Hammer": {
-        "short_desc": "Wooden hammer wielded by the Giant Blacksmith.",
-        "short_desc2": "Used for forging, but still quite powerful.",
-        "max": 1,
-        "category": "Weapons",
-    },
-    "Dagger": {
-        "short_desc": "This dagger has only a modest attack, but",
-        "short_desc2": "can be jabbed in rapid succession.",
-        "max": 1,
-        "category": "Weapons",
-    },
-    "Sorcerer's Catalyst": {
-        "short_desc": "Catalyst used by sorcerers of Vinheim",
-        "short_desc2": "Dragon School.",
-        "max": 1,
-        "category": "Weapons",
-    },
-    "Tower Kite Shield": {
-        "short_desc": "Medium shield decorated with a tower,",
-        "short_desc2": "the symbol of protection.",
-        "max": 1,
-        "category": "Weapons",
-    },
-    # Spells
-    "Fire Surge": {
-        "short_desc": "A pyromancy originating from a faraway land.",
-        "short_desc2": "Creates static fireballs on two tiles.",
-        "max": 1,
-        "category": "Spells",
-    },
-    "Heal": {
-        "short_desc": "Say a prayer to be blessed by its revelations.",
-        "short_desc2": "Restores a small amount of health.",
-        "max": 1,
-        "category": "Spells",
-    },
-    "Icecrag Burst": {
-        "short_desc": "Draw from the essence of the soul for power.",
-        "short_desc2": "Summons a row of icy crystals.",
-        "max": 1,
-        "category": "Spells",
-    },
-    # Key Items
-    "Dungeon Cell Key": {
-        "short_desc": "Key to the dungeon of the Undead Asylum",
-        "short_desc2": "to the North.",
-        "max": 1,
-        "category": "Key Items",
-    },
-    "Big Pilgrim's Key": {
-        "short_desc": "Key to the inner door of the Undead Asylum",
-        "short_desc2": "main hall. Belongs to a Chosen Undead.",
-        "max": 1,
-        "category": "Key Items",
-    },
-}
-
-## Player Data ##
-# Quick Items Data
-# qitems_data = {
-#     "slot1": {"item": "Estus Flask", "amount": player_inventory['Consumables_num'][1], "graphic": "assets/graphics/inventory/items/Consumables/Estus Flask.png"},
-#     "slot2": {"item": "Humanity", "amount": player_inventory['Consumables_num'][2], "graphic": "assets/graphics/inventory/items/Consumables/Humanity.png"},
-#     "slot3": {"item": "Darksign", "amount": 1, "graphic": "assets/graphics/inventory/items/Consumables/Darksign.png"},
-#     "slot4": {"item": None, "amount": 1, "graphic": "assets/graphics/inventory/items/None.png"},
-#     # "slot5": {"item": None, "amount": 11, "graphic": "assets/graphics/inventory/items/None.png"},
-# }
-# # Current Right Hand
-# right_hand_data = {
-#     "slot1": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "graphic": None},
-#     "slot2": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "graphic": None},
-# }
-# # Current Left Hand
-# left_hand_data = {
-#     "slot1": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "type": [], "graphic": None},
-#     "slot2": {"item": None, "cooldown": None, "damage": None, "knockback": None, "weight": None, "type": [], "graphic": None},
-# }
-# # Attuned Spells
-# attuned_spells_data = {
-#     "slot1": {"spell": None, "strength": None, "cost": None, "weight": None, "type": None, "graphic": None},
-#     "slot2": {"spell": None, "strength": None, "cost": None, "weight": None, "type": None, "graphic": None},
-# }
-# # Rings Data
-# ring_data = {
-#     "slot1": {"item": "Ring of Favour and Protection", "graphic": "assets/graphics/inventory/items/Rings/Ring of Favour and Protection.png"},
-#     "slot2": {"item": "Tiny Being's Ring", "graphic": "assets/graphics/inventory/items/Rings/Tiny Being's Ring.png"},
-#     "slot3": {"item": None, "graphic": None},
-# }
-# player_armour = {
-#     "slot1": {"item": "Knight Armour", "defense": 10, "weight": 22, "graphic": "assets/graphics/inventory/items/Armour/Knight Armour.png"}   
-# }
 
 # UI Info
 ui_data = {
