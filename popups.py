@@ -318,7 +318,7 @@ class gameMenu:
             else: selected = False
 
             boon_rect = pygame.Rect(1170, 30 + (slot * 35), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-            self.menu.boon_display(boon_rect, selected)
+            self.menu.boon_display(boon_rect, selected, self.showing_details)
 
             boon_img = self.boons[slot]
             self.display_surface.blit(boon_img, boon_rect)
@@ -416,20 +416,20 @@ class gameMenu:
 
         # Name
         title_surface = font.render(f"{boon_data[f"{boon}"]["name"]}", True, "white")
-        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(70, 15))
+        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 15))
         text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
         text_fade.fill(TEXT_BG_COLOUR)
-        text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(65, 10))
+        text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 10))
         self.display_surface.blit(text_fade, text_fade_rect)
         self.display_surface.blit(title_surface, title_rect)
 
         # Category
         cat = f"{boon_data[f"{boon}"]["category"]} | {boon_data[f"{boon}"]["lvl"]}"
         cat_surface = pygame.font.Font(UI_FONT, 10).render(cat, True, "white")
-        cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(70, 40))
+        cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 40))
         cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
         cat_fade.fill(TEXT_BG_COLOUR)
-        cat_fade_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(65, 35))
+        cat_fade_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 35))
         self.display_surface.blit(cat_fade, cat_fade_rect)
         self.display_surface.blit(cat_surface, cat_rect)
 
@@ -488,7 +488,7 @@ class itemMenu:
         self.display_surface.blit(self.resource_icon_list[index], rect)
         self.display_names(surface, name, rect, num)
 
-    def boon_display(self, rect, selected):
-        if selected: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box_selected.png").convert_alpha()
+    def boon_display(self, rect, selected, trigger):
+        if selected and trigger: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box_selected.png").convert_alpha()
         else: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box.png").convert_alpha()
         self.display_surface.blit(itembox_surf, rect)

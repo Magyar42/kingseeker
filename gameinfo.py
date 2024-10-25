@@ -118,7 +118,7 @@ interface_details = {
         "ring 1": None, "ring 2": None,
     },
     "boons": {
-        "list": ["boon_1", "boon_2", "boon_3"],
+        "list": ["boon_1", "boon_2", "boon_3", "boon_4"],
     },
     "spells": {
         1: "heal", 2: "fire_surge", 3: "icecrag_burst",
