@@ -193,6 +193,10 @@ class gameMenu:
         self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
         self.toggle_screen_effect = toggle_screen_effect
 
+        self.details_index_items = None
+        self.details_index_boons = None
+        self.boon_active = False
+
         self.selection_index = 0
         self.selection_time = None
         self.can_move_selection = True
@@ -222,15 +226,15 @@ class gameMenu:
             self.boons.append(current_boon_surf)
 
     def selection_cooldown(self):
-        if not self.can_move_selection:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.selection_time >= 200:
-                self.can_move_selection = True
+        # if not self.can_move_selection:
+        #     current_time = pygame.time.get_ticks()
+        #     if current_time - self.selection_time >= 200:
+        #         self.can_move_selection = True
 
-        if not self.can_move_boon:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.boon_time >= 200:
-                self.can_move_boon = True
+        # if not self.can_move_boon:
+        #     current_time = pygame.time.get_ticks()
+        #     if current_time - self.boon_time >= 200:
+        #         self.can_move_boon = True
         
         if not self.details_can_toggle:
             current_time = pygame.time.get_ticks()
@@ -240,25 +244,25 @@ class gameMenu:
     def input(self, player):
         keys = pygame.key.get_pressed()
 
-        if self.can_move_selection and self.showing_details:
-            if keys[pygame.K_DOWN] and self.selection_index < len(self.resource_name_list) - 1:
-                self.selection_index += 1
-                self.can_move_selection = False
-                self.selection_time = pygame.time.get_ticks()
-            elif keys[pygame.K_UP] and self.selection_index >= 1:
-                self.selection_index -= 1
-                self.can_move_selection = False
-                self.selection_time = pygame.time.get_ticks()
+        # if self.can_move_selection and self.showing_details:
+        #     if keys[pygame.K_DOWN] and self.selection_index < len(self.resource_name_list) - 1:
+        #         self.selection_index += 1
+        #         self.can_move_selection = False
+        #         self.selection_time = pygame.time.get_ticks()
+        #     elif keys[pygame.K_UP] and self.selection_index >= 1:
+        #         self.selection_index -= 1
+        #         self.can_move_selection = False
+        #         self.selection_time = pygame.time.get_ticks()
         
-        if self.can_move_boon and self.showing_details:
-            if keys[pygame.K_LEFT] and self.boon_index < len(interface_details["boons"]["list"]) - 1:
-                self.boon_index += 1
-                self.can_move_boon = False
-                self.boon_time = pygame.time.get_ticks()
-            elif keys[pygame.K_RIGHT] and self.boon_index >= 1:
-                self.boon_index -= 1
-                self.can_move_boon = False
-                self.boon_time = pygame.time.get_ticks()
+        # if self.can_move_boon and self.showing_details:
+        #     if keys[pygame.K_LEFT] and self.boon_index < len(interface_details["boons"]["list"]) - 1:
+        #         self.boon_index += 1
+        #         self.can_move_boon = False
+        #         self.boon_time = pygame.time.get_ticks()
+        #     elif keys[pygame.K_RIGHT] and self.boon_index >= 1:
+        #         self.boon_index -= 1
+        #         self.can_move_boon = False
+        #         self.boon_time = pygame.time.get_ticks()
 
             # if keys[pygame.K_SPACE]:
             #     self.can_move_selection = False
@@ -281,7 +285,6 @@ class gameMenu:
     
     # Esc Menu - Shows items + boons
     def displayMenu(self, player):
-        colour = UPGRADE_TEXT_COLOUR
         self.input(player)
         self.selection_cooldown()
 
@@ -292,7 +295,7 @@ class gameMenu:
         y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 300
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
 
-        title_surface = self.font.render("ITEMS", True, colour)
+        title_surface = self.font.render("ITEMS", True, UPGRADE_TEXT_COLOUR)
         title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, -15))
         text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
         text_fade.fill(TEXT_BG_COLOUR)
@@ -301,36 +304,65 @@ class gameMenu:
         self.display_surface.blit(text_fade, text_fade_rect)
         self.display_surface.blit(title_surface, title_rect)
 
+        # Set to None every tick so that it displays nothing if nothing is hovered over currently
+        self.details_index_items = None
+        if not self.boon_active: self.details_index_boons = None
+
+        pos = pygame.mouse.get_pos()
         for resource in self.resource_name_list:
             index = self.resource_name_list.index(resource)
             if index >= 4:
-                rect = pygame.Rect(x + 90, y + (option_rect_size[1] + 5) * (self.resource_name_list.index(resource) - 4), option_rect_size[0], option_rect_size[1])
-                self.menu.display(self.display_surface, self.selection_index, index, resource, rect, self.resource_num_list[index], self.showing_details)
+                item_rect = pygame.Rect(x + 90, y + (option_rect_size[1] + 5) * (self.resource_name_list.index(resource) - 4), option_rect_size[0], option_rect_size[1])
             else:
-                rect = pygame.Rect(x, y + (option_rect_size[1] + 5) * self.resource_name_list.index(resource), option_rect_size[0], option_rect_size[1])
-                self.menu.display(self.display_surface, self.selection_index, index, resource, rect, self.resource_num_list[index], self.showing_details)
-
-        # BOONS Display
-        shown_boons = len(self.boons)
+                item_rect = pygame.Rect(x, y + (option_rect_size[1] + 5) * self.resource_name_list.index(resource), option_rect_size[0], option_rect_size[1])
             
-        for slot in range(shown_boons):
-            if self.boon_index == slot: selected = True
+            if item_rect.collidepoint(pos):
+                self.details_index_items = index
+                selected = True
             else: selected = False
+            self.menu.display(index, item_rect, selected, self.resource_num_list[index])
 
-            boon_rect = pygame.Rect(1170, 30 + (slot * 35), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-            self.menu.boon_display(boon_rect, selected, self.showing_details)
+        # BOONS Display        
+        for slot in range(len(self.boons)):
+            boon_rect = pygame.Rect(1170, 30 + (slot * 45), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+            
+            if boon_rect.collidepoint(pos) and not self.boon_active:
+                self.details_index_boons = slot
+                selected = True
+            else: selected = False
+            self.menu.boon_display(boon_rect, selected)
 
             boon_img = self.boons[slot]
             self.display_surface.blit(boon_img, boon_rect)
 
+        # DETAILS toggle
+        if self.details_index_items is not None:
+            self.item_details(player, self.resource_name_list[self.details_index_items], pygame.font.Font(UI_FONT, 18))
+        if self.details_index_boons is not None:
+            self.boon_details(player, interface_details["boons"]["list"][self.details_index_boons], pygame.font.Font(UI_FONT, 18))
+
+            self.boon_active = True
+            if self.boon_active: 
+                # Blit again to draw on top of all boons
+                # self.boon_active locks self.details_index_boons, preventing it from being changed
+                active_boon_rect = pygame.Rect(1170, 30 + (self.details_index_boons * 45), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+                self.menu.boon_display(active_boon_rect, True)
+                active_boon_img = self.boons[self.details_index_boons]
+                self.display_surface.blit(active_boon_img, active_boon_rect)
+
+                if not active_boon_rect.collidepoint(pos):
+                    # Unlocks self.details_index_boons
+                    self.boon_active = False
+
+
         # EXTRA lines
-        tt1_surface = self.font.render("ESC: Close items view", True, colour)
+        tt1_surface = self.font.render("ESC: Close items view", True, UPGRADE_TEXT_COLOUR)
         tt1_rect = tt1_surface.get_rect(midleft = (10, 675))
         text_fade_tt1 = pygame.Surface((tt1_rect.w + 10, tt1_rect.h + 10)).convert_alpha()
         text_fade_tt1.fill(TEXT_BG_COLOUR)
         text_fade_tt1_rect = tt1_surface.get_rect(midleft = tt1_rect.midleft + pygame.math.Vector2(-5, -5))
 
-        tt2_surface = self.font.render("SHIFT: Toggle item details", True, colour)
+        tt2_surface = self.font.render("SHIFT: Toggle item details", True, UPGRADE_TEXT_COLOUR)
         tt2_rect = tt2_surface.get_rect(midleft = (10, 700))
         text_fade_tt2 = pygame.Surface((tt2_rect.w + 10, tt2_rect.h + 10)).convert_alpha()
         text_fade_tt2.fill(TEXT_BG_COLOUR)
@@ -340,11 +372,6 @@ class gameMenu:
         self.display_surface.blit(tt1_surface, tt1_rect)
         self.display_surface.blit(text_fade_tt2, text_fade_tt2_rect)
         self.display_surface.blit(tt2_surface, tt2_rect)
-
-        # DETAILS toggle
-        if self.showing_details:
-            self.item_details(player, self.resource_name_list[self.selection_index], pygame.font.Font(UI_FONT, 18))
-            self.boon_details(player, interface_details["boons"]["list"][self.boon_index], pygame.font.Font(UI_FONT, 18))
     
     # Shift Menu - Item details
     def item_details(self, player, resource, font):
@@ -373,7 +400,7 @@ class gameMenu:
 
         # Category
         cat = resource_details[f"{resource}"][0]
-        cat_surface = pygame.font.Font(UI_FONT, 10).render(cat, True, "white")
+        cat_surface = pygame.font.Font(UI_FONT, 12).render(cat, True, "white")
         cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(70, 40))
         cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
         cat_fade.fill(TEXT_BG_COLOUR)
@@ -415,7 +442,7 @@ class gameMenu:
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
 
         # Name
-        title_surface = font.render(f"{boon_data[f"{boon}"]["name"]}", True, "white")
+        title_surface = font.render(f"{boon_data[f'{boon}']['name']} [{boon_data[f'{boon}']['lvl']}]", True, "white")
         title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 15))
         text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
         text_fade.fill(TEXT_BG_COLOUR)
@@ -424,8 +451,8 @@ class gameMenu:
         self.display_surface.blit(title_surface, title_rect)
 
         # Category
-        cat = f"{boon_data[f"{boon}"]["category"]} | {boon_data[f"{boon}"]["lvl"]}"
-        cat_surface = pygame.font.Font(UI_FONT, 10).render(cat, True, "white")
+        cat = f"{boon_data[f'{boon}']['category']}"
+        cat_surface = pygame.font.Font(UI_FONT, 12).render(cat, True, "white")
         cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 40))
         cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
         cat_fade.fill(TEXT_BG_COLOUR)
@@ -458,7 +485,6 @@ class itemMenu:
         self.display_surface = pygame.display.get_surface()
         self.font = self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
 
-        self.options_list = ["equipment", "inventory", "status", "system"]
         self.icons_list = import_folder("assets/graphics/ui/menu/menu_options")
         self.icons_selected_list = import_folder("assets/graphics/ui/menu/menu_options_selected")
 
@@ -466,7 +492,7 @@ class itemMenu:
         self.resource_num_list = list(resources.values())
         self.resource_icon_list = import_folder("assets/graphics/ui/resources")
 
-    def display_names(self, surface, name, rect, num):
+    def display_names(self, surface, rect, num):
         #colour = UPGRADE_TEXT_COLOUR_SELECTED if selected else UPGRADE_TEXT_COLOUR
         colour = UPGRADE_TEXT_COLOUR
 
@@ -480,15 +506,14 @@ class itemMenu:
         surface.blit(text_fade, text_fade_rect)
         surface.blit(title_surface, title_rect)
 
-    def display(self, surface, selection_num, index, name, rect, num, trigger):
-        if index == selection_num and trigger:
-            pygame.draw.rect(surface, "#FF8208", rect, 3)
-        else:
-            pygame.draw.rect(surface, UI_BORDER_COLOUR, rect, 3)
+    def display(self, index, rect, selected, num):
+        if selected: pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, rect, 3)
+        else: pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, rect, 3)
+        
         self.display_surface.blit(self.resource_icon_list[index], rect)
-        self.display_names(surface, name, rect, num)
+        self.display_names(self.display_surface, rect, num)
 
-    def boon_display(self, rect, selected, trigger):
-        if selected and trigger: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box_selected.png").convert_alpha()
+    def boon_display(self, rect, selected):
+        if selected: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box_selected.png").convert_alpha()
         else: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box.png").convert_alpha()
         self.display_surface.blit(itembox_surf, rect)

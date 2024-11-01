@@ -1,8 +1,6 @@
 # Data and information that is updated and changed as gameplay progresses #
 # Information is saved to and loaded from here #
 
-## TODO: CHANGE THE WHOLE FILE FOR KINGSEEKER
-
 # System Settings
 local_settings = {
     "gameplay": {"hard_mode": False, "soles_mode": False, "HUD": "Default"},

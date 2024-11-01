@@ -147,7 +147,6 @@ class UI:
         self.display_surface.blit(itembox_surf, rect)
     
     def estus_display(self, player, triggered, uses):
-
         # Main box
         bg_rect = self.selection_box_small(30, 590 + 20, triggered)
         item_surface = self.estus_surf
@@ -192,25 +191,8 @@ class UI:
 
         self.display_surface.blit(skill_surface, skill_rect)
         self.box_cooldown(skill_rect, triggered)
-    
-    def show_boons(self, player):
-        if player.menu_open:
-            # if len(self.boons) > 5: shown_boons = 5
-            # else: shown_boons = len(self.boons)
-            shown_boons = len(self.boons)
-            boon_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
-            
-            for slot in range(shown_boons):
-                # if slot % 2 == 1: y_add = 45
-                # else: y_add = 0
-                boon_rect = pygame.Rect(1180 - (slot * 35), 10, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-                self.display_surface.blit(boon_surf, boon_rect)
-
-                boon_img = self.boons[slot]
-                self.display_surface.blit(boon_img, boon_rect)
         
     def show_spells(self, player, index):
-        # spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/spell_box.png"), (60, 60)).convert_alpha()
         base_y = centreImageNum(60, 60)[1] - 65
         x = 10 + self.spell_underlay.get_width() // 2 - 30
         for slot in range(3):
@@ -246,7 +228,6 @@ class UI:
         self.show_bar(player, player.stamina_target, player_data['dependent_variables']["stamina"], self.stamina_bar_rect, STAMINA_COLOUR, self.stamina_bar_grad_rect, STAMINA_COLOUR_GRADIENT)
         self.show_bar(player, player.mana_target, player_data['dependent_variables']["mana"], self.mana_bar_rect, MANA_COLOUR, self.mana_bar_grad_rect, MANA_COLOUR_GRADIENT)
 
-        # self.show_boons(player) # todo
         self.show_spells(player, player.spell_index)
 
         # todo for all inputs: have timer for use time AND cooldown after separate
