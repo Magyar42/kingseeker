@@ -107,7 +107,7 @@ class Level:
                         if style == "entities":
                             if column == "394":
                                 if player_reset:
-                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_tool, self.destroy_tool, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect)
+                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect)
                             elif column == "388":
                                 self.bonfire = Bonfire(0, (x, y), [self.visible_sprites, self.obstacle_sprites, self.interactable_sprites], self.restart_world, self.check_humanity_restored, self.check_bonfire_lit, self.check_bonfire_rest, self.toggle_menu, self.toggle_screen_effect, self.kindle_bonfire_visuals)
                             # elif column == "396":
