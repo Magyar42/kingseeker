@@ -41,6 +41,7 @@ BOSS_HP_WIDTH = 700
 BOSS_HP_OFFSET = 80
 BAR_HEIGHT = 20
 ITEM_BOX_SIZE = 80
+ITEM_BOX_SIZE_SMALL = 60
 UI_FONT = "assets/fonts/PublicPixel-z84yD.ttf"
 BACKUP_FONT = "assets/fonts/joystix.ttf"
 HUMANITY_BOX_WIDTH = 58
@@ -69,29 +70,29 @@ STAMINA_COLOUR = "#346137"
 STAMINA_COLOUR_GRADIENT = "#396B3D"
 MANA_COLOUR = "#1C1E5D"
 MANA_COLOUR_GRADIENT = "#272A7F"
-UI_BORDER_COLOUR_ACTIVE = "#755E30"
+UI_BORDER_COLOUR_ACTIVE = "#FF8208"
 INV_BORDER = "#755E30"
 
 # Weapon Data # todo: change for kingseeker
 weapon_data = {
-    "Broadsword": {"cooldown": 100, "damage": 15, "knockback": 2, "weight": 3, "graphic": "assets/graphics/inventory/items/Weapons/Broadsword.png"},
-    "Winged Spear": {"cooldown": 400, "damage": 30, "knockback": 5, "weight": 5, "graphic": "assets/graphics/inventory/items/Weapons/Winged Spear.png"},
-    "Giant Hammer": {"cooldown": 300, "damage": 20, "knockback": 2, "weight": 6, "graphic": "assets/graphics/inventory/items/Weapons/Giant Hammer.png"},
-    "Ricard's Rapier": {"cooldown": 80, "damage": 12, "knockback": 3, "weight": 3, "graphic": "assets/graphics/inventory/items/Weapons/Ricard's Rapier.png"},
-    "Dagger": {"cooldown": 30, "damage": 6, "knockback": 1, "weight": 2, "graphic": "assets/graphics/inventory/items/Weapons/Dagger.png"},
+    "Broadsword": {"cooldown": 100, "damage": 15, "knockback": 2, "weight": 3},
 }
 
-# Secondary Items Data # todo: change for kingseeker
-tool_data = {
-    "Tower Kite Shield": {"cooldown": 50, "damage": 0, "knockback": 1, "weight": 3, "type": ["shield"], "graphic": "assets/graphics/inventory/items/Weapons/Tower Kite Shield.png"},
-    "Sorcerer's Catalyst": {"cooldown": 100, "damage": 1, "knockback": 1, "weight": 2, "type": ["catalyst", "sorcery_item"], "graphic": "assets/graphics/inventory/items/Weapons/Sorcerer's Catalyst.png"},
+# Boons Data
+boon_data = {
+    ## Warriors of Sunlight
+    # Level 1
+    "boon_1": {"name": "Lightning Step", "category": "Warriors of Sunlight", "desc1": "Moving into foes inflicts weak lightning damage.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
+    "boon_2": {"name": "Primary Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Primary attack emits chain lightning when|damaging a foe.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
+    "boon_3": {"name": "Secondary Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Secondary attack causes a lightning|bolt to strike nearby foes.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
+    "boon_4": {"name": "Catalyst Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Transforms catalyst into a talisman|capable of casting divine miracles.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
 }
 
 # Magic Data # todo: change for kingseeker
 magic_data = {
-    "fire_surge": {"strength": 12, "cost": 10, "weight": 5, "type": "Pyromancy", "graphic": "assets/graphics/particles/magic/fire_surge/fire_surge.png"},
-    "heal": {"strength": 5, "cost": 8, "weight": 3, "type": "Miracle", "graphic": "assets/graphics/particles/magic/heal/heal.png"},
-    "icecrag_burst": {"strength": 9, "cost": 14, "weight": 6, "type": "Sorcery", "graphic": "assets/graphics/particles/magic/icecrag_burst/icecrag_burst.png"},
+    "fire_surge": {"strength": 12, "cost": 10, "type": "Pyromancy"},
+    "heal": {"strength": 5, "cost": 8, "type": "Miracle"},
+    "icecrag_burst": {"strength": 9, "cost": 14, "type": "Sorcery"},
 }
 
 # Enemy Data # todo: change for kingseeker

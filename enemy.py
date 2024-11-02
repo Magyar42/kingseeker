@@ -140,8 +140,6 @@ class Enemy(Entity):
             self.direction = self.get_player_dist_and_dir(player)[1]
             if attack_type == "weapon":
                 self.health -= player.get_full_weapon_damage()
-            elif attack_type == "tool":
-                self.health -= player.get_full_tool_damage()
             else:
                 self.health -= player.get_full_magic_damage()
             self.hit_time = pygame.time.get_ticks()

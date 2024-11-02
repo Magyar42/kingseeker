@@ -56,12 +56,7 @@ def get_upgrade_cost(level):
     return upgrade_equation
 
 def restore_estus(player, level):
-    player_data['status']['estus'] = 5 * level
-
-    player_data['status']['current_estus'] = player_data['status']['estus']
-    qitems_data[f'slot{player.qitems_index + 1}']['amount'] = player_data['status']['current_estus']
-    if player.qitems[player.qitems_index] == "Estus Flask":
-        player.qitems_uses[player.qitems_index] = qitems_data[f'slot{player.qitems_index + 1}']['amount']
+    print("TODO: restore estus")
 
 def get_attribute_num(stat):
     stat_path = f"assets/map/stats/{stat}.txt"

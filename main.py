@@ -6,11 +6,11 @@ from support import *
 from button import Button
 from particles import AnimationPlayer
 
-if platform.system() == "Windows":
-    from pyvidplayer2 import Video
-    opening = Video("assets/video/movie_subs.mp4")
-elif platform.system() == "Linux":
-    print(f"{platform.system()} system detected: opening movie will not play")
+# if platform.system() == "Windows":
+#     from pyvidplayer2 import Video
+#     opening = Video("assets/video/movie_subs.mp4")
+# elif platform.system() == "Linux":
+#     print(f"{platform.system()} system detected: opening movie will not play")
 
 # pygame.mouse.set_visible(False)
 # cursor_img = pygame.image.load("assets/graphics/cursor.png").convert_alpha()
@@ -20,7 +20,6 @@ icon_image = pygame.image.load("assets/graphics/bonfire_icon_new.png")
 # Functions
 def mm_newgame():
     print("Starting Game.")
-    print("ver. 23.5.24")
 
     pygame.mixer.music.stop()
     # todo: renable intro
@@ -69,7 +68,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level("0")
+        self.level = Level("999") # Set to test area (0 is firelink)
 
         self.frames_list = import_folder('assets/graphics/menu_animations/mainmenu_bonfire')
         self.frame_speed = 0.12
@@ -89,8 +88,10 @@ class Game:
                     elif mousekey_pressed[2]:
                         player_inputs["heavy attack"] = True
                     elif mousekey_pressed[1]:
-                        print("Skill used")
-                        player_inputs["skill"] = True
+                        player_inputs["cast spell"] = True
+                elif event.type == pygame.MOUSEWHEEL:
+                    player_inputs["scroll spell"] = True
+                    player_inputs["scroll direction"] = event.y
 
             self.screen.fill(MM_COLOUR)
             self.level.run()

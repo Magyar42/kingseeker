@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from gameinfo import *
+from support import centreImage, centreImageNum
 
 class UI:
     def __init__(self):
@@ -13,55 +14,52 @@ class UI:
         self.transition_speed = 5
 
         # Bars Setup
-        self.health_bar_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
-        self.mana_bar_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
-        self.stamina_bar_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
+        self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
+        self.mana_bar_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
+        self.stamina_bar_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
 
-        self.health_bar_grad_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.mana_bar_grad_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.stamina_bar_grad_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.health_bar_grad_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.mana_bar_grad_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.stamina_bar_grad_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
 
         # Extras
-        self.humanity_counter_rect = pygame.Rect(20, 15, HUMANITY_BOX_WIDTH, HUMANITY_BOX_HEIGHT)
+        # self.humanity_counter_rect = pygame.Rect(20, 15, HUMANITY_BOX_WIDTH, HUMANITY_BOX_HEIGHT)
+        # self.human_form_overlay = pygame.transform.scale(pygame.image.load("assets/graphics/ui/enkindled.png"), (110, 110)).convert_alpha()
 
-        # Convert Weapon Dictionary
-        self.weapon_graphics = []
-        for weapon in right_hand_data.values():
-            path = weapon["graphic"]
-            weapon = pygame.image.load(path).convert_alpha()
-            self.weapon_graphics.append(weapon)
+        # KINGSEEKER
+        # TODO: move to somewhere else so that it updates after each loading from firelink, as well as after each boon gained
+        self.estus_surf = pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png")
+        self.input_types = []
+        for input_type in ["light_attack", "heavy_attack", "skill", "catalyst"]:
+            current_tool = interface_details[f"{input_type}"]["name"]
+            current_tool_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
+            self.input_types.append(current_tool_surf)
+            # f"self.{input_type}_img" = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
         
-        # Convert Tool Dictionary
-        self.tool_graphics = []
-        for tool in left_hand_data.values():
-            path = tool["graphic"]
-            tool = pygame.image.load(path).convert_alpha()
-            self.tool_graphics.append(tool)
-        
-        # Convert Magic Dictionary
-        self.magic_graphics = []
-        for magic in magic_data.values():
-            path = magic["graphic"]
-            magic = pygame.image.load(path).convert_alpha()
-            self.magic_graphics.append(magic)
-        
-        # Convert Quick Items Dictionary
-        self.qitems_graphics = []
-        for item in qitems_data.values():
-            path = item["graphic"]
-            item = pygame.transform.scale(pygame.image.load(path), (64, 64)).convert_alpha()
-            self.qitems_graphics.append(item)
+        self.spells = []
+        for spell_num in range(1, 4):
+            current_spell = interface_details["spells"][spell_num]
+            current_spell_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/spells/{current_spell}.png")
+            self.spells.append(current_spell_surf)
 
-        self.human_form_overlay = pygame.transform.scale(pygame.image.load("assets/graphics/ui/enkindled.png"), (110, 110)).convert_alpha()
+        # self.boons = []
+        # for current_boon in interface_details["boons"]["list"]:
+        #     current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+        #     self.boons.append(current_boon_surf)
+
+        self.overlay_img = pygame.image.load(f"assets/graphics/ui/interface/item_box_overlay.png")
+        self.spell_underlay = pygame.image.load(f"assets/graphics/ui/interface/spell_underlay.png")
+        self.input_underlay = pygame.image.load(f"assets/graphics/ui/interface/input_underlay.png")
+        self.estus_counter = pygame.image.load(f"assets/graphics/ui/interface/counter_box.png")
 
     def update_bars(self):
-        self.health_bar_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
-        self.mana_bar_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
-        self.stamina_bar_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
+        self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
+        self.mana_bar_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
+        self.stamina_bar_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT)
 
-        self.health_bar_grad_rect = pygame.Rect(90, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.mana_bar_grad_rect = pygame.Rect(90, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
-        self.stamina_bar_grad_rect = pygame.Rect(90, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.health_bar_grad_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.mana_bar_grad_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT // 2)
+        self.stamina_bar_grad_rect = pygame.Rect(27, 58, ui_data['STAMINA_BAR_WIDTH'], BAR_HEIGHT // 2)
 
     def show_bar(self, player, current, max, bg_rect, colour, grad, grad_colour):
         pygame.draw.rect(self.display_surface, UI_BG_COLOUR, bg_rect)
@@ -105,153 +103,140 @@ class UI:
         self.display_surface.blit(text_surface, text_rect)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, text_rect.inflate(20, 20), 3)
     
-    def show_humanity(self, humanity):
-        # humanity = int(humanity)
-        if humanity < 10:
-            humanity = "0" + str(humanity)
+    # def show_humanity(self, humanity):
+    #     if humanity < 10:
+    #         humanity = "0" + str(humanity)
 
-        text_surface = self.humanity_font.render(str(humanity), False, TEXT_COLOUR)
-        text_rect = text_surface.get_rect(center = (self.humanity_counter_rect.centerx + 1, self.humanity_counter_rect.centery - 1))
+    #     text_surface = self.humanity_font.render(str(humanity), False, TEXT_COLOUR)
+    #     text_rect = text_surface.get_rect(center = (self.humanity_counter_rect.centerx + 1, self.humanity_counter_rect.centery - 1))
 
-        pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.humanity_counter_rect.inflate(10, 10))
-        self.display_surface.blit(text_surface, text_rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, self.humanity_counter_rect.inflate(10, 10), 3)
+    #     pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.humanity_counter_rect.inflate(10, 10))
+    #     self.display_surface.blit(text_surface, text_rect)
+    #     pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, self.humanity_counter_rect.inflate(10, 10), 3)
 
-        self.enkindled_ui_overlay(text_rect)
-
-    def selection_box(self, left, top, has_switched):
-        bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-        # pygame.draw.rect(self.display_surface, UI_BG_COLOUR, bg_rect)
-        if has_switched:
-            itembox_surf = pygame.image.load(f"{self.box_path}/item_box_selected.png").convert_alpha()
-            self.display_surface.blit(itembox_surf, bg_rect)
-            # pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, bg_rect, 3)
-        else:
-            itembox_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
-            self.display_surface.blit(itembox_surf, bg_rect)
-            # pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, bg_rect, 3)
-        return bg_rect
-
-    def weapon_overlay(self, weapon_index, has_switched):
-        bg_rect = self.selection_box(170, 565, has_switched)
-        weapon_surface = self.weapon_graphics[weapon_index]
-        weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(weapon_surface, weapon_rect)
-    
-    def tool_overlay(self, tool_index, has_switched):
-        bg_rect = self.selection_box(70, 565, has_switched)
-        tool_surface = self.tool_graphics[tool_index]
-        tool_rect = tool_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(tool_surface, tool_rect)
-    
-    def magic_overlay(self, magic_index, has_switched, player):
-        bg_rect = self.selection_box(120, 520, has_switched)
-        magic_surface = self.magic_graphics[magic_index]
-        magic_rect = magic_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(magic_surface, magic_rect)
-        if "catalyst" not in player.tool_type:
-            self.display_surface.blit(pygame.image.load("assets/graphics/ui/inactive_overlay.png"), magic_rect)
-    
-    def item_overlay(self, item_index, has_switched, uses):
-        bg_rect = self.selection_box(120, 610, has_switched)
-        item_surface = self.qitems_graphics[item_index]
-        item_rect = item_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(item_surface, item_rect)
-
-        # amount_rect = pygame.Rect(120, 685, ITEM_BOX_SIZE, 25)
-        # pygame.draw.rect(self.display_surface, UI_BG_COLOUR, amount_rect)
-        # if has_switched:
-        #     pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, amount_rect, 3)
-        # else:
-        #     pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, amount_rect, 3)
-        # 
-        text_surface = self.tooltip_font.render(str(uses), False, TEXT_COLOUR)
-        text_rect = text_surface.get_rect(midright = item_rect.bottomright + pygame.math.Vector2(3, -5))
-        self.display_surface.blit(text_surface, text_rect)
+    #     self.enkindled_ui_overlay(text_rect)
     
     # KINGSEEKER STUFF #
-    def item_display(self, player, has_switched, uses):
-        bg_rect = self.selection_box(170, 635, has_switched)
-        item_surface = self.qitems_graphics[0]
-        item_rect = item_surface.get_rect(center = bg_rect.center)
+    def selection_box(self, left, top, triggered):
+        bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
 
-        self.display_surface.blit(item_surface, item_rect)
-        text_surface = self.tooltip_font.render(str(uses), False, TEXT_COLOUR)
-        text_rect = text_surface.get_rect(midright = item_rect.bottomright + pygame.math.Vector2(3, -5))
-        self.display_surface.blit(text_surface, text_rect)
-
-    def primary_attack_display(self, player, has_switched):
-        bg_rect = self.selection_box(70, 545, has_switched)
-        weapon_surface = self.weapon_graphics[0]
-        weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
-
-        self.display_surface.blit(weapon_surface, weapon_rect)
+        if triggered: itembox_surf = pygame.image.load(f"{self.box_path}/item_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
+        self.display_surface.blit(itembox_surf, bg_rect)
+        
+        return bg_rect
     
-    def secondary_attack_display(self, player, has_switched):
-        bg_rect = self.selection_box(120, 590, has_switched)
-        weapon_surface = self.weapon_graphics[0]
-        weapon_rect = weapon_surface.get_rect(center = bg_rect.center)
+    def selection_box_small(self, left, top, triggered):
+        bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE_SMALL, ITEM_BOX_SIZE_SMALL)
 
-        self.display_surface.blit(weapon_surface, weapon_rect)
+        if triggered: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box.png").convert_alpha()
+        self.display_surface.blit(itembox_surf, bg_rect)
+        
+        return bg_rect
+    
+    def box_cooldown(self, rect, active):
+        if active:
+            self.display_surface.blit(self.overlay_img, rect)
 
-    def tool_display(self, player, has_switched):
-        bg_rect = self.selection_box(170, 545, has_switched)
-        tool_surface = self.tool_graphics[1]
-        tool_rect = tool_surface.get_rect(center = bg_rect.center)
+    def spell_box(self, rect, selected):
+        # bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
 
-        self.display_surface.blit(tool_surface, tool_rect)
+        if selected: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load(f"{self.box_path}/spell_box.png").convert_alpha()
+        self.display_surface.blit(itembox_surf, rect)
+    
+    def estus_display(self, player, triggered, uses):
+        # Main box
+        bg_rect = self.selection_box_small(30, 590 + 20, triggered)
+        item_surface = self.estus_surf
+        item_rect = item_surface.get_rect(center = bg_rect.center)
+        self.display_surface.blit(item_surface, item_rect)
 
-    def skill_display(self, player, has_switched):
-        bg_rect = self.selection_box(220, 590, has_switched)
-        skill_surface = self.magic_graphics[1]
+        # Counter
+        bg_rect = pygame.Rect(item_rect.bottomright[0] - 10, item_rect.bottomright[1] - 10, 30, 30)
+        text_surface = self.tooltip_font.render(str(uses), False, TEXT_COLOUR)
+        num_rect = text_surface.get_rect(center = bg_rect.center)
+        self.display_surface.blit(self.estus_counter, bg_rect)
+        self.display_surface.blit(text_surface, num_rect)
+
+    def primary_attack_display(self, player, triggered):
+        bg_rect = self.selection_box(70, 545, triggered)
+        light_attack_surface = self.input_types[0]
+        light_attack_rect = light_attack_surface.get_rect(center = bg_rect.center)
+
+        self.display_surface.blit(light_attack_surface, light_attack_rect)
+        self.box_cooldown(light_attack_rect, triggered)
+    
+    def secondary_attack_display(self, player, triggered):
+        bg_rect = self.selection_box(115, 590, triggered)
+        heavy_attack_surface = self.input_types[1]
+        heavy_attack_rect = heavy_attack_surface.get_rect(center = bg_rect.center)
+
+        self.display_surface.blit(heavy_attack_surface, heavy_attack_rect)
+        self.box_cooldown(heavy_attack_rect, triggered)
+
+    def catalyst_display(self, player, triggered):
+        bg_rect = self.selection_box(175, 545, triggered)
+        catalyst_surface = self.input_types[3]
+        catalyst_rect = catalyst_surface.get_rect(center = bg_rect.center)
+
+        self.display_surface.blit(catalyst_surface, catalyst_rect)
+        self.box_cooldown(catalyst_rect, triggered)
+
+    def skill_display(self, player, triggered):
+        bg_rect = self.selection_box(220, 590, triggered)
+        skill_surface = self.input_types[2]
         skill_rect = skill_surface.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(skill_surface, skill_rect)
-    
-    def show_boons(self, player):
-        if player.menu_open:
-            boon_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
-            for slot in range(7):
-                # if slot % 2 == 1: y_add = 45
-                # else: y_add = 0
-                boon_rect = pygame.Rect(1180 - (slot * 35), 10, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-                self.display_surface.blit(boon_surf, boon_rect)
+        self.box_cooldown(skill_rect, triggered)
         
-    def show_spells(self, player):
-        spell_surf = pygame.transform.scale(pygame.image.load(f"{self.box_path}/item_box.png"), (60, 60)).convert_alpha()
-        for slot in range(4):
-            spell_rect = pygame.Rect(20, 200 + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-            self.display_surface.blit(spell_surf, spell_rect)
+    def show_spells(self, player, index):
+        base_y = centreImageNum(60, 60)[1] - 65
+        x = 10 + self.spell_underlay.get_width() // 2 - 30
+        for slot in range(3):
+            if index == slot: selected = True
+            else: selected = False
+
+            spell_rect = pygame.Rect(x, base_y + (slot * 65), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+            self.spell_box(spell_rect, selected)
+
+            spell_img = self.spells[slot]
+            self.display_surface.blit(spell_img, spell_rect)
 
     def enkindled_ui_overlay(self, rect):
-        if not player_data['status']['hollow']:
+        if not interface_details['values']['hollow']:
             outline_rect = pygame.Rect(self.humanity_counter_rect.x - 26, self.humanity_counter_rect.y - 26, self.humanity_counter_rect.w, self.humanity_counter_rect.h)
 
             self.display_surface.blit(self.human_form_overlay, outline_rect)
     
+    def show_underlays(self):
+        # Spells
+        y = centreImage(self.spell_underlay)[1]
+        self.display_surface.blit(self.spell_underlay, (10, y))
+
+        # Inputs
+        self.display_surface.blit(self.input_underlay, (60, 535))
+        self.display_surface.blit(self.input_underlay, (165, 535))
+    
     def display(self, player):
         self.update_bars()
+        self.show_underlays()
 
         self.show_bar(player, player.health_target, player_data['dependent_variables']["health"], self.health_bar_rect, HEALTH_COLOUR, self.health_bar_grad_rect, HEALTH_COLOUR_GRADIENT)
         self.show_bar(player, player.stamina_target, player_data['dependent_variables']["stamina"], self.stamina_bar_rect, STAMINA_COLOUR, self.stamina_bar_grad_rect, STAMINA_COLOUR_GRADIENT)
         self.show_bar(player, player.mana_target, player_data['dependent_variables']["mana"], self.mana_bar_rect, MANA_COLOUR, self.mana_bar_grad_rect, MANA_COLOUR_GRADIENT)
 
-        self.show_boons(player) # todo
-        self.show_spells(player)
+        self.show_spells(player, player.spell_index)
 
-        self.skill_display(player, not player.can_switch_magic)
-        self.tool_display(player, not player.can_switch_tool)
-        self.primary_attack_display(player, not player.can_switch_weapon)
-        self.secondary_attack_display(player, not player.can_switch_weapon)
-        self.item_display(player, not player.can_switch_qitems, player.qitems_uses[player.qitems_index])
+        # todo for all inputs: have timer for use time AND cooldown after separate
+        # here, the box outline should go orange for the use time, not the cooldown
+        self.skill_display(player, player.using_skill)
+        self.catalyst_display(player, player.casting_spell)
+        self.primary_attack_display(player, player.light_attacking)
+        self.secondary_attack_display(player, player.heavy_attacking)
+        self.estus_display(player, player.drinking_estus, interface_details["values"]["current estus"])
 
-        self.show_xp(player_data['values']['souls'])
-        self.show_humanity(player_data['values']['humanity'])
-        # self.weapon_overlay(player.weapon_index, not player.can_switch_weapon) # Main item display
-        # self.tool_overlay(player.tool_index, not player.can_switch_tool) # Secondary item display
-        # self.magic_overlay(player.magic_index, not player.can_switch_magic, player) # Spell display
-        #self.item_overlay(player.qitems_index, not player.can_switch_qitems, player.qitems_uses[player.qitems_index]) # Quick Item Display
+        self.show_xp(interface_details['values']['souls'])
+        #self.show_humanity(interface_details['values']['active humanities'])

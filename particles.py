@@ -106,20 +106,20 @@ class AnimationPlayer():
         animation_frames = choice(self.frames["leaf"])
         ParticleEffect(pos, animation_frames, groups, sprite_type)
     
-    def create_particles(self, animation_type, pos, groups, sprite_type):
+    def create_particles(self, animation_type, pos, groups, sprite_type, speed=0.15):
         animation_frames = self.frames[animation_type]
-        ParticleEffect(pos, animation_frames, groups, sprite_type)
+        ParticleEffect(pos, animation_frames, groups, sprite_type, speed)
     
     def create_macro(self, animation_type, pos, groups, effect, speed, remain_time, toggle_screen_effect):
         animation_frames = self.frames[animation_type]
         ScreenEffect(pos, animation_frames, groups, effect, speed, remain_time, toggle_screen_effect)
 
 class ParticleEffect(pygame.sprite.Sprite):
-    def __init__(self, pos, animation_frames, groups, sprite_type):
+    def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15):
         super().__init__(groups)
         self.sprite_type = sprite_type
         self.frame_index = 0
-        self.animation_speed = 0.15
+        self.animation_speed = speed
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
