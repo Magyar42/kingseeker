@@ -6,7 +6,7 @@ from popups import Prompt, ItemPopup
 from debug import debug
 
 class NPC(pygame.sprite.Sprite):
-    def __init__(self, npc_id, pos, groups, effect = None):
+    def __init__(self, npc_id, pos, groups, chamber_wave_active, effect = None):
         super().__init__(groups)
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
@@ -24,6 +24,7 @@ class NPC(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-30, -40)
         self.use_radius = 100
+        self.chamber_wave_active = chamber_wave_active
 
         self.prompt = Prompt()
         self.item_popup = ItemPopup()
@@ -98,7 +99,7 @@ class NPC(pygame.sprite.Sprite):
 
     def player_interact(self, player):
         player_distance = self.get_player_dist(player)
-        if player_distance <= self.use_radius and not self.talked_to:
+        if player_distance <= self.use_radius and not self.talked_to and not self.chamber_wave_active:
             # print(f"{round(player_distance)}m from {self.npc_id}!")
             if self.npc_id != "transition_prompt": self.prompt.createPrompt("NPC", "Q", "Talk")
             else: self.prompt.createPrompt("NPC", "Q", "Begin Journey: Undead Burg")
@@ -240,6 +241,8 @@ class NPC(pygame.sprite.Sprite):
         self.animate()
         self.cooldowns()
     
-    def npc_update(self, player):
+    def npc_update(self, player, bool):
         self.player_interact(player)
         self.interact_interface(player)
+        self.chamber_wave_active = bool
+        debug(self.chamber_wave_active)

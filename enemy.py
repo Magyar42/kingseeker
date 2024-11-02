@@ -5,7 +5,7 @@ from support import *
 from bonfire import Bonfire
 
 class Enemy(Entity):
-    def __init__(self, enemy_name, pos, groups, obstacle_sprites, attackable_sprites, damage_player, trigger_death_particles, add_xp):
+    def __init__(self, enemy_name, pos, groups, obstacle_sprites, attackable_sprites, damage_player, trigger_death_particles, add_xp, death_effect):
         super().__init__(groups)
         self.sprite_type = "enemy"
         self.animation_speed = 0.15
@@ -39,6 +39,7 @@ class Enemy(Entity):
         self.damage_player = damage_player
         self.trigger_death_particles = trigger_death_particles
         self.add_xp = add_xp
+        self.death_effect = death_effect
 
         # I-Frame Timer
         self.vulnerable = True
@@ -155,6 +156,7 @@ class Enemy(Entity):
             self.trigger_death_particles(self.rect.center, self.enemy_name)
             self.add_xp(self.xp)
             self.death_sound.play()
+            self.death_effect()
 
     def hit_reaction(self):
         if not self.vulnerable:

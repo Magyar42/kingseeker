@@ -52,6 +52,9 @@ class UI:
         self.input_underlay = pygame.image.load(f"assets/graphics/ui/interface/input_underlay.png")
         self.estus_counter = pygame.image.load(f"assets/graphics/ui/interface/counter_box.png")
 
+        self.esc_inactive_img = pygame.image.load("assets/graphics/ui/key_icons/esc_inactive.png")
+        self.esc_active_img = pygame.image.load("assets/graphics/ui/key_icons/esc_active.png")
+
     def update_bars(self):
         self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
         self.mana_bar_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
@@ -220,7 +223,13 @@ class UI:
         self.display_surface.blit(self.input_underlay, (60, 535))
         self.display_surface.blit(self.input_underlay, (165, 535))
     
-    def display(self, player):
+    def show_details_toggle(self, trigger):
+        esc_rect = self.esc_inactive_img.get_rect(topleft = (5, 679))
+
+        if trigger: self.display_surface.blit(self.esc_active_img, esc_rect)
+        else: self.display_surface.blit(self.esc_inactive_img, esc_rect)
+    
+    def combat_display(self, player):
         self.update_bars()
         self.show_underlays()
 
@@ -239,4 +248,6 @@ class UI:
         self.estus_display(player, player.drinking_estus, interface_details["values"]["current estus"])
 
         self.show_xp(interface_details['values']['souls'])
-        #self.show_humanity(interface_details['values']['active humanities'])
+    
+    def permanent_display(self, player):
+        self.show_details_toggle(player.menu_open)

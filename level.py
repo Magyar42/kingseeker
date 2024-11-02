@@ -53,6 +53,14 @@ class Level:
         self.current_attack = None
         self.hurtbox = None
 
+        # Enemy Spawning!
+        self.enemy_spawn_coords = []
+        self.chamber_enemy_info = []
+        self.chamber_enemy_spawn_info = [None]
+        # self.chamber_wave_num = 0
+        self.chamber_wave_active = False
+        self.chamber_active_enemies = 0
+
         self.create_map(True, self.map_id)
 
         self.ui = UI()
@@ -78,6 +86,75 @@ class Level:
         self.current_bloodstain_pos = ()
         self.message_icon = pygame.image.load("assets/graphics/ui/message_icon.png")
 
+    def create_enemy_spawns(self, player, region, spawn_locations):
+        chamber = choice(list(enemy_spawn_template[region].keys()))
+        min = enemy_spawn_template[region][chamber]["min_enemies"]
+        max = enemy_spawn_template[region][chamber]["max_enemies"]
+        type_list = enemy_spawn_template[region][chamber]["whitelisted_enemies"]
+
+        total_enemies = randint(min, max)
+        if enemy_spawn_template[region][chamber]["type"] == "waves":
+            # Select number of waves
+            min_waves = enemy_spawn_template[region][chamber]["min_waves"]
+            max_waves = enemy_spawn_template[region][chamber]["max_waves"]
+            num_waves = randint(min_waves, max_waves)
+
+            # Set number of enemies in each wave
+            enemies_per_wave = total_enemies // num_waves
+            remainder_enemies = total_enemies % num_waves
+
+            # Save info
+            self.chamber_enemy_spawn_info.extend((enemy_spawn_template[region][chamber]["type"], enemies_per_wave, remainder_enemies))
+        elif enemy_spawn_template[region][chamber]["type"] == "constant":
+            # Select initial number of enemies
+            max_initial_num = total_enemies // 2
+            initial_num_divider = randint(2,3) # todo: add check to ensure initial value is !> number of spawn points (and is !< 2)
+            enemy_initial_num = max_initial_num // initial_num_divider
+
+            # Save info
+            self.chamber_enemy_spawn_info.extend((enemy_spawn_template[region][chamber]["type"], enemy_initial_num))
+        else:
+            # Save info
+            self.chamber_enemy_spawn_info.append(enemy_spawn_template[region][chamber]["type"])
+
+        for enemy in range(total_enemies):
+            spawn_pos = choice(spawn_locations)
+            spawn_locations.remove(spawn_pos)
+            type = choice(type_list)
+
+            enemy_info = [spawn_pos, type]
+            self.chamber_enemy_info.append(enemy_info)
+        
+        print(self.chamber_enemy_info)
+        print(self.chamber_enemy_spawn_info)
+    
+    def check_enemy_spawns(self):
+        if self.chamber_active_enemies == 0 and self.chamber_wave_active:
+            self.chamber_wave_active = False
+
+        if len(self.chamber_enemy_info) > 0: # Only triggers if list of enemies has any enemies in it
+
+            if self.chamber_enemy_spawn_info[0] == "waves":
+                if not self.chamber_wave_active: # Ensures only one wave's enemies are spawned
+
+                    # Get number of enemies to spawn; often the set value, but checks for remainders
+                    if len(self.chamber_enemy_info) < self.chamber_enemy_spawn_info[1]:
+                        enemies_per_wave = self.chamber_enemy_spawn_info[2]
+                    else:
+                        enemies_per_wave = self.chamber_enemy_spawn_info[1]
+
+                    for num in range(enemies_per_wave):
+                        Enemy(self.chamber_enemy_info[0][1], self.chamber_enemy_info[0][0], [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
+                        print(self.chamber_enemy_info[0])
+                        self.chamber_enemy_info.pop(0)
+                    
+                    print("End of this wave's spawning.")
+                    self.chamber_active_enemies = enemies_per_wave
+                    self.chamber_wave_active = True
+
+    def death_effect(self):     # On enemy death
+        self.chamber_active_enemies -= 1
+
     def create_map(self, player_reset, map_id = "0"):
         layouts = {
             "boundary": import_csv_layout(f"assets/map/{map_id}/map_FloorBlocks.csv"),
@@ -90,6 +167,9 @@ class Level:
             "objects": import_folder("assets/graphics/objects"),
         }
 
+        self.enemy_spawn_coords = []
+        self.chamber_enemy_info = []
+        self.chamber_enemy_spawn_info = []
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for column_index, column in enumerate(row):
@@ -133,6 +213,8 @@ class Level:
                             #     if column == "389":
                             #         enemy_name = "asylum_demon"
                             #         self.boss = Boss(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.update_hurtboxes, self.destroy_hurtboxes, self.check_victory_achieved)
+                            elif column == "277": # Potential enemy spawns
+                                self.enemy_spawn_coords.append([x, y])
                             elif column in npc_list:
                                 effect = None
                                 if column == "389": npc_id = "firekeeper"
@@ -156,8 +238,8 @@ class Level:
                                 elif column == "259": npc_id = "quelana"
                                 elif column == "366":
                                     npc_id = "transition_prompt"
-                                    effect = self.load_new_region
-                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], effect)
+                                    effect = self.load_new_chamber
+                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_wave_active, effect)
                             elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
                                 covenant_sign = "warriors_of_sunlight"
@@ -168,7 +250,8 @@ class Level:
                                 elif column == "392": enemy_name = "raccoon"
                                 elif column == "393": enemy_name = "squid"
                                 else: enemy_name = "bamboo" # todo: change
-                                Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp)
+                                Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
+        if map_id != "0": self.create_enemy_spawns(self.player, self.player.region, self.enemy_spawn_coords)
 
     def update_map(self, pos):       # triggered on player death, enemy death, item pickup
         self.bloodstain = Bloodstain(pos, [self.visible_sprites, self.interactable_sprites], self.check_souls_retrieval)
@@ -389,7 +472,7 @@ class Level:
         self.check_player_stats("Stamina")
         self.check_player_stats("Mana")
 
-    def restart_world(self, map = 0):
+    def restart_world(self, map = "0"):
         # Removes stuff
         for sprite_group in self.sprite_groups_list:
             for sprite in sprite_group:
@@ -403,6 +486,9 @@ class Level:
                     # self.bloodstain_present = True
 
         # Loads stuff
+        self.map_id = map
+        self.chamber_wave_active = False
+        self.chamber_active_enemies = 0
         if self.player.status == "dead":
             self.visible_sprites = YSortCameraGroup(map)
             self.screen_sprites = ScreenCameraGroup(map)
@@ -413,16 +499,16 @@ class Level:
             self.create_map(False, map) # todo: dont reset for sitting at bonfire
             # if self.bloodstain_present: self.update_map(self.current_bloodstain_pos)
     
-    def load_new_region(self, region_id = "0"):
+    def load_new_chamber(self, chamber_id = "0"):
+        self.map_id = chamber_id
         # Removes all sprites
         for sprite_group in self.sprite_groups_list:
             for sprite in sprite_group:
                 sprite.kill()
         # Loads new sprites and inits new background
-        self.visible_sprites = YSortCameraGroup(region_id)
-        self.screen_sprites = ScreenCameraGroup(region_id)
-        self.create_map(True, region_id)
-        self.map_id = region_id
+        self.visible_sprites = YSortCameraGroup(chamber_id)
+        self.screen_sprites = ScreenCameraGroup(chamber_id)
+        self.create_map(True, chamber_id)
     
     def update_dynamic_sprites(self):
         self.visible_sprites.enemy_update(self.player)
@@ -430,18 +516,20 @@ class Level:
         self.visible_sprites.chest_update(self.player)
         self.visible_sprites.lever_update(self.player)
         self.visible_sprites.message_update(self.player)
-        self.visible_sprites.npc_update(self.player)
+        self.visible_sprites.npc_update(self.player, self.chamber_wave_active)
         self.visible_sprites.bonfire_update(self.player)
         self.visible_sprites.sign_update(self.player)
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
-        if self.map_id != "0": self.ui.display(self.player)
+        self.ui.permanent_display(self.player)
+        if self.map_id != "0": self.ui.combat_display(self.player)
         # self.boss.display(self.player)
         self.visible_sprites.update()
         self.screen_sprites.update()
 
         self.update_dynamic_sprites()
+        self.check_enemy_spawns()
         
         # Testing
         # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")
@@ -519,10 +607,10 @@ class YSortCameraGroup(pygame.sprite.Group):
         for message in message_sprites:
             message.message_update(player)
 
-    def npc_update(self, player):
+    def npc_update(self, player, bool):
         npc_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "npc"]
         for npc in npc_sprites:
-            npc.npc_update(player)
+            npc.npc_update(player, bool)
     
     def bonfire_update(self, player):
         bonfire_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "bonfire"]

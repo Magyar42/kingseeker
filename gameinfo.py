@@ -186,3 +186,13 @@ lever_list = [0,0,0,0]
 message_list = {
     1: ["Be wary of beast. In,", "short, time for running."]
 }
+
+# Enemy Spawn Types
+enemy_spawn_template = {
+    "undead_burg": {
+        "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        # "02": { "type": "constant", "min_enemies": 6, "max_enemies": 10, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
+        # "03": { "type": "boss", "min_enemies": 1, "max_enemies": 1, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["raccoon"], "scaling": 0.75, "drop_mult": 1.5, "selection_mult": 0.5 },
+        "04": { "type": "waves", "min_enemies": 5, "max_enemies": 8, "min_waves": 2, "max_waves": 4, "whitelisted_enemies": ["bamboo", "spirit", "squid"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+    }
+}

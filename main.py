@@ -46,6 +46,11 @@ def mm_system():
 
     game.settings()
 
+def display_cursor(img, screen):
+    cursor_pos = pygame.mouse.get_pos()
+    cursor_rect = img.get_rect(topleft = (cursor_pos[0] - 5, cursor_pos[1] - 2))
+    screen.blit(img, cursor_rect)
+
 # Button Sprites
 mainmenuFont = pygame.font.Font(UI_FONT, MAIN_MENU_FONT_SIZE)
 bodyFont = pygame.font.Font(UI_FONT, 16)
@@ -68,7 +73,8 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level("999") # Set to test area (0 is firelink)
+        self.level = Level("0") # Set to test area (0 is firelink)
+        self.cursor_img = pygame.image.load('assets/graphics/cursor.png').convert_alpha()
 
         self.frames_list = import_folder('assets/graphics/menu_animations/mainmenu_bonfire')
         self.frame_speed = 0.12
@@ -95,7 +101,8 @@ class Game:
 
             self.screen.fill(MM_COLOUR)
             self.level.run()
-            
+
+            display_cursor(self.cursor_img, self.screen)
             pygame.display.update()
             self.clock.tick(FPS)
     
@@ -150,8 +157,9 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+            display_cursor(self.cursor_img, self.screen)
             pygame.display.update()
-            self.clock.tick(FPS)        
+            self.clock.tick(FPS)
     
     def settings(self):
         while True:
@@ -184,6 +192,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+            display_cursor(self.cursor_img, self.screen)
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -213,10 +222,11 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+            display_cursor(self.cursor_img, self.screen)
             pygame.display.update()
             self.clock.tick(FPS)
 
-# Sounds
+
 pygame.mixer.music.load("assets/audio/DaSo - Soles of Fire.mp3")
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(loops = -1)
@@ -224,6 +234,8 @@ pygame.mixer.music.play(loops = -1)
 select_sfx = pygame.mixer.Sound("assets/audio/sfx/CURSOL_SELECT.wav")
 select_sfx.set_volume(0.2)
 confirm_sfx = pygame.mixer.Sound("assets/audio/sfx/CURSOL_OK.wav")
+
+pygame.mouse.set_visible(False)
 
 # Game
 if __name__ == "__main__":
