@@ -31,7 +31,11 @@ class AnimationPlayer():
             'asylum_demon': import_folder('assets/graphics/particles/smoke'),
 
             'player': import_folder('assets/graphics/particles/smoke2'),
-            
+
+            # spawning
+            'enemy_spawn': import_folder('assets/graphics/particles/enemy_spawn'),
+            'enemy_spawn2': import_folder('assets/graphics/particles/enemy_spawn2'),
+
             # leafs 
             'leaf': (
                 import_folder('assets/graphics/particles/leaf1'),
@@ -106,16 +110,16 @@ class AnimationPlayer():
         animation_frames = choice(self.frames["leaf"])
         ParticleEffect(pos, animation_frames, groups, sprite_type)
     
-    def create_particles(self, animation_type, pos, groups, sprite_type, speed=0.15):
+    def create_particles(self, animation_type, pos, groups, sprite_type, speed=0.15, effect=None):
         animation_frames = self.frames[animation_type]
-        ParticleEffect(pos, animation_frames, groups, sprite_type, speed)
+        ParticleEffect(pos, animation_frames, groups, sprite_type, speed, effect)
     
     def create_macro(self, animation_type, pos, groups, effect, speed, remain_time, toggle_screen_effect):
         animation_frames = self.frames[animation_type]
         ScreenEffect(pos, animation_frames, groups, effect, speed, remain_time, toggle_screen_effect)
 
 class ParticleEffect(pygame.sprite.Sprite):
-    def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15):
+    def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15, effect=None):
         super().__init__(groups)
         self.sprite_type = sprite_type
         self.frame_index = 0
@@ -123,10 +127,12 @@ class ParticleEffect(pygame.sprite.Sprite):
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
+        self.effect = effect
     
     def animate(self):
         self.frame_index += self.animation_speed
         if self.frame_index >= len(self.frames):
+            if self.effect != None: self.effect()
             self.kill()
         else:
             self.image = self.frames[int(self.frame_index)]
