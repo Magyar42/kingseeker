@@ -62,6 +62,7 @@ class AnimationPlayer():
 
             # region titles
             'undead_parish': import_folder('assets/overlay/regions/undead_parish'),
+            'the_depths': import_folder('assets/overlay/regions/the_depths'),
 
             # screen effects
             'fire1': import_folder('assets/graphics/ui/screen_effects/fire1'),
@@ -74,6 +75,18 @@ class AnimationPlayer():
             # reward icons
             'great_soul': import_folder('assets/graphics/ui/rewards/great_soul'),
             'humanity': import_folder('assets/graphics/ui/rewards/humanity'),
+            'titanite_shard': import_folder('assets/graphics/ui/rewards/titanite_shard'),
+            'titanite_chunk': import_folder('assets/graphics/ui/rewards/titanite_chunk'),
+            'titanite_slab': import_folder('assets/graphics/ui/rewards/titanite_slab'),
+            'demon_titanite': import_folder('assets/graphics/ui/rewards/demon_titanite'),
+            'sunlight_medal': import_folder('assets/graphics/ui/rewards/sunlight_medal'),
+            'souvenir_of_reprisal': import_folder('assets/graphics/ui/rewards/souvenir_of_reprisal'),
+            'sunlight_summon': import_folder('assets/graphics/ui/rewards/sunlight_summon'),
+            'chaos_summon': import_folder('assets/graphics/ui/rewards/chaos_summon'),
+            'darkwraith_summon': import_folder('assets/graphics/ui/rewards/darkwraith_summon'),
+            'darkmoon_summon': import_folder('assets/graphics/ui/rewards/darkmoon_summon'),
+            'velkas_tome': import_folder('assets/graphics/ui/rewards/velkas_tome'),
+            'vendor': import_folder('assets/graphics/ui/rewards/vendor'),
 
             # Asylum Demon
             # todo!!! ADD ACTUAL SPRITES AND FRAMES TO EACH ATTACK AND BLANK THE NONATTACKS! THANKL YOUY BABYE
@@ -165,7 +178,7 @@ class TempIcon(pygame.sprite.Sprite): # todo: isnt actually animated
     def animate(self):
         self.frame_index += self.animation_speed
         if self.frame_index >= len(self.frames):
-            self.kill()
+            self.frame_index = 0
         else:
             self.image = self.frames[int(self.frame_index)]
     

@@ -185,12 +185,12 @@ class Level:
         print(chamber_enemy_info["enemy_list"][0])
         chamber_enemy_info["enemy_list"].pop(0)
     
-    def find_current_region(self, id):
-        region_num = id[0]
-        self.region = region_values[region_num]
+    # def find_current_region(self, id):
+    #     region_num = id[0]
+    #     self.region = region_values[region_num]
 
-    def create_map(self, player_reset, map_id = "0", trigger_region_title = False):
-        self.find_current_region(map_id)
+    def create_map(self, player_reset, map_id = "000", trigger_region_title = False):
+        # self.find_current_region(map_id)
 
         layouts = {
             "boundary": import_csv_layout(f"assets/map/{self.region}/{map_id}/map_FloorBlocks.csv"),
@@ -203,6 +203,8 @@ class Level:
             "objects": import_folder("assets/graphics/objects"),
         }
 
+        transition_ids = [0, 1]
+        unique_id = None # by default
         self.enemy_spawn_coords = []
         chamber_enemy_info["enemy_list"] = []
         for style, layout in layouts.items():
@@ -253,6 +255,7 @@ class Level:
                             elif column in npc_list:
                                 effect = None
                                 reward = "None"
+                                rotate_val = 0
                                 if column == "389": npc_id = "firekeeper"
                                 elif column == "367": npc_id = "crestfallen"
                                 elif column == "345": npc_id = "frampt"
@@ -272,11 +275,17 @@ class Level:
                                 elif column == "303": npc_id = "knightess"
                                 elif column == "281": npc_id = "oscar"
                                 elif column == "259": npc_id = "quelana"
-                                elif column == "366":
+                                elif column == "366" or column == "344":
+                                    if column == "344": rotate_val = 90
                                     npc_id = "transition_prompt"
                                     effect = self.load_new_chamber
-                                    reward = choice(list(chamber_rewards.keys()))
-                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_wave_active, self.blit_reward_icon, effect, reward)
+
+                                    if map_id == "000": reward = choice(["sunlight_summon", "chaos_summon", "darkwraith_summon", "darkmoon_summon", "velkas_tome"])
+                                    else: reward = choice(list(chamber_rewards.keys()))
+
+                                    unique_id = transition_ids[0]
+                                    transition_ids.pop(0)
+                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_wave_active, self.blit_reward_icon, self.map_id, effect, reward, unique_id, rotate_val)
                             elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
                                 covenant_sign = "warriors_of_sunlight"
@@ -288,8 +297,9 @@ class Level:
                                 elif column == "393": enemy_name = "squid"
                                 else: enemy_name = "bamboo" # todo: change
                                 Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
+
         print(self.enemy_spawn_coords)
-        if map_id != "0": self.create_enemy_spawns(self.player, self.region, self.enemy_spawn_coords)
+        if map_id not in safe_rooms: self.create_enemy_spawns(self.player, self.region, self.enemy_spawn_coords)
         if trigger_region_title:
             self.toggle_screen_effect()
             x = self.display_surface.get_size()[0] // 2
@@ -298,7 +308,7 @@ class Level:
 
     def blit_reward_icon(self, reward, pos):
         # self.display_surface.blit(img, (100, 100))
-        self.animation_player.create_icon(f"{reward}", pos, [self.visible_sprites], "ambient", 0.25)
+        self.animation_player.create_icon(f"{reward}", pos, [self.visible_sprites], "ambient", 0.10)
 
     def update_map(self, pos):       # triggered on player death, enemy death, item pickup
         self.bloodstain = Bloodstain(pos, [self.visible_sprites, self.interactable_sprites], self.check_souls_retrieval)
@@ -519,7 +529,7 @@ class Level:
         self.check_player_stats("Stamina")
         self.check_player_stats("Mana")
 
-    def restart_world(self, map = "0"):
+    def restart_world(self, map = "000"):
         # Removes stuff
         for sprite_group in self.sprite_groups_list:
             for sprite in sprite_group:
@@ -547,20 +557,33 @@ class Level:
             self.create_map(False, map) # todo: dont reset for sitting at bonfire
             # if self.bloodstain_present: self.update_map(self.current_bloodstain_pos)
     
-    def load_new_chamber(self, reward=None):
+    def load_new_chamber(self, reward=None, id=None):
         trigger_region_title = False
         self.region_chambers_done += 1
-        if self.region_chambers_done >= NUM_CHAMBERS_PER_REGION: # If this region is completed
-            print("loading new region!")
+        if self.region_chambers_done == NUM_CHAMBERS_PER_REGION - 1: # If this region is completed (minus end room)
+            print("Loading end chamber!")
+            region_num = region_values[self.region]
+            chamber_id = f"{region_num}99" # Load end room
+            self.reward = reward
+
+        elif self.region_chambers_done >= NUM_CHAMBERS_PER_REGION: # If this region is FULLY completed
+            print("Loading new region!")
             self.region_chambers_done = 0
 
             # todo: set dynamically
-            chamber_id = "199"
-            self.region = "undead_parish"
+            if self.region == "undead_burg":
+                if id == 0:
+                    chamber_id = "199"
+                    self.region = "undead_parish"
+                else:
+                    chamber_id = "299"
+                    self.region = "the_depths"
+            
             self.available_chambers = chambers_per_region[self.region]
             trigger_region_title = True
+
         else: 
-            print("loading next chamber!")
+            print("Loading next chamber!")
             chamber_id = choice(self.available_chambers)
             self.available_chambers.remove(chamber_id) # Prevents same chamber from being loaded in a run
             self.reward = reward
@@ -588,7 +611,7 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.ui.permanent_display(self.player)
-        if self.map_id != "0": self.ui.combat_display(self.player)
+        if self.map_id != "000": self.ui.combat_display(self.player)
         # self.boss.display(self.player)
         self.visible_sprites.update()
         self.screen_sprites.update()
@@ -597,7 +620,7 @@ class Level:
         self.check_enemy_spawns()
         
         # Testing
-        debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")
+        # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")
         # debug(f"Displayed HP: {self.player.health_target} | Actual HP: {self.player.health} | Increased HP: {self.player.health_increase}")
         # debug(f"Index: {int(self.player.frame_index)}")
         # debug(f"{self.player.poise} / {self.player.max_poise}")

@@ -150,43 +150,50 @@ REQUIRES_HUMAN_TEXT = "Must be in Human form."
 CANNOT_KINDLE = "Cannot kindle flame further."
 
 # misc
-covenants = ["warriors_of_sunlight", "chaos_servants", "gravelord_servants", "darkwraiths", "blades_of_the_darkmoon", "path_of_the_dragon", "royal_guard", "way_of_white"]
-npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366"]
+covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon"]
+npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
 
 # Region Values
 region_values = {
-    "0": "undead_burg",
-    "1": "undead_parish",
-    "2": "the_depths",
-    "3": "blighttown",
-    "4": "catacombs",
-    "5": "valley_of_drakes",
-    "6": "new_londo_ruins",
+    "undead_burg": "0",
+    "undead_parish": "1",
+    "the_depths": "2",
+    "blighttown": "3",
+    "catacombs": "4",
+    "valley_of_drakes": "5",
+    "new_londo_ruins": "6",
 }
 
 # Chamber Details
 NUM_CHAMBERS_PER_REGION = 3
 chambers_per_region = {
+    # Chambers which can be randomly loaded [starting chambers of each area are NOT included]
     "undead_burg": ["001", "002"],
     "undead_parish": [""],
+    "the_depths": [""],
 }
+safe_rooms = [
+    "000", "099", "100," "199", "200", "299"
+]
+# X00 is the START room for each region
+# X99 is the END room for each region
 
 # Chamber Rewards
 chamber_rewards = { # todo: make sure of the chance section
     "humanity": { "chance": 1, "min": 2, "max": 5 },
-    # "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
-    # "titanite_shard": { "chance": 1, "min": 2, "max": 4 },
-    # "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
-    # "titanite_slab": { "chance": 0.25, "min": 1, "max": 1 },
-    # "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
-    # "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
-    # "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
+    "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
+    "titanite_shard": { "chance": 1, "min": 2, "max": 4 },
+    "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
+    "titanite_slab": { "chance": 0.25, "min": 1, "max": 1 },
+    "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
+    "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
+    "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
 
-    # "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
+    "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
 
-    # "vendor": { "chance": 0.5, "min": 1, "max": 1 },
+    "vendor": { "chance": 0.5, "min": 1, "max": 1 },
 }
