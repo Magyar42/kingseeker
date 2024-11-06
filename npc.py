@@ -4,9 +4,10 @@ from support import *
 from gameinfo import *
 from popups import Prompt, ItemPopup
 from debug import debug
+from random import choice
 
 class NPC(pygame.sprite.Sprite):
-    def __init__(self, npc_id, pos, groups, chamber_wave_active, effect = None):
+    def __init__(self, npc_id, pos, groups, chamber_wave_active, blit_reward_icon, effect = None, reward="None"):
         super().__init__(groups)
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
@@ -42,6 +43,8 @@ class NPC(pygame.sprite.Sprite):
         self.convo = None   
         self.talked_to = False  
         self.effect = effect  
+        self.reward = reward
+        self.blit_reward_icon = blit_reward_icon
 
         # self.chest_sound = pygame.mixer.Sound("assets/audio/sfx/OpenChest.wav")
         # self.chest_sound.set_volume(0.25)
@@ -119,7 +122,8 @@ class NPC(pygame.sprite.Sprite):
                         # Effects after opening (spawning item) done in self.animate
                         # due to only happening once chest opening animation played
                     else:
-                        self.effect("001") # todo: use id of undead burg
+                        print(self.reward)
+                        self.effect(self.reward)
 
     def initiate_npc(self, player):
         if self.interacting_npc:
@@ -237,12 +241,18 @@ class NPC(pygame.sprite.Sprite):
             if current_time - self.click_time >= 200:
                 self.can_click = True
     
+    def draw_next_reward(self, reward, pos):
+        if self.npc_id == "transition_prompt":
+            pos += pygame.math.Vector2(32, 32)
+            self.blit_reward_icon(reward, pos)
+    
     def update(self):
         self.animate()
         self.cooldowns()
+
+        self.draw_next_reward(self.reward, self.pos)
     
     def npc_update(self, player, bool):
         self.player_interact(player)
         self.interact_interface(player)
         self.chamber_wave_active = bool
-        debug(self.chamber_wave_active)

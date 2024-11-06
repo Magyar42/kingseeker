@@ -33,8 +33,12 @@ class Level:
         self.current_message_id = 0
         self.font = pygame.font.Font(UI_FONT, MEDIUM_FONT_SIZE)
 
-        self.visible_sprites = YSortCameraGroup(self.map_id)
-        self.screen_sprites = ScreenCameraGroup(self.map_id)
+        self.region = "undead_burg"
+        self.reward = None
+        self.region_chambers_done = 0 # Amount of chambers for THIS region completed
+        self.available_chambers = chambers_per_region[self.region]
+        self.visible_sprites = YSortCameraGroup(self.map_id, self.region)
+        self.screen_sprites = ScreenCameraGroup(self.map_id, self.region)
         self.obstacle_sprites = pygame.sprite.Group()
         self.attack_sprites = pygame.sprite.Group()
         self.boss_attack_sprites = pygame.sprite.Group()
@@ -90,6 +94,7 @@ class Level:
         max = enemy_spawn_template[region][spawn_id]["max_enemies"]
         type_list = enemy_spawn_template[region][spawn_id]["whitelisted_enemies"]
         total_enemies = randint(min, max)
+        print(total_enemies)
 
         # Set details - depends on the type of the spawn_id
         if enemy_spawn_template[region][spawn_id]["type"] == "waves":
@@ -179,13 +184,19 @@ class Level:
 
         print(chamber_enemy_info["enemy_list"][0])
         chamber_enemy_info["enemy_list"].pop(0)
+    
+    def find_current_region(self, id):
+        region_num = id[0]
+        self.region = region_values[region_num]
 
-    def create_map(self, player_reset, map_id = "0"):
+    def create_map(self, player_reset, map_id = "0", trigger_region_title = False):
+        self.find_current_region(map_id)
+
         layouts = {
-            "boundary": import_csv_layout(f"assets/map/{map_id}/map_FloorBlocks.csv"),
+            "boundary": import_csv_layout(f"assets/map/{self.region}/{map_id}/map_FloorBlocks.csv"),
             #"grass": import_csv_layout("assets/map/map_Grass.csv"),
-            "object": import_csv_layout(f"assets/map/{map_id}/map_LargeObjects.csv"),
-            "entities": import_csv_layout(f"assets/map/{map_id}/map_Entities.csv"),
+            "object": import_csv_layout(f"assets/map/{self.region}/{map_id}/map_LargeObjects.csv"),
+            "entities": import_csv_layout(f"assets/map/{self.region}/{map_id}/map_Entities.csv"),
         }
         graphics = {
             "grass": import_folder("assets/graphics/grass"),
@@ -241,6 +252,7 @@ class Level:
                                 self.enemy_spawn_coords.append([x, y])
                             elif column in npc_list:
                                 effect = None
+                                reward = "None"
                                 if column == "389": npc_id = "firekeeper"
                                 elif column == "367": npc_id = "crestfallen"
                                 elif column == "345": npc_id = "frampt"
@@ -263,7 +275,8 @@ class Level:
                                 elif column == "366":
                                     npc_id = "transition_prompt"
                                     effect = self.load_new_chamber
-                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_wave_active, effect)
+                                    reward = choice(list(chamber_rewards.keys()))
+                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_wave_active, self.blit_reward_icon, effect, reward)
                             elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
                                 covenant_sign = "warriors_of_sunlight"
@@ -276,7 +289,16 @@ class Level:
                                 else: enemy_name = "bamboo" # todo: change
                                 Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
         print(self.enemy_spawn_coords)
-        if map_id != "0": self.create_enemy_spawns(self.player, self.player.region, self.enemy_spawn_coords)
+        if map_id != "0": self.create_enemy_spawns(self.player, self.region, self.enemy_spawn_coords)
+        if trigger_region_title:
+            self.toggle_screen_effect()
+            x = self.display_surface.get_size()[0] // 2
+            y = self.display_surface.get_size()[1] // 4
+            self.animation_player.create_macro(f"{self.region}", (x, y), [self.screen_sprites], None, 0.20, 0, self.toggle_screen_effect)
+
+    def blit_reward_icon(self, reward, pos):
+        # self.display_surface.blit(img, (100, 100))
+        self.animation_player.create_icon(f"{reward}", pos, [self.visible_sprites], "ambient", 0.25)
 
     def update_map(self, pos):       # triggered on player death, enemy death, item pickup
         self.bloodstain = Bloodstain(pos, [self.visible_sprites, self.interactable_sprites], self.check_souls_retrieval)
@@ -514,9 +536,10 @@ class Level:
         self.map_id = map
         self.chamber_wave_active = False
         self.chamber_active_enemies = 0
+        self.region_chambers_done = 0
         if self.player.status == "dead":
-            self.visible_sprites = YSortCameraGroup(map)
-            self.screen_sprites = ScreenCameraGroup(map)
+            self.visible_sprites = YSortCameraGroup(map, self.region)
+            self.screen_sprites = ScreenCameraGroup(map, self.region)
             self.create_map(True, map)
             # self.update_map(bloodstain_pos)
             restore_estus(self.player, 1)   # todo: use kindle level of last bonfire
@@ -524,16 +547,33 @@ class Level:
             self.create_map(False, map) # todo: dont reset for sitting at bonfire
             # if self.bloodstain_present: self.update_map(self.current_bloodstain_pos)
     
-    def load_new_chamber(self, chamber_id = "0"):
+    def load_new_chamber(self, reward=None):
+        trigger_region_title = False
+        self.region_chambers_done += 1
+        if self.region_chambers_done >= NUM_CHAMBERS_PER_REGION: # If this region is completed
+            print("loading new region!")
+            self.region_chambers_done = 0
+
+            # todo: set dynamically
+            chamber_id = "199"
+            self.region = "undead_parish"
+            self.available_chambers = chambers_per_region[self.region]
+            trigger_region_title = True
+        else: 
+            print("loading next chamber!")
+            chamber_id = choice(self.available_chambers)
+            self.available_chambers.remove(chamber_id) # Prevents same chamber from being loaded in a run
+            self.reward = reward
+
         self.map_id = chamber_id
         # Removes all sprites
         for sprite_group in self.sprite_groups_list:
             for sprite in sprite_group:
                 sprite.kill()
         # Loads new sprites and inits new background
-        self.visible_sprites = YSortCameraGroup(chamber_id)
-        self.screen_sprites = ScreenCameraGroup(chamber_id)
-        self.create_map(True, chamber_id)
+        self.visible_sprites = YSortCameraGroup(chamber_id, self.region)
+        self.screen_sprites = ScreenCameraGroup(chamber_id, self.region)
+        self.create_map(True, chamber_id, trigger_region_title)
     
     def update_dynamic_sprites(self):
         self.visible_sprites.enemy_update(self.player)
@@ -557,7 +597,7 @@ class Level:
         self.check_enemy_spawns()
         
         # Testing
-        # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")
+        debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")
         # debug(f"Displayed HP: {self.player.health_target} | Actual HP: {self.player.health} | Increased HP: {self.player.health_increase}")
         # debug(f"Index: {int(self.player.frame_index)}")
         # debug(f"{self.player.poise} / {self.player.max_poise}")
@@ -585,7 +625,7 @@ class Level:
             if self.hurtbox: self.hurtbox.collision_update(self.player, self.hurtbox)
 
 class YSortCameraGroup(pygame.sprite.Group):
-    def __init__(self, map_id):
+    def __init__(self, map_id, region="undead_burg"):
         super().__init__()
 
         self.display_surface = pygame.display.get_surface()
@@ -593,7 +633,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
 
-        self.floor_surface = pygame.image.load(f"assets/graphics/tilemap/ground_{map_id}.png").convert()
+        self.floor_surface = pygame.image.load(f"assets/graphics/tilemap/{region}/ground_{map_id}.png").convert()
         self.floor_rect = self.floor_surface.get_rect(topleft = (0,0))
     
     def custom_draw(self, player):
@@ -648,7 +688,7 @@ class YSortCameraGroup(pygame.sprite.Group):
             sign.sign_update(player)
 
 class ScreenCameraGroup(pygame.sprite.Group):
-    def __init__(self, map_id):
+    def __init__(self, map_id, region):
         super().__init__()
 
         self.display_surface = pygame.display.get_surface()
@@ -656,7 +696,7 @@ class ScreenCameraGroup(pygame.sprite.Group):
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
 
-        self.floor_surface = pygame.image.load(f"assets/graphics/tilemap/ground_{map_id}.png").convert()
+        self.floor_surface = pygame.image.load(f"assets/graphics/tilemap/{region}/ground_{map_id}.png").convert()
         self.floor_rect = self.floor_surface.get_rect(topleft = (0,0))
     
     def custom_draw(self, player):

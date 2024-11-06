@@ -60,6 +60,9 @@ class AnimationPlayer():
             'target_destroyed': import_folder('assets/overlay/target_destroyed'),
             'victory_achieved': import_folder('assets/overlay/victory_achieved'),
 
+            # region titles
+            'undead_parish': import_folder('assets/overlay/regions/undead_parish'),
+
             # screen effects
             'fire1': import_folder('assets/graphics/ui/screen_effects/fire1'),
             'fire2': import_folder('assets/graphics/ui/screen_effects/fire2'),
@@ -67,6 +70,10 @@ class AnimationPlayer():
 
             # items
             'estus': import_folder('assets/graphics/particles/estus'),
+
+            # reward icons
+            'great_soul': import_folder('assets/graphics/ui/rewards/great_soul'),
+            'humanity': import_folder('assets/graphics/ui/rewards/humanity'),
 
             # Asylum Demon
             # todo!!! ADD ACTUAL SPRITES AND FRAMES TO EACH ATTACK AND BLANK THE NONATTACKS! THANKL YOUY BABYE
@@ -114,6 +121,10 @@ class AnimationPlayer():
         animation_frames = self.frames[animation_type]
         ParticleEffect(pos, animation_frames, groups, sprite_type, speed, effect)
     
+    def create_icon(self, animation_type, pos, groups, sprite_type, speed=0.15):
+        animation_frames = self.frames[animation_type]
+        TempIcon(pos, animation_frames, groups, sprite_type, speed)
+    
     def create_macro(self, animation_type, pos, groups, effect, speed, remain_time, toggle_screen_effect):
         animation_frames = self.frames[animation_type]
         ScreenEffect(pos, animation_frames, groups, effect, speed, remain_time, toggle_screen_effect)
@@ -140,6 +151,26 @@ class ParticleEffect(pygame.sprite.Sprite):
     def update(self):
         self.animate()
         # print(self.frame_index)
+
+class TempIcon(pygame.sprite.Sprite): # todo: isnt actually animated
+    def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15):
+        super().__init__(groups)
+        self.sprite_type = sprite_type
+        self.frame_index = 0
+        self.animation_speed = speed
+        self.frames = animation_frames
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect(center = pos)
+    
+    def animate(self):
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(self.frames):
+            self.kill()
+        else:
+            self.image = self.frames[int(self.frame_index)]
+    
+    def update(self):
+        self.animate()
 
 class ScreenEffect(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups, effect, speed, remain_time, toggle_screen_effect):

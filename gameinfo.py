@@ -191,12 +191,16 @@ message_list = {
 enemy_spawn_template = {
     "undead_burg": {
         "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        # "02": { "type": "constant", "min_enemies": 6, "max_enemies": 10, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
+        # "03": { "type": "boss", "min_enemies": 1, "max_enemies": 1, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["raccoon"], "scaling": 0.75, "drop_mult": 1.5, "selection_mult": 0.5 },
+        # "04": { "type": "waves", "min_enemies": 8, "max_enemies": 12, "min_waves": 2, "max_waves": 4, "whitelisted_enemies": ["bamboo", "spirit", "squid"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        "05": { "type": "waves", "min_enemies": 6, "max_enemies": 8, "min_waves": 2, "max_waves": 3, "whitelisted_enemies": ["spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        "06": { "type": "constant", "min_enemies": 6, "max_enemies": 8, "min_waves": 3, "max_waves": 3, "whitelisted_enemies": ["bamboo"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+    },
+    "undead_parish": {
+        "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
         "02": { "type": "constant", "min_enemies": 6, "max_enemies": 10, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
-        "03": { "type": "boss", "min_enemies": 1, "max_enemies": 1, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["raccoon"], "scaling": 0.75, "drop_mult": 1.5, "selection_mult": 0.5 },
-        "04": { "type": "waves", "min_enemies": 8, "max_enemies": 12, "min_waves": 2, "max_waves": 4, "whitelisted_enemies": ["bamboo", "spirit", "squid"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-        "05": { "type": "waves", "min_enemies": 6, "max_enemies": 8, "min_waves": 5, "max_waves": 8, "whitelisted_enemies": ["spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-        "06": { "type": "constant", "min_enemies": 6, "max_enemies": 8, "min_waves": 5, "max_waves": 8, "whitelisted_enemies": ["bamboo"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-    }
+    },
 }
 
 # Current Chamber - Spawn Details

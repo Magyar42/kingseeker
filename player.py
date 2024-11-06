@@ -188,7 +188,6 @@ class Player(Entity):
         # kingseeker
         self.ongoing_run = False
         self.selected_spell_index = 0
-        self.region = "undead_burg"
     
     def resetPlayer(self):
         self.health = player_data['dependent_variables']['health']
