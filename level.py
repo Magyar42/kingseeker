@@ -61,6 +61,9 @@ class Level:
         self.enemy_spawn_coords = []
         self.chamber_wave_active = False
         self.chamber_active_enemies = 0
+        self.enemies_list_empty = False
+        self.chamber_cleared = False
+        self.reward_pos = (0, 0)
 
         self.create_map(True, self.map_id)
 
@@ -175,9 +178,22 @@ class Level:
                     
                     self.chamber_active_enemies = 1 # Spawn one after one dies
                     self.chamber_wave_active = True
+        
+        else:
+            self.enemies_list_empty = True
 
     def death_effect(self):     # On enemy death
         self.chamber_active_enemies -= 1
+        if self.enemies_list_empty and self.chamber_active_enemies == 0:
+            self.chamber_cleared = True
+            self.animation_player.create_particles("nova", (self.reward_pos[0] + 32, self.reward_pos[1] + 32), [self.visible_sprites], "ambient", 0.15, self.spawn_reward)
+    
+    def spawn_reward(self):
+        # covenant_sign = choice(covenants) # todo: set to random
+        covenant_sign = "warriors_of_sunlight"
+
+        # todo: update to ANY of the potential rewards
+        SummonSign(covenant_sign, (self.reward_pos), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
     
     def spawn_enemies(self):
         Enemy(chamber_enemy_info["enemy_list"][0][1], chamber_enemy_info["enemy_list"][0][0], [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
@@ -191,6 +207,9 @@ class Level:
 
     def create_map(self, player_reset, map_id = "000", trigger_region_title = False):
         # self.find_current_region(map_id)
+        self.enemies_list_empty = False
+        if map_id not in safe_rooms: self.chamber_cleared = False
+        else: self.chamber_cleared = True
 
         layouts = {
             "boundary": import_csv_layout(f"assets/map/{self.region}/{map_id}/map_FloorBlocks.csv"),
@@ -285,11 +304,12 @@ class Level:
 
                                     unique_id = transition_ids[0]
                                     transition_ids.pop(0)
-                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_wave_active, self.blit_reward_icon, self.map_id, effect, reward, unique_id, rotate_val)
+                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_cleared, self.blit_reward_icon, self.map_id, effect, reward, unique_id, rotate_val)
                             elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
-                                covenant_sign = "warriors_of_sunlight"
-                                SummonSign(covenant_sign, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
+                                self.reward_pos = (x, y)
+                                # covenant_sign = "warriors_of_sunlight"
+                                # SummonSign(covenant_sign, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
                             else:
                                 if column == "390": enemy_name = "bamboo"
                                 elif column == "391": enemy_name = "spirit"
@@ -582,6 +602,9 @@ class Level:
             self.available_chambers = chambers_per_region[self.region]
             trigger_region_title = True
 
+        # todo add check for region minus end room AND the room before
+        # this is because ideally that room will have 1 exit, and will also not have any reward set
+
         else: 
             print("Loading next chamber!")
             chamber_id = choice(self.available_chambers)
@@ -604,7 +627,7 @@ class Level:
         self.visible_sprites.chest_update(self.player)
         self.visible_sprites.lever_update(self.player)
         self.visible_sprites.message_update(self.player)
-        self.visible_sprites.npc_update(self.player, self.chamber_wave_active)
+        self.visible_sprites.npc_update(self.player, self.chamber_cleared)
         self.visible_sprites.bonfire_update(self.player)
         self.visible_sprites.sign_update(self.player)
 

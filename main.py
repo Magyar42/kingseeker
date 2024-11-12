@@ -12,9 +12,6 @@ from particles import AnimationPlayer
 # elif platform.system() == "Linux":
 #     print(f"{platform.system()} system detected: opening movie will not play")
 
-# pygame.mouse.set_visible(False)
-# cursor_img = pygame.image.load("assets/graphics/cursor.png").convert_alpha()
-# cursor_img_rect = cursor_img.get_rect()
 icon_image = pygame.image.load("assets/graphics/bonfire_icon_new.png")
 
 # Functions

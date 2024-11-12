@@ -165,7 +165,7 @@ region_values = {
 }
 
 # Chamber Details
-NUM_CHAMBERS_PER_REGION = 3
+NUM_CHAMBERS_PER_REGION = 4
 chambers_per_region = {
     # Chambers which can be randomly loaded [starting chambers of each area are NOT included]
     "undead_burg": ["001", "002"],

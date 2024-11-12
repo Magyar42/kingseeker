@@ -7,7 +7,7 @@ from debug import debug
 from random import choice
 
 class NPC(pygame.sprite.Sprite):
-    def __init__(self, npc_id, pos, groups, chamber_wave_active, blit_reward_icon, map_id, effect = None, reward = "None", unique_id = None, rotate_val = 0):
+    def __init__(self, npc_id, pos, groups, chamber_cleared, blit_reward_icon, map_id, effect = None, reward = "None", unique_id = None, rotate_val = 0):
         super().__init__(groups)
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
@@ -28,7 +28,7 @@ class NPC(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-30, -40)
         self.use_radius = 100
-        self.chamber_wave_active = chamber_wave_active
+        self.chamber_cleared = chamber_cleared
 
         self.prompt = Prompt()
         self.item_popup = ItemPopup()
@@ -106,7 +106,7 @@ class NPC(pygame.sprite.Sprite):
 
     def player_interact(self, player):
         player_distance = self.get_player_dist(player)
-        if player_distance <= self.use_radius and not self.talked_to and not self.chamber_wave_active:
+        if player_distance <= self.use_radius and not self.talked_to and self.chamber_cleared:
             # print(f"{round(player_distance)}m from {self.npc_id}!")
             if self.npc_id != "transition_prompt": self.prompt.createPrompt("NPC", "Q", "Talk")
             else:
@@ -249,9 +249,10 @@ class NPC(pygame.sprite.Sprite):
                 self.can_click = True
     
     def draw_next_reward(self, reward, pos):
-        if self.npc_id == "transition_prompt":
-            pos += pygame.math.Vector2(32, 32)
-            self.blit_reward_icon(reward, pos)
+        if self.chamber_cleared:
+            if self.npc_id == "transition_prompt":
+                pos += pygame.math.Vector2(32, 32)
+                self.blit_reward_icon(reward, pos)
     
     def update(self):
         self.animate()
@@ -266,4 +267,4 @@ class NPC(pygame.sprite.Sprite):
     def npc_update(self, player, bool):
         self.player_interact(player)
         self.interact_interface(player)
-        self.chamber_wave_active = bool
+        self.chamber_cleared = bool

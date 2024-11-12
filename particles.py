@@ -35,6 +35,8 @@ class AnimationPlayer():
             # spawning
             'enemy_spawn': import_folder('assets/graphics/particles/enemy_spawn'),
             'enemy_spawn2': import_folder('assets/graphics/particles/enemy_spawn2'),
+            'item_spawn': import_folder('assets/graphics/particles/spawn'),
+            'nova': import_folder('assets/graphics/particles/nova'),
 
             # leafs 
             'leaf': (
