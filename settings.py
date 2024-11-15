@@ -150,8 +150,10 @@ REQUIRES_HUMAN_TEXT = "Must be in Human form."
 CANNOT_KINDLE = "Cannot kindle flame further."
 
 # misc
-covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon"]
+covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon", "velka"]
 npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
+boon_summons = ["sunlight_summon", "chaos_summon", "darkwraith_summon", "darkmoon_summon", "velkas_tome"]
+resources_names = ["soul_remnants", "humanities", "souvenirs of reprisal", "sunlight medals", "titanite shards", "titanite chunks", "titanite slabs", "demon titanite"]
 
 # Region Values
 region_values = {
@@ -180,14 +182,16 @@ safe_rooms = [
 
 # Chamber Rewards
 chamber_rewards = { # todo: make sure of the chance section
-    "humanity": { "chance": 1, "min": 2, "max": 5 },
     "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
+    "humanity": { "chance": 1, "min": 2, "max": 5 },
+
+    "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
+    "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
+
     "titanite_shard": { "chance": 1, "min": 2, "max": 4 },
     "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
     "titanite_slab": { "chance": 0.25, "min": 1, "max": 1 },
     "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
-    "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
-    "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
 
     "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
     "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },

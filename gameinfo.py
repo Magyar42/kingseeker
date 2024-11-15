@@ -36,7 +36,7 @@ npc_conversations = {
 
 # Meta-Progression Resources
 resources = {
-    "soul remnants": 99,
+    "soul remnants": 30,
     "humanities": 11,
 
     "souvenirs of reprisal": 2,
@@ -125,12 +125,9 @@ interface_details = {
         "estus level": 1,
         "souls": 0,
         "lost souls": 0,
-        "active humanities": 0,
-        "lost humanities": 0,
         "max estus": 3,
         "current estus": 3,
         "levelup cost": 1,
-        "hollow": True,
     }
 }
 

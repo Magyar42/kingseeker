@@ -189,11 +189,27 @@ class Level:
             self.animation_player.create_particles("nova", (self.reward_pos[0] + 32, self.reward_pos[1] + 32), [self.visible_sprites], "ambient", 0.15, self.spawn_reward)
     
     def spawn_reward(self):
-        # covenant_sign = choice(covenants) # todo: set to random
-        covenant_sign = "warriors_of_sunlight"
+        # If self.reward is a BOON
+        if self.reward in boon_summons:
+            covenant_index = boon_summons.index(self.reward)
+            covenant_sign = covenants[covenant_index]
 
-        # todo: update to ANY of the potential rewards
-        SummonSign(covenant_sign, (self.reward_pos), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
+            # todo: update to ANY of the potential rewards
+            SummonSign(covenant_sign, (self.reward_pos), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.summon_sign_effect)
+        
+        # Else if vendor
+        elif self.reward == "vendor":
+            print("money!") # todo
+
+        # Else if self.reward is a RESOURCE
+        else:
+            if self.reward == "great_soul":
+                interface_details["values"]["souls"] += 2000
+            else:
+                resource_index = list(chamber_rewards.keys()).index(self.reward)
+                resource_name = resources_names[resource_index]
+                resources[resource_name] += 10
+
     
     def spawn_enemies(self):
         Enemy(chamber_enemy_info["enemy_list"][0][1], chamber_enemy_info["enemy_list"][0][0], [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
@@ -299,7 +315,7 @@ class Level:
                                     npc_id = "transition_prompt"
                                     effect = self.load_new_chamber
 
-                                    if map_id == "000": reward = choice(["sunlight_summon", "chaos_summon", "darkwraith_summon", "darkmoon_summon", "velkas_tome"])
+                                    if map_id == "000": reward = choice(boon_summons)
                                     else: reward = choice(list(chamber_rewards.keys()))
 
                                     unique_id = transition_ids[0]
@@ -318,7 +334,6 @@ class Level:
                                 else: enemy_name = "bamboo" # todo: change
                                 Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
 
-        print(self.enemy_spawn_coords)
         if map_id not in safe_rooms: self.create_enemy_spawns(self.player, self.region, self.enemy_spawn_coords)
         if trigger_region_title:
             self.toggle_screen_effect()

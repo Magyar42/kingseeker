@@ -200,22 +200,23 @@ class Bonfire(pygame.sprite.Sprite):
 
     def menu_kindle_effects(self, choice, player):
         if choice == "Yes":
-            if player_data['status']['hollow'] == True:
-                self.display_must_be_human = True
-                self.kindling_bonfire = False
-                self.status = "idle"
-            elif bonfire_data[self.id]["kindle_level"] >= 4 or bonfire_data[self.id]["kindle_level"] >= 2 and not player_data["unlocks"]["rite_of_kindling"]:
-                self.display_max_kindled = True
-                self.kindling_bonfire = False
-                self.status = "idle"
-            elif player_data['values']['humanity'] > 0:
-                self.kindle_effect(player)
-                player_data['values']['humanity'] -= 1
-                self.kindling_bonfire = False
-            else:
-                self.need_humanity = True
-                self.kindling_bonfire = False
-                self.status = "idle"
+            # if player_data['status']['hollow'] == True:
+            #     self.display_must_be_human = True
+            #     self.kindling_bonfire = False
+            #     self.status = "idle"
+            # elif bonfire_data[self.id]["kindle_level"] >= 4 or bonfire_data[self.id]["kindle_level"] >= 2 and not player_data["unlocks"]["rite_of_kindling"]:
+            #     self.display_max_kindled = True
+            #     self.kindling_bonfire = False
+            #     self.status = "idle"
+            # elif player_data['values']['humanity'] > 0:
+            #     self.kindle_effect(player)
+            #     player_data['values']['humanity'] -= 1
+            #     self.kindling_bonfire = False
+            # else:
+            #     self.need_humanity = True
+            #     self.kindling_bonfire = False
+            #     self.status = "idle"
+            print("hollowing AAA")
         elif choice == "No":
             self.kindling_bonfire = False
             self.toggle_screen_effect()
@@ -245,11 +246,11 @@ class Bonfire(pygame.sprite.Sprite):
 
     def menu_humanity_effects(self, choice):
         if choice == "Yes":
-            if player_data['status']['hollow'] == False:
-                self.display_already_human = True
-                self.spending_humanity = False
-            elif player_data['values']['humanity'] > 0:
-                player_data['status']['hollow'] = False
+            # if player_data['status']['hollow'] == False:
+            #     self.display_already_human = True
+            #     self.spending_humanity = False
+            if player_data['values']['humanity'] > 0:
+                # player_data['status']['hollow'] = False
                 player_data['values']['humanity'] -= 1
                 self.check_humanity_restored()
                 self.spending_humanity = False

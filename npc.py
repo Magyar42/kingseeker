@@ -249,10 +249,9 @@ class NPC(pygame.sprite.Sprite):
                 self.can_click = True
     
     def draw_next_reward(self, reward, pos):
-        if self.chamber_cleared:
-            if self.npc_id == "transition_prompt":
-                pos += pygame.math.Vector2(32, 32)
-                self.blit_reward_icon(reward, pos)
+        if self.npc_id == "transition_prompt":
+            pos += pygame.math.Vector2(32, 32)
+            self.blit_reward_icon(reward, pos)
     
     def update(self):
         self.animate()
@@ -260,9 +259,10 @@ class NPC(pygame.sprite.Sprite):
         
         # Only trigger the effect ONCE
         # Once triggered, the TempIcon class will loop it
-        if not self.icon_blitted:
-            self.draw_next_reward(self.reward, self.pos)
-            self.icon_blitted = True
+        if self.chamber_cleared:
+            if not self.icon_blitted:
+                self.draw_next_reward(self.reward, self.pos)
+                self.icon_blitted = True
     
     def npc_update(self, player, bool):
         self.player_interact(player)

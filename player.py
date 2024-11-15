@@ -111,7 +111,6 @@ class Player(Entity):
             "PERCEPTION": 9,
         }
         self.level = 4
-        self.humanity = interface_details['values']['active humanities']
 
         self.max_attributes = {
             "VITALITY": 99,
@@ -571,12 +570,8 @@ class Player(Entity):
             self.direction.x = 0
 
             # On death effects
-            interface_details['values']['hollow'] = True
             interface_details['values']['lost souls'] = interface_details['values']['souls']
-            interface_details['values']['lost humanities'] = interface_details['values']['active humanities']
             interface_details['values']['souls'] = 0
-            interface_details['values']['active humanities'] = 0
-            print(f"{interface_details['values']['lost souls']} souls and {interface_details['values']['lost humanities']} humanity lost")
 
     def check_player_poise(self, dmg):
         poise_dmg = round(dmg // 2, 1)
@@ -614,7 +609,6 @@ class Player(Entity):
         self.get_status()
         self.animate()
         self.move(self.speed, self.sprite_type)
-        interface_details['values']['active humanities'] = self.on_humanity_increased(interface_details['values']['active humanities'], 99)
         self.stamina_recovery()
         self.mana_recovery()
         self.check_death()
