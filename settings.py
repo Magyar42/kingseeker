@@ -175,9 +175,9 @@ chambers_per_region = {
     "the_depths": [""],
 }
 safe_rooms = [
-    "000", "099", "100," "199", "200", "299"
+    "000", "099", "101," "199", "201", "299"
 ]
-# X00 is the START room for each region
+# X01 is the START room for each region
 # X99 is the END room for each region
 
 # Chamber Rewards
