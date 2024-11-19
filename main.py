@@ -6,15 +6,6 @@ from support import *
 from button import Button
 from particles import AnimationPlayer
 
-# if platform.system() == "Windows":
-#     from pyvidplayer2 import Video
-#     opening = Video("assets/video/movie_subs.mp4")
-# elif platform.system() == "Linux":
-#     print(f"{platform.system()} system detected: opening movie will not play")
-
-# pygame.mouse.set_visible(False)
-# cursor_img = pygame.image.load("assets/graphics/cursor.png").convert_alpha()
-# cursor_img_rect = cursor_img.get_rect()
 icon_image = pygame.image.load("assets/graphics/bonfire_icon_new.png")
 
 # Functions
@@ -22,10 +13,6 @@ def mm_newgame():
     print("Starting Game.")
 
     pygame.mixer.music.stop()
-    # todo: renable intro
-    # if platform.system() == "Windows":
-    #     game.play_intro()
-    # else:
     pygame.mixer.music.load("assets/audio/DaSo - Firelink Sneakers.mp3")
     pygame.mixer.music.set_volume(0.1)
     pygame.mixer.music.play(loops = -1)
