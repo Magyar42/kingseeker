@@ -63,6 +63,8 @@ class AnimationPlayer():
             'victory_achieved': import_folder('assets/overlay/victory_achieved'),
 
             # region titles
+            'firelink_shrine': import_folder('assets/overlay/regions/firelink_shrine'),
+            'undead_burg': import_folder('assets/overlay/regions/undead_burg'),
             'undead_parish': import_folder('assets/overlay/regions/undead_parish'),
             'the_depths': import_folder('assets/overlay/regions/the_depths'),
 

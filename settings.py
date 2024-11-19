@@ -167,15 +167,16 @@ region_values = {
 }
 
 # Chamber Details
-NUM_CHAMBERS_PER_REGION = 4
+NUM_CHAMBERS_PER_REGION = 2
 chambers_per_region = {
-    # Chambers which can be randomly loaded [starting chambers of each area are NOT included]
-    "undead_burg": ["001", "002"],
+    # Chambers which can be randomly loaded [starting/ending chambers of each area are NOT included]
+    "firelink_shrine": [""],
+    "undead_burg": ["097", "098"],
     "undead_parish": [""],
     "the_depths": [""],
 }
 safe_rooms = [
-    "000", "099", "101," "199", "201", "299"
+    "000", "001","099", "101," "199", "201", "299"
 ]
 # X01 is the START room for each region
 # X99 is the END room for each region

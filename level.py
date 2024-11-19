@@ -33,7 +33,7 @@ class Level:
         self.current_message_id = 0
         self.font = pygame.font.Font(UI_FONT, MEDIUM_FONT_SIZE)
 
-        self.region = "undead_burg"
+        self.region = "firelink_shrine"
         self.reward = None
         self.region_chambers_done = 0 # Amount of chambers for THIS region completed
         self.available_chambers = chambers_per_region[self.region]
@@ -595,23 +595,28 @@ class Level:
     def load_new_chamber(self, reward=None, id=None):
         trigger_region_title = False
         self.region_chambers_done += 1
-        if self.region_chambers_done == NUM_CHAMBERS_PER_REGION - 1: # If this region is completed (minus end room)
-            print("Loading end chamber!")
-            region_num = region_values[self.region]
-            chamber_id = f"{region_num}99" # Load end room
-            self.reward = reward
 
-        elif self.region_chambers_done >= NUM_CHAMBERS_PER_REGION: # If this region is FULLY completed
+        if self.region_chambers_done >= NUM_CHAMBERS_PER_REGION or self.region == "firelink_shrine": # If this region is FULLY completed
             print("Loading new region!")
             self.region_chambers_done = 0
 
             # todo: set dynamically
-            if self.region == "undead_burg":
+            if self.region == "firelink_shrine":
                 if id == 0:
-                    chamber_id = "199"
+                    chamber_id = "001"
+                    self.region = "undead_burg"
+                elif id == 1:
+                    chamber_id = "401"
+                    self.region = "catacombs"
+                else:
+                    chamber_id = "601"
+                    self.region = "new_londo_ruins"
+            elif self.region == "undead_burg":
+                if id == 0:
+                    chamber_id = "101"
                     self.region = "undead_parish"
                 else:
-                    chamber_id = "299"
+                    chamber_id = "201"
                     self.region = "the_depths"
             
             self.available_chambers = chambers_per_region[self.region]
@@ -619,6 +624,12 @@ class Level:
 
         # todo add check for region minus end room AND the room before
         # this is because ideally that room will have 1 exit, and will also not have any reward set
+
+        elif self.region_chambers_done == NUM_CHAMBERS_PER_REGION - 1: # If this region is completed (minus end room)
+            print("Loading end chamber!")
+            region_num = region_values[self.region]
+            chamber_id = f"{region_num}99" # Load end room
+            self.reward = reward
 
         else: 
             print("Loading next chamber!")
