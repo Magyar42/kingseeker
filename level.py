@@ -357,7 +357,18 @@ class Level:
         self.hurtbox = None
 
     def create_attack(self):
-        self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
+        self.current_attack = Weapon(self.player, [self.visible_sprites]) # self.attack_sprites
+        
+        direction = self.player.status.split("_")[0]
+        if direction == "right":
+            pos = self.player.rect.center + pygame.math.Vector2(32, 0)
+        elif direction == "left":
+            pos = self.player.rect.center + pygame.math.Vector2(-32, 0)
+        elif direction == "up":
+            pos = self.player.rect.center + pygame.math.Vector2(0, -32)
+        elif direction == "down":
+            pos = self.player.rect.center + pygame.math.Vector2(0, 32)
+        self.animation_player.create_attack("sword_1", pos, [self.visible_sprites, self.attack_sprites], "weapon", direction, 0.20)
 
     def create_magic(self, name, strength, cost):
         self.current_attack = Catalyst(self.player, [self.visible_sprites])

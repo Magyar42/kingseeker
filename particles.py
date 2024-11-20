@@ -22,6 +22,8 @@ class AnimationPlayer():
             'leaf_attack': import_folder('assets/graphics/particles/leaf_attack'),
             'thunder': import_folder('assets/graphics/particles/thunder'),
             'sparkle': import_folder('assets/graphics/particles/sparkle'),
+
+            'sword_1': import_folder('assets/graphics/particles/player_attack/sword_1'),
  
             # deaths
             'squid': import_folder('assets/graphics/particles/smoke'),
@@ -137,6 +139,10 @@ class AnimationPlayer():
     def create_particles(self, animation_type, pos, groups, sprite_type, speed=0.15, effect=None):
         animation_frames = self.frames[animation_type]
         ParticleEffect(pos, animation_frames, groups, sprite_type, speed, effect)
+
+    def create_attack(self, animation_type, pos, groups, sprite_type, direction, speed=0.15, effect=None):
+        animation_frames = self.frames[animation_type]
+        AttackEffect(pos, animation_frames, groups, sprite_type, direction, speed, effect)
     
     def create_icon(self, animation_type, pos, groups, sprite_type, speed=0.15):
         animation_frames = self.frames[animation_type]
@@ -169,7 +175,38 @@ class ParticleEffect(pygame.sprite.Sprite):
         self.animate()
         # print(self.frame_index)
 
-class TempIcon(pygame.sprite.Sprite): # todo: isnt actually animated
+class AttackEffect(pygame.sprite.Sprite):
+    def __init__(self, pos, animation_frames, groups, sprite_type, direction, speed=0.15, effect=None):
+        super().__init__(groups)
+        self.sprite_type = sprite_type
+        self.frame_index = 0
+        self.animation_speed = speed
+        self.frames = animation_frames
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect(center = pos)
+        self.effect = effect
+        self.direction = direction
+    
+    def animate(self):
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(self.frames):
+            if self.effect != None: self.effect()
+            self.kill()
+        else:
+            if self.direction == "right":
+                self.image = self.frames[int(self.frame_index)]
+            elif self.direction == "left":
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
+            elif self.direction == "up":
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
+            else:
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], -90)
+    
+    def update(self):
+        self.animate()
+        # print(self.frame_index)
+
+class TempIcon(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15):
         super().__init__(groups)
         self.sprite_type = sprite_type
