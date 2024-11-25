@@ -117,6 +117,13 @@ boon_data = {
     "boon_16": {"name": "Stormclouds", "category": "Warriors of Sunlight", "desc1": "Effect also extends stunned duration by 0.5s.", "desc2": "", "subboons": None, "is_subboon": True},
 }
 
+# Boon Categories
+boons_core = {
+    "warriors_of_sunlight": {
+        "list": ["boon_1", "boon_2", "boon_3", "boon_4"]
+    },
+}
+
 # Velka's Blessings # todo: finish
 velka_boons = {
     # Modifiers 
@@ -230,7 +237,7 @@ region_values = {
 }
 
 # Chamber Details
-NUM_CHAMBERS_PER_REGION = 2
+NUM_CHAMBERS_PER_REGION = 4
 chambers_per_region = {
     # Chambers which can be randomly loaded [starting/ending chambers of each area are NOT included]
     "firelink_shrine": [""],
@@ -239,29 +246,32 @@ chambers_per_region = {
     "the_depths": [""],
 }
 safe_rooms = [
-    "000", "001","099", "101," "199", "201", "299"
+    "000","099", "101," "199", "201", "299"
+]
+reward_first_rooms = [
+    "001"
 ]
 # X01 is the START room for each region
 # X99 is the END room for each region
 
 # Chamber Rewards
 chamber_rewards = { # todo: make sure of the chance section
-    "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
-    "humanity": { "chance": 1, "min": 2, "max": 5 },
+    # "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
+    # "humanity": { "chance": 1, "min": 2, "max": 5 },
 
-    "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
-    "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
+    # "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
+    # "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
 
-    "titanite_shard": { "chance": 1, "min": 2, "max": 4 },
-    "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
-    "titanite_slab": { "chance": 0.25, "min": 1, "max": 1 },
-    "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
+    # "titanite_shard": { "chance": 1, "min": 2, "max": 4 },
+    # "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
+    # "titanite_slab": { "chance": 0.25, "min": 1, "max": 1 },
+    # "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
 
     "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
+    # "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
 
-    "vendor": { "chance": 0.5, "min": 1, "max": 1 },
+    # "vendor": { "chance": 0.5, "min": 1, "max": 1 },
 }

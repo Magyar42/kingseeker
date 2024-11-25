@@ -614,5 +614,4 @@ class Player(Entity):
         self.check_death()
         #self.check_player_poise()
 
-        # Todo: place the following in a method
         if self.menu_open: self.main_menu()

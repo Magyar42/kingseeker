@@ -129,7 +129,7 @@ class NPC(pygame.sprite.Sprite):
                         # Effects after opening (spawning item) done in self.animate
                         # due to only happening once chest opening animation played
                     else:
-                        print(self.reward)
+                        # print(self.reward)
                         self.effect(self.reward, self.unique_id)
 
     def initiate_npc(self, player):
