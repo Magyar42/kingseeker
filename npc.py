@@ -4,9 +4,10 @@ from support import *
 from gameinfo import *
 from popups import Prompt, ItemPopup
 from debug import debug
+from random import choice
 
 class NPC(pygame.sprite.Sprite):
-    def __init__(self, npc_id, pos, groups, chamber_wave_active, effect = None):
+    def __init__(self, npc_id, pos, groups, chamber_cleared, blit_reward_icon, map_id, effect = None, reward = "None", unique_id = None, rotate_val = 0):
         super().__init__(groups)
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
@@ -14,17 +15,20 @@ class NPC(pygame.sprite.Sprite):
         self.frame_index = 0
         self.animation_speed = 0.10
         self.sprite_type = "npc"
+        self.rotate_val = rotate_val
 
+        self.map_id = map_id
         self.npc_id = npc_id
+        self.unique_id = unique_id
         self.import_graphics()
         self.available_icon = pygame.transform.scale(pygame.image.load("assets/graphics/interactable_entities/npcs/available.png"), (8,39)).convert_alpha()
-        self.image = self.animations[self.npc_id][self.frame_index]
+        self.image = pygame.transform.rotate(self.animations[self.npc_id][self.frame_index], self.rotate_val)
 
         self.pos = pos
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-30, -40)
         self.use_radius = 100
-        self.chamber_wave_active = chamber_wave_active
+        self.chamber_cleared = chamber_cleared
 
         self.prompt = Prompt()
         self.item_popup = ItemPopup()
@@ -42,6 +46,9 @@ class NPC(pygame.sprite.Sprite):
         self.convo = None   
         self.talked_to = False  
         self.effect = effect  
+        self.reward = reward
+        self.blit_reward_icon = blit_reward_icon
+        self.icon_blitted = False
 
         # self.chest_sound = pygame.mixer.Sound("assets/audio/sfx/OpenChest.wav")
         # self.chest_sound.set_volume(0.25)
@@ -82,7 +89,7 @@ class NPC(pygame.sprite.Sprite):
         else:
             self.display_surface.blit(self.image, self.rect)
 
-        self.image = animation[int(self.frame_index)]
+        self.image = pygame.transform.rotate(animation[int(self.frame_index)], self.rotate_val)
         #self.rect = self.image.get_rect(center = self.hitbox.center)
 
         # x = (self.display_surface.get_size()[0] // 2)
@@ -99,10 +106,13 @@ class NPC(pygame.sprite.Sprite):
 
     def player_interact(self, player):
         player_distance = self.get_player_dist(player)
-        if player_distance <= self.use_radius and not self.talked_to and not self.chamber_wave_active:
+        if player_distance <= self.use_radius and not self.talked_to and self.chamber_cleared:
             # print(f"{round(player_distance)}m from {self.npc_id}!")
             if self.npc_id != "transition_prompt": self.prompt.createPrompt("NPC", "Q", "Talk")
-            else: self.prompt.createPrompt("NPC", "Q", "Begin Journey: Undead Burg")
+            else:
+                # for region in list(chambers_per_region.keys()):
+                #     if self.map_id in chambers_per_region[region]:
+                self.prompt.createPrompt("NPC", "Q", f"Continue ({self.reward})")
 
             if not self.interacting_npc:
                 keys = pygame.key.get_pressed()
@@ -119,7 +129,8 @@ class NPC(pygame.sprite.Sprite):
                         # Effects after opening (spawning item) done in self.animate
                         # due to only happening once chest opening animation played
                     else:
-                        self.effect("001") # todo: use id of undead burg
+                        print(self.reward)
+                        self.effect(self.reward, self.unique_id)
 
     def initiate_npc(self, player):
         if self.interacting_npc:
@@ -237,12 +248,23 @@ class NPC(pygame.sprite.Sprite):
             if current_time - self.click_time >= 200:
                 self.can_click = True
     
+    def draw_next_reward(self, reward, pos):
+        if self.npc_id == "transition_prompt":
+            pos += pygame.math.Vector2(32, 32)
+            self.blit_reward_icon(reward, pos)
+    
     def update(self):
         self.animate()
         self.cooldowns()
+        
+        # Only trigger the effect ONCE
+        # Once triggered, the TempIcon class will loop it
+        if self.chamber_cleared:
+            if not self.icon_blitted:
+                self.draw_next_reward(self.reward, self.pos)
+                self.icon_blitted = True
     
     def npc_update(self, player, bool):
         self.player_interact(player)
         self.interact_interface(player)
-        self.chamber_wave_active = bool
-        debug(self.chamber_wave_active)
+        self.chamber_cleared = bool

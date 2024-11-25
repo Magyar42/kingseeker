@@ -495,7 +495,7 @@ class SummonSign(pygame.sprite.Sprite):
             if self.status == "activating":
                 self.status = "active"
                 self.summon_sign_ui_effect()
-                self.frame_index = 7
+                self.frame_index = len(animation) - 1
             else:
                 self.frame_index = 0
         else:

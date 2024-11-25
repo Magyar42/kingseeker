@@ -36,7 +36,7 @@ npc_conversations = {
 
 # Meta-Progression Resources
 resources = {
-    "soul remnants": 99,
+    "soul remnants": 30,
     "humanities": 11,
 
     "souvenirs of reprisal": 2,
@@ -125,12 +125,9 @@ interface_details = {
         "estus level": 1,
         "souls": 0,
         "lost souls": 0,
-        "active humanities": 0,
-        "lost humanities": 0,
         "max estus": 3,
         "current estus": 3,
         "levelup cost": 1,
-        "hollow": True,
     }
 }
 
@@ -191,8 +188,34 @@ message_list = {
 enemy_spawn_template = {
     "undead_burg": {
         "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-        # "02": { "type": "constant", "min_enemies": 6, "max_enemies": 10, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
+        "02": { "type": "constant", "min_enemies": 6, "max_enemies": 6, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
         # "03": { "type": "boss", "min_enemies": 1, "max_enemies": 1, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["raccoon"], "scaling": 0.75, "drop_mult": 1.5, "selection_mult": 0.5 },
-        "04": { "type": "waves", "min_enemies": 5, "max_enemies": 8, "min_waves": 2, "max_waves": 4, "whitelisted_enemies": ["bamboo", "spirit", "squid"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-    }
+        "04": { "type": "waves", "min_enemies": 6, "max_enemies": 8, "min_waves": 2, "max_waves": 4, "whitelisted_enemies": ["bamboo", "spirit", "squid"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        "05": { "type": "waves", "min_enemies": 5, "max_enemies": 6, "min_waves": 2, "max_waves": 3, "whitelisted_enemies": ["spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        "06": { "type": "constant", "min_enemies": 6, "max_enemies": 7, "min_waves": 3, "max_waves": 3, "whitelisted_enemies": ["bamboo"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+    },
+    "undead_parish": {
+        "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        "02": { "type": "constant", "min_enemies": 5, "max_enemies": 6, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
+    },
+    "the_depths": {
+        "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        "02": { "type": "constant", "min_enemies": 6, "max_enemies": 6, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
+    },
+}
+
+# Current Chamber - Spawn Details
+# Dynamically updated at the creation of each chamber
+chamber_enemy_info = {
+    "type": "",
+    "total_enemies": "",
+    "enemy_list": [], # Each element in the list represents an enemy -> (position, type)
+
+    # Waves
+    "num_waves": "",
+    "enemies_per_wave": "",
+    "remainder_enemies": "",
+
+    # Constant
+    "initial_num": "",
 }

@@ -274,9 +274,9 @@ class gameMenu:
 
         # DETAILS toggle
         if self.details_index_items is not None:
-            self.item_details(player, self.resource_name_list[self.details_index_items], pygame.font.Font(UI_FONT, 18))
+            self.item_details(player, self.resource_name_list[self.details_index_items], pygame.font.Font(UI_FONT, 16))
         if self.details_index_boons is not None:
-            self.boon_details(player, interface_details["boons"]["list"][self.details_index_boons], pygame.font.Font(UI_FONT, 18))
+            self.boon_details(player, interface_details["boons"]["list"][self.details_index_boons], pygame.font.Font(UI_FONT, 16))
 
             self.boon_active = True
             if self.boon_active: 

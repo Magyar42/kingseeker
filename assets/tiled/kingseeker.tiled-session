@@ -1,0 +1,56 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "undead_burg/map_001.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "kingseeker - extras.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "kingseeker - objects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "kingseeker - tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "undead_burg/map_001.tmx": {
+            "scale": 0.37294921875,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1371.5003927729772,
+                "y": 959.9162084315267
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/Users/krist/Documents/repos/kingseeker/assets/map/undead_burg/001",
+    "map.height": 30,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 40,
+    "openFiles": [
+        "kingseeker - extras.tsx",
+        "kingseeker - objects.tsx",
+        "kingseeker - tiles.tsx",
+        "undead_burg/map_001.tmx"
+    ],
+    "project": "kingseeker.tiled-project",
+    "recentFiles": [
+        "kingseeker - extras.tsx",
+        "kingseeker - objects.tsx",
+        "kingseeker - tiles.tsx",
+        "undead_burg/map_001.tmx"
+    ]
+}

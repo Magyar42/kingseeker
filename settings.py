@@ -82,7 +82,7 @@ weapon_data = {
 boon_data = {
     ## Warriors of Sunlight
     # Level 1
-    "boon_1": {"name": "Lightning Step", "category": "Warriors of Sunlight", "desc1": "Moving into foes inflicts weak lightning damage.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
+    "boon_1": {"name": "Lightning Step", "category": "Warriors of Sunlight", "desc1": "Moving into foes inflicts weak lightning|damage.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
     "boon_2": {"name": "Primary Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Primary attack emits chain lightning when|damaging a foe.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
     "boon_3": {"name": "Secondary Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Secondary attack causes a lightning|bolt to strike nearby foes.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
     "boon_4": {"name": "Catalyst Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Transforms catalyst into a talisman|capable of casting divine miracles.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
@@ -90,9 +90,9 @@ boon_data = {
 
 # Magic Data # todo: change for kingseeker
 magic_data = {
-    "fire_surge": {"strength": 12, "cost": 10, "type": "Pyromancy"},
-    "heal": {"strength": 5, "cost": 8, "type": "Miracle"},
-    "icecrag_burst": {"strength": 9, "cost": 14, "type": "Sorcery"},
+    "fire_surge": {"strength": 12, "cost": 20, "type": "Pyromancy"},
+    "heal": {"strength": 20, "cost": 20, "type": "Miracle"},
+    "icecrag_burst": {"strength": 9, "cost": 24, "type": "Sorcery"},
 }
 
 # Enemy Data # todo: change for kingseeker
@@ -150,5 +150,55 @@ REQUIRES_HUMAN_TEXT = "Must be in Human form."
 CANNOT_KINDLE = "Cannot kindle flame further."
 
 # misc
-covenants = ["warriors_of_sunlight", "chaos_servants", "gravelord_servants", "darkwraiths", "blades_of_the_darkmoon", "path_of_the_dragon", "royal_guard", "way_of_white"]
-npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366"]
+covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon", "velka"]
+npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
+boon_summons = ["sunlight_summon", "chaos_summon", "darkwraith_summon", "darkmoon_summon", "velkas_tome"]
+resources_names = ["soul_remnants", "humanities", "souvenirs of reprisal", "sunlight medals", "titanite shards", "titanite chunks", "titanite slabs", "demon titanite"]
+
+# Region Values
+region_values = {
+    "undead_burg": "0",
+    "undead_parish": "1",
+    "the_depths": "2",
+    "blighttown": "3",
+    "catacombs": "4",
+    "valley_of_drakes": "5",
+    "new_londo_ruins": "6",
+}
+
+# Chamber Details
+NUM_CHAMBERS_PER_REGION = 2
+chambers_per_region = {
+    # Chambers which can be randomly loaded [starting/ending chambers of each area are NOT included]
+    "firelink_shrine": [""],
+    "undead_burg": ["097", "098"],
+    "undead_parish": [""],
+    "the_depths": [""],
+}
+safe_rooms = [
+    "000", "001","099", "101," "199", "201", "299"
+]
+# X01 is the START room for each region
+# X99 is the END room for each region
+
+# Chamber Rewards
+chamber_rewards = { # todo: make sure of the chance section
+    "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
+    "humanity": { "chance": 1, "min": 2, "max": 5 },
+
+    "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
+    "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
+
+    "titanite_shard": { "chance": 1, "min": 2, "max": 4 },
+    "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
+    "titanite_slab": { "chance": 0.25, "min": 1, "max": 1 },
+    "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
+
+    "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
+
+    "vendor": { "chance": 0.5, "min": 1, "max": 1 },
+}

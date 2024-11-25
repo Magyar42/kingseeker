@@ -22,6 +22,8 @@ class AnimationPlayer():
             'leaf_attack': import_folder('assets/graphics/particles/leaf_attack'),
             'thunder': import_folder('assets/graphics/particles/thunder'),
             'sparkle': import_folder('assets/graphics/particles/sparkle'),
+
+            'sword_1': import_folder('assets/graphics/particles/player_attack/sword_1'),
  
             # deaths
             'squid': import_folder('assets/graphics/particles/smoke'),
@@ -31,7 +33,13 @@ class AnimationPlayer():
             'asylum_demon': import_folder('assets/graphics/particles/smoke'),
 
             'player': import_folder('assets/graphics/particles/smoke2'),
-            
+
+            # spawning
+            'enemy_spawn': import_folder('assets/graphics/particles/enemy_spawn'),
+            'enemy_spawn2': import_folder('assets/graphics/particles/enemy_spawn2'),
+            'item_spawn': import_folder('assets/graphics/particles/spawn'),
+            'nova': import_folder('assets/graphics/particles/nova'),
+
             # leafs 
             'leaf': (
                 import_folder('assets/graphics/particles/leaf1'),
@@ -56,6 +64,12 @@ class AnimationPlayer():
             'target_destroyed': import_folder('assets/overlay/target_destroyed'),
             'victory_achieved': import_folder('assets/overlay/victory_achieved'),
 
+            # region titles
+            'firelink_shrine': import_folder('assets/overlay/regions/firelink_shrine'),
+            'undead_burg': import_folder('assets/overlay/regions/undead_burg'),
+            'undead_parish': import_folder('assets/overlay/regions/undead_parish'),
+            'the_depths': import_folder('assets/overlay/regions/the_depths'),
+
             # screen effects
             'fire1': import_folder('assets/graphics/ui/screen_effects/fire1'),
             'fire2': import_folder('assets/graphics/ui/screen_effects/fire2'),
@@ -63,6 +77,22 @@ class AnimationPlayer():
 
             # items
             'estus': import_folder('assets/graphics/particles/estus'),
+
+            # reward icons
+            'great_soul': import_folder('assets/graphics/ui/rewards/great_soul'),
+            'humanity': import_folder('assets/graphics/ui/rewards/humanity'),
+            'titanite_shard': import_folder('assets/graphics/ui/rewards/titanite_shard'),
+            'titanite_chunk': import_folder('assets/graphics/ui/rewards/titanite_chunk'),
+            'titanite_slab': import_folder('assets/graphics/ui/rewards/titanite_slab'),
+            'demon_titanite': import_folder('assets/graphics/ui/rewards/demon_titanite'),
+            'sunlight_medal': import_folder('assets/graphics/ui/rewards/sunlight_medal'),
+            'souvenir_of_reprisal': import_folder('assets/graphics/ui/rewards/souvenir_of_reprisal'),
+            'sunlight_summon': import_folder('assets/graphics/ui/rewards/sunlight_summon'),
+            'chaos_summon': import_folder('assets/graphics/ui/rewards/chaos_summon'),
+            'darkwraith_summon': import_folder('assets/graphics/ui/rewards/darkwraith_summon'),
+            'darkmoon_summon': import_folder('assets/graphics/ui/rewards/darkmoon_summon'),
+            'velkas_tome': import_folder('assets/graphics/ui/rewards/velkas_tome'),
+            'vendor': import_folder('assets/graphics/ui/rewards/vendor'),
 
             # Asylum Demon
             # todo!!! ADD ACTUAL SPRITES AND FRAMES TO EACH ATTACK AND BLANK THE NONATTACKS! THANKL YOUY BABYE
@@ -106,15 +136,77 @@ class AnimationPlayer():
         animation_frames = choice(self.frames["leaf"])
         ParticleEffect(pos, animation_frames, groups, sprite_type)
     
-    def create_particles(self, animation_type, pos, groups, sprite_type, speed=0.15):
+    def create_particles(self, animation_type, pos, groups, sprite_type, speed=0.15, effect=None):
         animation_frames = self.frames[animation_type]
-        ParticleEffect(pos, animation_frames, groups, sprite_type, speed)
+        ParticleEffect(pos, animation_frames, groups, sprite_type, speed, effect)
+
+    def create_attack(self, animation_type, pos, groups, sprite_type, direction, speed=0.15, effect=None):
+        animation_frames = self.frames[animation_type]
+        AttackEffect(pos, animation_frames, groups, sprite_type, direction, speed, effect)
+    
+    def create_icon(self, animation_type, pos, groups, sprite_type, speed=0.15):
+        animation_frames = self.frames[animation_type]
+        TempIcon(pos, animation_frames, groups, sprite_type, speed)
     
     def create_macro(self, animation_type, pos, groups, effect, speed, remain_time, toggle_screen_effect):
         animation_frames = self.frames[animation_type]
         ScreenEffect(pos, animation_frames, groups, effect, speed, remain_time, toggle_screen_effect)
 
 class ParticleEffect(pygame.sprite.Sprite):
+    def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15, effect=None):
+        super().__init__(groups)
+        self.sprite_type = sprite_type
+        self.frame_index = 0
+        self.animation_speed = speed
+        self.frames = animation_frames
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect(center = pos)
+        self.effect = effect
+    
+    def animate(self):
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(self.frames):
+            if self.effect != None: self.effect()
+            self.kill()
+        else:
+            self.image = self.frames[int(self.frame_index)]
+    
+    def update(self):
+        self.animate()
+        # print(self.frame_index)
+
+class AttackEffect(pygame.sprite.Sprite):
+    def __init__(self, pos, animation_frames, groups, sprite_type, direction, speed=0.15, effect=None):
+        super().__init__(groups)
+        self.sprite_type = sprite_type
+        self.frame_index = 0
+        self.animation_speed = speed
+        self.frames = animation_frames
+        self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect(center = pos)
+        self.effect = effect
+        self.direction = direction
+    
+    def animate(self):
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(self.frames):
+            if self.effect != None: self.effect()
+            self.kill()
+        else:
+            if self.direction == "right":
+                self.image = self.frames[int(self.frame_index)]
+            elif self.direction == "left":
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
+            elif self.direction == "up":
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
+            else:
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], -90)
+    
+    def update(self):
+        self.animate()
+        # print(self.frame_index)
+
+class TempIcon(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15):
         super().__init__(groups)
         self.sprite_type = sprite_type
@@ -127,13 +219,12 @@ class ParticleEffect(pygame.sprite.Sprite):
     def animate(self):
         self.frame_index += self.animation_speed
         if self.frame_index >= len(self.frames):
-            self.kill()
+            self.frame_index = 0
         else:
             self.image = self.frames[int(self.frame_index)]
     
     def update(self):
         self.animate()
-        # print(self.frame_index)
 
 class ScreenEffect(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups, effect, speed, remain_time, toggle_screen_effect):

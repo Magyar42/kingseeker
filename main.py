@@ -60,7 +60,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level("0") # Set to test area (0 is firelink)
+        self.level = Level("000")
         self.cursor_img = pygame.image.load('assets/graphics/cursor.png').convert_alpha()
 
         self.frames_list = import_folder('assets/graphics/menu_animations/mainmenu_bonfire')
