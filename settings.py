@@ -81,11 +81,74 @@ weapon_data = {
 # Boons Data
 boon_data = {
     ## Warriors of Sunlight
-    # Level 1
-    "boon_1": {"name": "Lightning Step", "category": "Warriors of Sunlight", "desc1": "Moving into foes inflicts weak lightning|damage.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
-    "boon_2": {"name": "Primary Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Primary attack emits chain lightning when|damaging a foe.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
-    "boon_3": {"name": "Secondary Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Secondary attack causes a lightning|bolt to strike nearby foes.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
-    "boon_4": {"name": "Catalyst Infusion: Lightning", "category": "Warriors of Sunlight", "desc1": "Transforms catalyst into a talisman|capable of casting divine miracles.", "desc2": "Scales with FAITH", "lvl": "LVL 1"},
+    # Core Boons
+    "boon_1": {"name": "Core Boon: Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False},
+
+    "boon_2": {"name": "Core Boon: Lightning Strike", "category": "Warriors of Sunlight", "desc1": "Primary/secondary attack emits chain-lightning|when damaging a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False},
+
+    "boon_3": {"name": "Core Boon: Electrifying Skill", "category": "Warriors of Sunlight", "desc1": "Ability emits chain-lightning when damaging|a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False},
+
+    "boon_4": {"name": "Core Boon: Sunlight Catalyst", "category": "Warriors of Sunlight", "desc1": "Gain the Sunlight Talisman capable of|casting Miracles.", "desc2": "Skews catalyst scaling towards FAITH.", "subboons": None, "is_subboon": False},
+
+    # General Boons
+    "boon_5": {"name": "Vengeance of the Gods", "category": "Warriors of Sunlight", "desc1": "When taking damage, there is a 25% chance of|releasing a shockwave.", "desc2": "", "subboons": ["boon_9", "boon_10"], "is_subboon": False},
+
+    "boon_6": {"name": "King of the Storm", "category": "Warriors of Sunlight", "desc1": "Chain-lighting effects bounce 2 more times.", "desc2": "", "subboons": ["boon_11", "boon_12"], "is_subboon": False},
+
+    "boon_7": {"name": "Protection of the Sun", "category": "Warriors of Sunlight", "desc1": "Ability is replaced by Soothing Sunlight,|fully restoring health when used.", "desc2": "", "subboons": ["boon_13", "boon_14"], "is_subboon": False},
+
+    "boon_8": {"name": "Unrelenting Drive", "category": "Warriors of Sunlight", "desc1": "Killing an enemy while health is at 100%|boosts damage by 2% for 4s.", "desc2": "This effect can stack up to 5 times.", "subboons": ["boon_15", "boon_16"], "is_subboon": False},
+
+    # Sub Boons
+    "boon_9": {"name": "Empowered Faith", "category": "Warriors of Sunlight", "desc1": "Increases shockwave chance to 75%.", "desc2": "Increases shockwave size by 25%.", "subboons": None, "is_subboon": True},
+    
+    "boon_10": {"name": "Divine Drivel", "category": "Warriors of Sunlight", "desc1": "Enemies hit by shockwaves are stunned for 1s.", "desc2": "", "subboons": None, "is_subboon": True},
+
+    "boon_11": {"name": "Repulsion", "category": "Warriors of Sunlight", "desc1": "Each chain-lightning effect's damage increases per bounce.", "desc2": "The final hit from a chain-lightning effect releases a|small AoE shockwave.", "subboons": None, "is_subboon": True},
+    
+    "boon_12": {"name": "Electrifying Deflection", "category": "Warriors of Sunlight", "desc1": "Enemies hit by chain-lighting have a 25% of being stunned|for 1s.", "desc2": "", "subboons": None, "is_subboon": True},
+
+    "boon_13": {"name": "Deepened Devotion", "category": "Warriors of Sunlight", "desc1": "Soothing Sunlight also fully restores mana and stamina.", "desc2": "", "subboons": None, "is_subboon": True},
+    
+    "boon_14": {"name": "Holy Protection", "category": "Warriors of Sunlight", "desc1": "Increases defense and speed by 30% for 6s after use.", "desc2": "", "subboons": None, "is_subboon": True},
+
+    "boon_15": {"name": "Benevolence", "category": "Warriors of Sunlight", "desc1": "Health threshold reduced to 75%.", "desc2": "", "subboons": None, "is_subboon": True},
+
+    "boon_16": {"name": "Stormclouds", "category": "Warriors of Sunlight", "desc1": "Effect also extends stunned duration by 0.5s.", "desc2": "", "subboons": None, "is_subboon": True},
+}
+
+# Velka's Blessings # todo: finish
+velka_boons = {
+    # Modifiers 
+    "general_modifiers": {
+        "list": None
+    },
+    "warriors_of_sunlight_modifiers": {
+        "list": ["wos_chain_lightning", "wos_stunned", "wos_shockwave", "wos_weapon_faith", "wos_catalyst_faith"]
+    },
+    "chaos_servants_modifiers": {
+        "list": None
+    },
+    "darkwraiths_modifiers": {
+        "list": None
+    },
+    "blades_of_the_darkmoon_modifiers": {
+        "list": None
+    },
+
+    # Spells
+    "warriors_of_sunlight_spells": {
+        "list": ["bountiful_light", "wrath_of_the_gods", "lightning_spear", "white_corona", "lightning_stake"]
+    },
+    "chaos_servants_spells": {
+        "list": None
+    },
+    "darkwraiths_spells": {
+        "list": None
+    },
+    "blades_of_the_darkmoon_spells": {
+        "list": None
+    },
 }
 
 # Magic Data # todo: change for kingseeker

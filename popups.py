@@ -219,9 +219,27 @@ class gameMenu:
         self.menu = itemMenu()
 
         self.boons = []
+        # Only load boons (not sub-boons) for the display
         for current_boon in interface_details["boons"]["list"]:
-            current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
-            self.boons.append(current_boon_surf)
+            if not boon_data[current_boon]["is_subboon"]:
+                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+                self.boons.append(current_boon_surf)
+
+    def selection_cooldown(self):
+        # if not self.can_move_selection:
+        #     current_time = pygame.time.get_ticks()
+        #     if current_time - self.selection_time >= 200:
+        #         self.can_move_selection = True
+
+        # if not self.can_move_boon:
+        #     current_time = pygame.time.get_ticks()
+        #     if current_time - self.boon_time >= 200:
+        #         self.can_move_boon = True
+        
+        if not self.details_can_toggle:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.details_toggle_time >= 200:
+                self.details_can_toggle = True
     
     # Esc Menu - Shows items + boons
     def displayMenu(self, player):
@@ -363,15 +381,18 @@ class gameMenu:
     # Details Menu - Boon details
     def boon_details(self, player, boon, font):
         # Background
-        bg_rect_size = (600, 167)
+        if boon_data[boon]["desc2"] != "": bg_rect_size = (600, 147)
+        else: bg_rect_size = (600, 107)
+
         x = (self.display_surface.get_size()[0] - 790) # - (bg_rect_size[0] // 2)
         y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) - 250
+
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
         pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
 
         # Name
-        title_surface = font.render(f"{boon_data[f'{boon}']['name']} [{boon_data[f'{boon}']['lvl']}]", True, "white")
+        title_surface = font.render(f"{boon_data[f'{boon}']['name']}", True, "white")
         title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 15))
         text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
         text_fade.fill(TEXT_BG_COLOUR)
@@ -408,6 +429,93 @@ class gameMenu:
             text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, "white")
             text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 115 + (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
+
+        # SUB BOONS
+        self.subboons_display(boon, pygame.font.Font(UI_FONT, 12), boon_data[f'{boon}']['subboons'], bg_rect_size[1])
+    
+    # todo: clean up the below
+    def subboons_display(self, parent_boon, font, child_boons, parent_height):
+        if child_boons == None:
+            # Background
+            bg_rect_size = (600, 30)
+            x = (self.display_surface.get_size()[0] - 790)
+            y = (self.display_surface.get_size()[1] // 2) - (parent_height // 2) - 250 + parent_height + 20
+            main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
+            pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
+
+            # Name
+            title_surface = font.render("No sub-boons available for Core Boons.", True, "white")
+            title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 15))
+            text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
+            text_fade.fill(TEXT_BG_COLOUR)
+            text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 10))
+            self.display_surface.blit(text_fade, text_fade_rect)
+            self.display_surface.blit(title_surface, title_rect)
+            # pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, text_fade_rect.inflate(10, 10), 3)
+        else:
+            # Background
+            prev_subboon_height = 0
+            for index, subboon in enumerate(child_boons):
+                # If sub-boon is active, show details
+                if subboon in interface_details["boons"]["list"]:
+                    if boon_data[subboon]["desc2"] != "": bg_rect_size = (600, 110)
+                    else: bg_rect_size = (600, 70)
+
+                    x = (self.display_surface.get_size()[0] - 790) # - (bg_rect_size[0] // 2)
+                    y = (self.display_surface.get_size()[1] // 2) - (parent_height // 2) - 250 + parent_height + 20 + (index * (prev_subboon_height + 20))
+                    main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
+                    pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
+                    pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
+
+                    # Name
+                    title_surface = font.render(f"{boon_data[f'{subboon}']['name']}", True, "white")
+                    title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 15))
+                    text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
+                    text_fade.fill(TEXT_BG_COLOUR)
+                    text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 10))
+                    self.display_surface.blit(text_fade, text_fade_rect)
+                    self.display_surface.blit(title_surface, title_rect)
+
+                    # Desc 1
+                    desc1 = boon_data[f'{subboon}']["desc1"]
+                    split_current_line = desc1.split("|")
+                    while len(split_current_line) < 4:
+                        split_current_line.append("")
+                    for subline in range(4):
+                        text_surf = pygame.font.Font(UI_FONT, 10).render(split_current_line[subline], False, "white")
+                        text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 45 + (subline * 15)))
+                        self.display_surface.blit(text_surf, text_rect)
+
+                    # Desc 2
+                    desc2 = boon_data[f'{subboon}']["desc2"]
+                    split_current_line = desc2.split("|")
+                    while len(split_current_line) < 4:
+                        split_current_line.append("")
+                    for subline in range(4):
+                        text_surf = pygame.font.Font(UI_FONT, 10).render(split_current_line[subline], False, "white")
+                        text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 85 + (subline * 15)))
+                        self.display_surface.blit(text_surf, text_rect)
+                    
+                # If sub-boon is not active, show ???
+                else: 
+                    # Background
+                    bg_rect_size = (600, 30)
+                    x = (self.display_surface.get_size()[0] - 790)
+                    y = (self.display_surface.get_size()[1] // 2) - (parent_height // 2) - 250 + parent_height + 20 + (index * (prev_subboon_height + 20))
+                    main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
+                    pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
+                    pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
+
+                    # Name
+                    title_surface = font.render("???", True, "white")
+                    title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 15))
+                    text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
+                    text_fade.fill(TEXT_BG_COLOUR)
+                    text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 10))
+                    self.display_surface.blit(text_fade, text_fade_rect)
+                    self.display_surface.blit(title_surface, title_rect)
+                prev_subboon_height = bg_rect_size[1] # Used to dynamically change distance between subboons
 
 class itemMenu:
     def __init__(self):
