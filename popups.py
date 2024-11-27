@@ -604,16 +604,22 @@ class BoonsMenu:
         return boons_choice
 
     def display(self, options_list):
+        prev_height = 0
         for num, boon in enumerate(options_list):
-            self.boon_details(boon, num)
+            added_height = self.boon_details(boon, num, prev_height)
+            print(f"Prev height: {prev_height} | Added height: {added_height}")
+            prev_height += added_height
 
-    def boon_details(self, boon, num):
+    def boon_details(self, boon, num, prev_height):
+        print(boon)
         # Background
-        if boon_data[boon]["desc2"] != "": bg_rect_size = (600, 147)
-        else: bg_rect_size = (600, 107)
+        if boon_data[boon]["desc2"] != "":
+            bg_rect_size = (700, 147)
+        else:
+            bg_rect_size = (700, 107)
 
         x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[0] // 2)
-        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) - 250 + (num * (bg_rect_size[1] + 25))
+        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) - 250 + prev_height
 
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
         pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
@@ -621,20 +627,20 @@ class BoonsMenu:
 
         # Name
         title_surface = pygame.font.Font(UI_FONT, 14).render(f"{boon_data[f'{boon}']['name']}", True, "white")
-        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 15))
+        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 15))
         text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
         text_fade.fill(TEXT_BG_COLOUR)
-        text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 10))
+        text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(100, 10))
         self.display_surface.blit(text_fade, text_fade_rect)
         self.display_surface.blit(title_surface, title_rect)
 
         # Category
         cat = f"{boon_data[f'{boon}']['category']}"
         cat_surface = pygame.font.Font(UI_FONT, 12).render(cat, True, "white")
-        cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 40))
+        cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 40))
         cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
         cat_fade.fill(TEXT_BG_COLOUR)
-        cat_fade_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 35))
+        cat_fade_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(100, 35))
         self.display_surface.blit(cat_fade, cat_fade_rect)
         self.display_surface.blit(cat_surface, cat_rect)
 
@@ -645,7 +651,7 @@ class BoonsMenu:
             split_current_line.append("")
         for subline in range(4):
             text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, "white")
-            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 75 + (subline * 15)))
+            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 75 + (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
         # Desc 2
@@ -655,5 +661,7 @@ class BoonsMenu:
             split_current_line.append("")
         for subline in range(4):
             text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, "white")
-            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 115 + (subline * 15)))
+            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 115 + (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
+        
+        return bg_rect_size[1] #+ 20
