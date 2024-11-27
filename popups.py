@@ -215,6 +215,14 @@ class gameMenu:
                 current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
                 self.boons.append(current_boon_surf)
 
+    def update_boons(self):
+        self.boons = []
+        # Only load boons (not sub-boons) for the display
+        for current_boon in interface_details["boons"]["list"]:
+            if not boon_data[current_boon]["is_subboon"]:
+                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+                self.boons.append(current_boon_surf)
+
     def selection_cooldown(self):
         # if not self.can_move_selection:
         #     current_time = pygame.time.get_ticks()
@@ -547,11 +555,17 @@ class itemMenu:
 
 # Boons Menu
 class BoonsMenu:
-    def __init__(self, toggle_screen_effect):
+    def __init__(self, toggle_screen_effect, enable_player_control):
         self.display_surface = pygame.display.get_surface()
-        self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
 
         self.toggle_screen_effect = toggle_screen_effect
+        self.enable_player_control = enable_player_control
+
+        self.boon_icons = []
+        self.item_box = pygame.image.load("assets/graphics/ui/interface/item_box.png").convert_alpha()
+        self.item_box_selected = pygame.image.load("assets/graphics/ui/interface/item_box_selected.png").convert_alpha()
     
     def generate_boons(self, covenant):
         player_boons = interface_details["boons"]["list"]
@@ -600,6 +614,15 @@ class BoonsMenu:
                 boons_choice.append(new_boon)
                 trimmed_boons_list.remove(new_boon)
         print(boons_choice)
+
+        self.boon_icons = []
+        # Only load boons (not sub-boons) for the display
+        for current_boon in boons_choice:
+            if not boon_data[current_boon]["is_subboon"]:
+                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+            else:
+                current_boon_surf = pygame.image.load("assets/graphics/ui/interface_icons/boons/general_subboon.png")
+            self.boon_icons.append(current_boon_surf)
         
         return boons_choice
 
@@ -607,11 +630,9 @@ class BoonsMenu:
         prev_height = 0
         for num, boon in enumerate(options_list):
             added_height = self.boon_details(boon, num, prev_height)
-            print(f"Prev height: {prev_height} | Added height: {added_height}")
             prev_height += added_height
 
     def boon_details(self, boon, num, prev_height):
-        print(boon)
         # Background
         if boon_data[boon]["desc2"] != "":
             bg_rect_size = (700, 147)
@@ -619,14 +640,32 @@ class BoonsMenu:
             bg_rect_size = (700, 107)
 
         x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[0] // 2)
-        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) - 250 + prev_height
+        y = (self.display_surface.get_size()[1] // 2) - 300 + prev_height
 
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
-        pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
+        icon_surface = self.boon_icons[num]
+        icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(10, 0))
+
+        # Icon + BG [Updates with hover]
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+        if hit:
+            pygame.draw.rect(self.display_surface, UI_SELECTED_COLOUR, main_rect.inflate(10, 10))
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, main_rect.inflate(10, 10), 3)
+            self.display_surface.blit(self.item_box_selected, icon_rect)
+
+            if player_inputs["light attack"]:
+                self.add_boon(boon) # If LMB pressed, select boon
+                player_inputs["light attack"] = False
+        else:
+            pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
+            self.display_surface.blit(self.item_box, icon_rect)
+        
+        self.display_surface.blit(icon_surface, icon_rect)
 
         # Name
-        title_surface = pygame.font.Font(UI_FONT, 14).render(f"{boon_data[f'{boon}']['name']}", True, "white")
+        title_surface = self.font14.render(f"{boon_data[f'{boon}']['name']}", True, "white")
         title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 15))
         text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
         text_fade.fill(TEXT_BG_COLOUR)
@@ -634,9 +673,14 @@ class BoonsMenu:
         self.display_surface.blit(text_fade, text_fade_rect)
         self.display_surface.blit(title_surface, title_rect)
 
-        # Category
-        cat = f"{boon_data[f'{boon}']['category']}"
-        cat_surface = pygame.font.Font(UI_FONT, 12).render(cat, True, "white")
+        # Subtext
+        if boon_data[f'{boon}']['parent'] != None:
+            parent = boon_data[f'{boon}']['parent']
+            subtext = f"{boon_data[f'{boon}']['cat']} | {boon_data[f'{parent}']['name']}"
+        else:
+            subtext = boon_data[f'{boon}']['cat']
+
+        cat_surface = self.font12.render(subtext, True, "white")
         cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 40))
         cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
         cat_fade.fill(TEXT_BG_COLOUR)
@@ -650,7 +694,7 @@ class BoonsMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, "white")
+            text_surf = self.font12.render(split_current_line[subline], False, "white")
             text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 75 + (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -660,8 +704,13 @@ class BoonsMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, "white")
+            text_surf = self.font12.render(split_current_line[subline], False, "white")
             text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 115 + (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
         
-        return bg_rect_size[1] #+ 20
+        return bg_rect_size[1] + 20
+
+    def add_boon(self, boon):
+        interface_details["boons"]["list"].append(boon)
+        self.enable_player_control()
+        print(interface_details["boons"]["list"])

@@ -69,7 +69,7 @@ class Level:
         self.create_map(True, self.map_id)
 
         self.ui = UI()
-        self.boons_menu = BoonsMenu(self.toggle_menu)
+        self.boons_menu = BoonsMenu(self.toggle_menu, self.enable_player_control)
         self.boons_menu_open = False
         self.boon_options = None
 
@@ -552,8 +552,18 @@ class Level:
     def summon_sign_effect(self, covenant):
         self.player.resting = True
         self.boons_menu_open = True
+        self.player.any_interface_open = True
         self.boon_options = self.boons_menu.generate_boons(covenant)
         print(f"{covenant} summon sign activated!")
+
+    # Enables player movement, removing any screen-effects
+    def enable_player_control(self):
+        self.player.resting = False
+        self.boons_menu_open = False
+        self.player.any_interface_open = False
+        self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
+
+        self.player.trigger_boons_update = True
     
     def activated_message_effect(self, id, pos):
         if not self.displaying_message:
