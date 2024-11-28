@@ -6,15 +6,15 @@ from support import *
 from button import Button
 from particles import AnimationPlayer
 
-icon_image = pygame.image.load("assets/graphics/bonfire_icon_new.png")
+icon_image = pygame.image.load("assets/graphics/ico.png")
 
 # Functions
 def mm_newgame():
     print("Starting Game.")
 
     pygame.mixer.music.stop()
-    pygame.mixer.music.load("assets/audio/DaSo - Firelink Sneakers.mp3")
-    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.load("assets/audio/MainTheme.mp3")
+    pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(loops = -1)
     game.run_game()
 
@@ -107,7 +107,7 @@ class Game:
             
             if opening.get_pos() >= 219 or opening.get_pos() >= 0.1 and key == "escape": # Skip
                 opening.close()
-                pygame.mixer.music.load("assets/audio/DaSo - Firelink Sneakers.mp3")
+                pygame.mixer.music.load("assets/audio/MainTheme.mp3")
                 pygame.mixer.music.set_volume(0.1)
                 pygame.mixer.music.play(loops = -1)
                 game.run_game()
@@ -214,7 +214,7 @@ class Game:
             self.clock.tick(FPS)
 
 
-pygame.mixer.music.load("assets/audio/DaSo - Soles of Fire.mp3")
+pygame.mixer.music.load("assets/audio/Soles of Fire.mp3")
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(loops = -1)
 

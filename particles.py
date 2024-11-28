@@ -193,14 +193,14 @@ class AttackEffect(pygame.sprite.Sprite):
             if self.effect != None: self.effect()
             self.kill()
         else:
-            if self.direction == "right":
+            if self.direction == "down":
                 self.image = self.frames[int(self.frame_index)]
             elif self.direction == "left":
-                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
-            elif self.direction == "up":
-                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
-            else:
                 self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], -90)
+            elif self.direction == "up":
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
+            else:
+                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
     
     def update(self):
         self.animate()
