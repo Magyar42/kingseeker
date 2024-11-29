@@ -27,7 +27,7 @@ class Enemy(Entity):
         self.xp = enemy_info['xp']
         self.speed = enemy_info['speed']
         self.attack_damage = enemy_info['damage']
-        self.resistance = enemy_info['resistance']
+        self.resistance = enemy_info['poise']
         self.attack_radius = enemy_info['attack_radius']
         self.notice_radius = enemy_info['notice_radius']
         self.attack_type = enemy_info['attack_type']

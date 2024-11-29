@@ -101,20 +101,20 @@ player_unlocks = {
 # Player details for per run
 interface_details = {
     "light_attack": {
-        "class": "sword", "name": "broadsword_light", "cooldown": 100, "base damage": 15, "knockback": 1, "weight": 3, "effects": None, "infusion": None,
+        "class": "sword", "name": "broadsword_light", "cooldown": 100, "base damage": 15, "knockback": 0, "stamina_use": 15,
     },
     "heavy_attack": {
-        "class": "sword", "name": "broadsword_heavy", "cooldown": 200, "base damage": 25, "knockback": 1, "weight": 5, "effects": None, "infusion": None,
+        "class": "sword", "name": "broadsword_heavy", "cooldown": 200, "base damage": 30, "knockback": 1, "stamina_use": 30,
     },
     "catalyst": {
-        "class": "pyromancy", "name": "pyromancy_flame", "cooldown": 100, "base damage": 5, "weight": 0, "effects": None, "infusion": None,
+        "class": "pyromancy", "name": "pyromancy_flame", "cooldown": 100, "base damage": 5,
     },
     "skill": {
         "name": "skill_1", "cooldown": None, "base damage": None, "effects": None, "infusion": None,
     },
-    "rings": {
-        "ring 1": None, "ring 2": None,
-    },
+    # "rings": {
+    #     "ring 1": None, "ring 2": None,
+    # },
     "boons": {
         "list": ["boon_1", "boon_2", "boon_5"],
     },
@@ -133,9 +133,7 @@ interface_details = {
 
 # Hidden numbers which can be affected by boons
 player_data = {
-    "dependent_variables": {"health": 400, "mana": 100, "stamina": 60, "equip load": 21.5,
-        "max equip load": 54.0, "speed": 5, "poise": 42.1,"att. slots": 2, "attack": 10, "magic mult": 1,
-        "stamina recovery": 0.2, "mana recovery": 0.005},
+    "dependent_variables": {"health": 400, "mana": 100, "stamina": 60, "speed": 5, "poise": 42.1, "attack": 10, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0.005},
 
     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
 
@@ -187,12 +185,12 @@ message_list = {
 # Enemy Spawn Types
 enemy_spawn_template = {
     "undead_burg": {
-        "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-        "02": { "type": "constant", "min_enemies": 6, "max_enemies": 6, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
-        # "03": { "type": "boss", "min_enemies": 1, "max_enemies": 1, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["raccoon"], "scaling": 0.75, "drop_mult": 1.5, "selection_mult": 0.5 },
-        "04": { "type": "waves", "min_enemies": 6, "max_enemies": 8, "min_waves": 2, "max_waves": 4, "whitelisted_enemies": ["bamboo", "spirit", "squid"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-        "05": { "type": "waves", "min_enemies": 5, "max_enemies": 6, "min_waves": 2, "max_waves": 3, "whitelisted_enemies": ["spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
-        "06": { "type": "constant", "min_enemies": 6, "max_enemies": 7, "min_waves": 3, "max_waves": 3, "whitelisted_enemies": ["bamboo"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["undead_warrior"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        # "02": { "type": "constant", "min_enemies": 6, "max_enemies": 6, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },
+        # # "03": { "type": "boss", "min_enemies": 1, "max_enemies": 1, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["raccoon"], "scaling": 0.75, "drop_mult": 1.5, "selection_mult": 0.5 },
+        # "04": { "type": "waves", "min_enemies": 6, "max_enemies": 8, "min_waves": 2, "max_waves": 4, "whitelisted_enemies": ["bamboo", "spirit", "squid"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        # "05": { "type": "waves", "min_enemies": 5, "max_enemies": 6, "min_waves": 2, "max_waves": 3, "whitelisted_enemies": ["spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+        # "06": { "type": "constant", "min_enemies": 6, "max_enemies": 7, "min_waves": 3, "max_waves": 3, "whitelisted_enemies": ["bamboo"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
     },
     "undead_parish": {
         "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["bamboo", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },

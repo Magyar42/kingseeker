@@ -30,7 +30,8 @@ class AnimationPlayer():
             'raccoon': import_folder('assets/graphics/particles/smoke'),
             'spirit': import_folder('assets/graphics/particles/smoke'),
             'bamboo': import_folder('assets/graphics/particles/smoke'),
-            'asylum_demon': import_folder('assets/graphics/particles/smoke'),
+    
+            'undead_warrior': import_folder('assets/graphics/particles/smoke'),
 
             'player': import_folder('assets/graphics/particles/smoke2'),
 
@@ -93,36 +94,6 @@ class AnimationPlayer():
             'darkmoon_summon': import_folder('assets/graphics/ui/rewards/darkmoon_summon'),
             'velkas_tome': import_folder('assets/graphics/ui/rewards/velkas_tome'),
             'vendor': import_folder('assets/graphics/ui/rewards/vendor'),
-
-            # Asylum Demon
-            # todo!!! ADD ACTUAL SPRITES AND FRAMES TO EACH ATTACK AND BLANK THE NONATTACKS! THANKL YOUY BABYE
-            # 'down_idle': import_folder('assets/graphics/particles/slash'),
-            # 'down_move': import_folder('assets/graphics/particles/slash'),
-            # 'down_swing': import_folder('assets/graphics/particles/slash'),
-            # 'down_slam': import_folder('assets/graphics/particles/slash'),
-            # 'down_swing_down': import_folder('assets/graphics/particles/slash'),
-            # 'down_fly': import_folder('assets/graphics/particles/slash'),
-
-            # 'right_idle': import_folder('assets/graphics/particles/slash'),
-            # 'right_move': import_folder('assets/graphics/particles/slash'),
-            # 'right_swing': import_folder('assets/graphics/particles/slash'),
-            # 'right_slam': import_folder('assets/graphics/particles/slash'),
-            # 'right_swing_down': import_folder('assets/graphics/particles/slash'),
-            # 'right_fly': import_folder('assets/graphics/particles/slash'),
-
-            # 'up_idle': import_folder('assets/graphics/particles/slash'),
-            # 'up_move': import_folder('assets/graphics/particles/slash'),
-            # 'up_swing': import_folder('assets/graphics/particles/slash'),
-            # 'up_slam': import_folder('assets/graphics/particles/slash'),
-            # 'up_swing_down': import_folder('assets/graphics/particles/slash'),
-            # 'up_fly': import_folder('assets/graphics/particles/slash'),
-
-            # 'left_idle': import_folder('assets/graphics/particles/slash'),
-            # 'left_move': import_folder('assets/graphics/particles/slash'),
-            # 'left_swing': import_folder('assets/graphics/particles/slash'),
-            # 'left_slam': import_folder('assets/graphics/particles/slash'),
-            # 'left_swing_down': import_folder('assets/graphics/particles/slash'),
-            # 'left_fly': import_folder('assets/graphics/particles/slash'),
         }
 
     def reflect_images(self, frames):
@@ -195,6 +166,13 @@ class AttackEffect(pygame.sprite.Sprite):
     
     def animate(self):
         self.frame_index += self.animation_speed
+        
+        # Trigger hurtbox effect every frame
+        self.create_attack_hurtboxes(int(self.frame_index), self.attack_type)
+
+        # Destroy prev hurtboxes
+        # self.destroy_attack_hurtboxes(int(self.frame_index))
+
         if self.frame_index >= len(self.frames):
             if self.effect != None: self.effect()
             self.kill()
@@ -207,12 +185,6 @@ class AttackEffect(pygame.sprite.Sprite):
                 self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
             else:
                 self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
-        
-        # Trigger hurtbox effect every frame
-        self.create_attack_hurtboxes(int(self.frame_index), self.attack_type)
-
-        # Destroy prev hurtboxes
-        if int(self.frame_index) > 0: self.destroy_attack_hurtboxes(int(self.frame_index)-1, self.attack_type)
     
     def update(self):
         self.animate()

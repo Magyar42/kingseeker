@@ -58,7 +58,7 @@ class Level:
 
         self.current_attack = None
         self.hurtbox = None
-        self.current_hurtboxes = []
+        # self.current_hurtboxes = []
         # self.hurtboxes = Hurtboxes([self.attack_sprites])
 
         # Enemy Spawning
@@ -364,13 +364,13 @@ class Level:
     def update_map(self, pos):       # triggered on player death, enemy death, item pickup
         self.bloodstain = Bloodstain(pos, [self.visible_sprites, self.interactable_sprites], self.check_souls_retrieval)
     
-    def update_hurtboxes(self, pos, size, frame_index, enemy_name, current_action):
-        self.hurtbox = HurtBoxes(pos, size, [self.visible_sprites, self.boss_attack_sprites], self.destroy_hurtboxes, self.damage_player, enemy_name, current_action)
-        #print(self.hurtbox) 
+    # def update_hurtboxes(self, pos, size, frame_index, enemy_name, current_action):
+    #     self.hurtbox = HurtBoxes(pos, size, [self.visible_sprites, self.boss_attack_sprites], self.destroy_hurtboxes, self.damage_player, enemy_name, current_action)
+    #     #print(self.hurtbox) 
 
-    def destroy_hurtboxes(self):
-        if self.hurtbox: self.hurtbox.kill()
-        self.hurtbox = None
+    # def destroy_hurtboxes(self):
+    #     if self.hurtbox: self.hurtbox.kill()
+    #     self.hurtbox = None
 
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites]) # self.attack_sprites
@@ -397,17 +397,23 @@ class Level:
             self.magic_player.icecrag_burst(self.player, cost, [self.visible_sprites, self.attack_sprites])
 
     def create_attack_hurtboxes(self, frame, attack_type):
-        current_hurtboxes = list(attack_hurtbox_data[attack_type][frame])
+        current_hurtboxes_details = list(attack_hurtbox_data[attack_type][frame])
 
         x_base = self.player.rect.x
         y_base = self.player.rect.y
+        
+        for box in current_hurtboxes_details:
+            self.hurtbox = Hurtboxes([self.attack_sprites, self.visible_sprites], x_base+box[0], y_base+box[1], box[2], box[3])
+            self.destroy_attack_hurtboxes(frame)
+        
+        # print(f"{frame}: {current_hurtboxes_objects}")
+        # self.current_hurtboxes.append(current_hurtboxes_objects) # Save list X to list containing all hurtboxes currently
 
-        for box in current_hurtboxes:
-            self.hurtboxes = Hurtboxes([self.attack_sprites, self.visible_sprites], x_base+box[0], y_base+box[1], box[2], box[3])
+        # self.destroy_attack_hurtboxes(frame)
 
-    def destroy_attack_hurtboxes(self, frame, attack_type):
-        self.hurtboxes.kill()
-        # todo: MAKE WORK! currently is wacky
+    def destroy_attack_hurtboxes(self, frame=0):
+        if self.hurtbox: self.hurtbox.kill()
+        self.hurtbox = None
 
     def destroy_attack(self):
         if self.current_attack:
@@ -559,8 +565,8 @@ class Level:
         self.animation_player.create_particles("estus", pos, [self.visible_sprites], "bonfire_effect")
         self.kindling_sound.play()
 
-    def spawn_chest_item(self, id, pos):
-        FloorItem(id, pos, [self.visible_sprites, self.interactable_sprites], True)
+    # def spawn_chest_item(self, id, pos):
+    #     FloorItem(id, pos, [self.visible_sprites, self.interactable_sprites], True)
     
     def activated_lever_effect(self, id, pos):
         # todo: do an effect depending on the lever id
@@ -751,7 +757,7 @@ class Level:
             # ONLY visible sprites will get this update fired
             self.player_attack_logic()
             # if self.bloodstain_present: self.bloodstain.bloodstain_update(self.player)
-            if self.hurtbox: self.hurtbox.collision_update(self.player, self.hurtbox)
+            # if self.hurtbox: self.hurtbox.collision_update(self.player, self.hurtbox)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self, map_id, region="undead_burg"):

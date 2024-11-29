@@ -10,7 +10,7 @@ class Hurtboxes(pygame.sprite.Sprite):
         #self.rect = self.image.get_rect(topleft = (100, 100))
 
         self.rect = pygame.Rect(x, y, width, height)
-        pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.rect)
+        #pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.rect)
     
     # def create_hurtboxes(self, x, y, width, height):
     #     self.rect = pygame.Rect(x, y, width, height)

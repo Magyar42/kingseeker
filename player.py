@@ -61,7 +61,6 @@ class Player(Entity):
         self.destroy_attack = destroy_attack
 
         self.weapon = interface_details["light_attack"]["name"].split("_")[0]
-        self.weapon_weight = interface_details["light_attack"]["weight"]
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.weapon_switch_cooldown = 200
@@ -76,9 +75,9 @@ class Player(Entity):
         self.spell_scroll_time = None
 
         # stats
-        self.stamina_light_attack_mult = 3
-        self.stamina_heavy_attack_mult = 5
-        self.stamina_magic_mult = 4
+        self.stamina_light_attack_cost = interface_details["light_attack"]["stamina_use"]
+        self.stamina_heavy_attack_cost = interface_details["heavy_attack"]["stamina_use"]
+        self.stamina_magic_mult = 4 # todo: per spell
 
         self.health = player_data['dependent_variables']['health']
         self.health_target = player_data['dependent_variables']['health']
@@ -389,8 +388,8 @@ class Player(Entity):
 
                     # attack input - light
                     if player_inputs["light attack"] and not self.light_attacking:
-                        if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
-                            self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
+                        if self.stamina_target - self.stamina_light_attack_cost >= 0:
+                            self.stamina_target -= self.stamina_light_attack_cost # Effect on stamina
 
                             self.attacking = True
                             self.attack_time = pygame.time.get_ticks()
@@ -403,8 +402,8 @@ class Player(Entity):
 
                     # attack input - heavy
                     if player_inputs["heavy attack"] and not self.heavy_attacking:
-                        if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
-                            self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
+                        if self.stamina_target - self.stamina_heavy_attack_cost >= 0:
+                            self.stamina_target -= self.stamina_heavy_attack_cost # Effect on stamina
 
                             self.attacking = True
                             self.attack_time = pygame.time.get_ticks()
