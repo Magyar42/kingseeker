@@ -1,0 +1,126 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "github/kingseeker/assets/tiled/undead_burg/map_001.tmx",
+    "expandedProjectPaths": [
+        "github/kingseeker/assets/tiled/undead_burg",
+        ".",
+        "github",
+        "github/kingseeker",
+        "github/kingseeker/assets/tiled",
+        "github/kingseeker/assets"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "Extras.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 0.75
+        },
+        "end_area.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 1919,
+                "y": 1279
+            }
+        },
+        "firelink.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 1919,
+                "y": 1279
+            }
+        },
+        "github/kingseeker/assets/tiled/kingseeker - extras.tsx": {
+            "scaleInDock": 1
+        },
+        "github/kingseeker/assets/tiled/kingseeker - objects.tsx": {
+            "scaleInDock": 1
+        },
+        "github/kingseeker/assets/tiled/kingseeker - tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "github/kingseeker/assets/tiled/undead_burg/map_001.tmx": {
+            "scale": 0.4356640625,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 1273.9173316596432,
+                "y": 957.1595086523805
+            }
+        },
+        "kingseeker_base_floor.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 0.75
+        },
+        "kingseeker_objects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 0.75
+        },
+        "transition_area.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1522,
+                "y": 954
+            }
+        },
+        "undead_burg_chambers.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 1919,
+                "y": 1279
+            }
+        },
+        "undead_burg_opening_chamber.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 1919,
+                "y": 1279
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/Users/chkon/Documents/Nexus/github/kingseeker/assets/map/undead_burg/001",
+    "last.imagePath": "C:/Users/chkon/Dropbox/Kingseeker/assets/graphics/objects",
+    "map.height": 40,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 60,
+    "openFiles": [
+        "firelink.tmx",
+        "undead_burg_opening_chamber.tmx",
+        "kingseeker_base_floor.tsx",
+        "Extras.tsx",
+        "kingseeker_objects.tsx",
+        "undead_burg_chambers.tmx",
+        "end_area.tmx",
+        "github/kingseeker/assets/tiled/undead_burg/map_001.tmx"
+    ],
+    "project": "kingseeker.tiled-project",
+    "recentFiles": [
+        "firelink.tmx",
+        "undead_burg_opening_chamber.tmx",
+        "kingseeker_base_floor.tsx",
+        "Extras.tsx",
+        "kingseeker_objects.tsx",
+        "undead_burg_chambers.tmx",
+        "end_area.tmx",
+        "github/kingseeker/assets/tiled/undead_burg/map_001.tmx",
+        "transition_area.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    },
+    "tileset.type": 1
+}
