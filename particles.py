@@ -140,9 +140,9 @@ class AnimationPlayer():
         animation_frames = self.frames[animation_type]
         ParticleEffect(pos, animation_frames, groups, sprite_type, speed, effect)
 
-    def create_attack(self, animation_type, pos, groups, sprite_type, direction, speed=0.15, effect=None):
+    def create_attack(self, animation_type, pos, groups, sprite_type, direction, create_attack_hurtboxes, destroy_attack_hurtboxes, speed=0.15, effect=None):
         animation_frames = self.frames[animation_type]
-        AttackEffect(pos, animation_frames, groups, sprite_type, direction, speed, effect)
+        AttackEffect(pos, animation_frames, groups, sprite_type, direction, animation_type, create_attack_hurtboxes, destroy_attack_hurtboxes, speed, effect)
     
     def create_icon(self, animation_type, pos, groups, sprite_type, speed=0.15):
         animation_frames = self.frames[animation_type]
@@ -176,16 +176,22 @@ class ParticleEffect(pygame.sprite.Sprite):
         # print(self.frame_index)
 
 class AttackEffect(pygame.sprite.Sprite):
-    def __init__(self, pos, animation_frames, groups, sprite_type, direction, speed=0.15, effect=None):
+    def __init__(self, pos, animation_frames, groups, sprite_type, direction, animation_type, create_attack_hurtboxes, destroy_attack_hurtboxes, speed=0.15, effect=None):
         super().__init__(groups)
         self.sprite_type = sprite_type
+
         self.frame_index = 0
-        self.animation_speed = speed
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
+
+        self.animation_speed = speed
         self.effect = effect
         self.direction = direction
+        self.attack_type = animation_type
+
+        self.create_attack_hurtboxes = create_attack_hurtboxes
+        self.destroy_attack_hurtboxes = destroy_attack_hurtboxes
     
     def animate(self):
         self.frame_index += self.animation_speed
@@ -201,6 +207,12 @@ class AttackEffect(pygame.sprite.Sprite):
                 self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
             else:
                 self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
+        
+        # Trigger hurtbox effect every frame
+        self.create_attack_hurtboxes(int(self.frame_index), self.attack_type)
+
+        # Destroy prev hurtboxes
+        if int(self.frame_index) > 0: self.destroy_attack_hurtboxes(int(self.frame_index)-1, self.attack_type)
     
     def update(self):
         self.animate()

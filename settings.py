@@ -158,6 +158,18 @@ velka_boons = {
     },
 }
 
+# Attack Hurtboxes # x offset from player|y offset from player|width|height
+attack_hurtbox_data = {
+    "sword_1": {
+        0: [[64, 0, 64, 64]],
+        1: [[-64, 0, 64, 64], [-32, 64, 128, 64]],
+        2: [],
+        3: [],
+        4: [],
+        5: [],
+    }
+}
+
 # Magic Data # todo: change for kingseeker
 magic_data = {
     "fire_surge": {"strength": 12, "cost": 20, "type": "Pyromancy"},

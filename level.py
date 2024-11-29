@@ -20,6 +20,7 @@ from bloodstain import Bloodstain
 #from objects import Lever
 #from objects import Message
 # from boss import HurtBoxes
+from weapon import Hurtboxes
 from npc import NPC
 from interactable_items import SummonSign
 from popups import BoonsMenu
@@ -57,6 +58,8 @@ class Level:
 
         self.current_attack = None
         self.hurtbox = None
+        self.current_hurtboxes = []
+        # self.hurtboxes = Hurtboxes([self.attack_sprites])
 
         # Enemy Spawning
         self.enemy_spawn_coords = []
@@ -373,15 +376,16 @@ class Level:
         self.current_attack = Weapon(self.player, [self.visible_sprites]) # self.attack_sprites
         
         direction = self.player.status.split("_")[0]
-        if direction == "right":
-            pos = self.player.rect.center + pygame.math.Vector2(32, 0)
-        elif direction == "left":
-            pos = self.player.rect.center + pygame.math.Vector2(-32, 0)
-        elif direction == "up":
-            pos = self.player.rect.center + pygame.math.Vector2(0, -32)
-        elif direction == "down":
-            pos = self.player.rect.center + pygame.math.Vector2(0, 32)
-        self.animation_player.create_attack("sword_1", pos, [self.visible_sprites, self.attack_sprites], "weapon", direction, 0.20)
+        pos = self.player.rect.center
+        # if direction == "right":
+        #     pos = self.player.rect.center + pygame.math.Vector2(32, 0)
+        # elif direction == "left":
+        #     pos = self.player.rect.center + pygame.math.Vector2(-32, 0)
+        # elif direction == "up":
+        #     pos = self.player.rect.center + pygame.math.Vector2(0, -32)
+        # elif direction == "down":
+        #     pos = self.player.rect.center + pygame.math.Vector2(0, 32)
+        self.animation_player.create_attack("sword_1", pos, [self.visible_sprites, self.attack_sprites], "weapon", direction, self.create_attack_hurtboxes, self.destroy_attack_hurtboxes, 0.20)
 
     def create_magic(self, name, strength, cost):
         self.current_attack = Catalyst(self.player, [self.visible_sprites])
@@ -391,6 +395,19 @@ class Level:
             self.magic_player.fire_surge(self.player, cost, [self.visible_sprites, self.attack_sprites])
         elif name == "icecrag_burst":
             self.magic_player.icecrag_burst(self.player, cost, [self.visible_sprites, self.attack_sprites])
+
+    def create_attack_hurtboxes(self, frame, attack_type):
+        current_hurtboxes = list(attack_hurtbox_data[attack_type][frame])
+
+        x_base = self.player.rect.x
+        y_base = self.player.rect.y
+
+        for box in current_hurtboxes:
+            self.hurtboxes = Hurtboxes([self.attack_sprites, self.visible_sprites], x_base+box[0], y_base+box[1], box[2], box[3])
+
+    def destroy_attack_hurtboxes(self, frame, attack_type):
+        self.hurtboxes.kill()
+        # todo: MAKE WORK! currently is wacky
 
     def destroy_attack(self):
         if self.current_attack:

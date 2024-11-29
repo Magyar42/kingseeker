@@ -54,7 +54,7 @@ mainMenuSprites.add(
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("KINGSEEKER")
+        pygame.display.set_caption("Kingseeker")
         pygame.display.set_icon(icon_image)
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()

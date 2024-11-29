@@ -3,12 +3,26 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "undead_burg/map_001.tmx",
+    "activeFile": "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleMap.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "C:/Users/krist/Documents/kingseeker_base_floor.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleMap.tmx": {
+            "scale": 1.86474609375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.0670332547788,
+                "y": 159.80727939251113
+            }
+        },
+        "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleSheet.tsx": {
+            "scaleInDock": 1
+        },
         "kingseeker - extras.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 0.5,
@@ -28,8 +42,8 @@
             "scale": 0.37294921875,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1371.5003927729772,
-                "y": 959.9162084315267
+                "x": 1278.9945011783188,
+                "y": 580.5079863838702
             }
         }
     },
@@ -44,13 +58,15 @@
         "kingseeker - extras.tsx",
         "kingseeker - objects.tsx",
         "kingseeker - tiles.tsx",
-        "undead_burg/map_001.tmx"
+        "undead_burg/map_001.tmx",
+        "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleMap.tmx"
     ],
     "project": "kingseeker.tiled-project",
     "recentFiles": [
         "kingseeker - extras.tsx",
         "kingseeker - objects.tsx",
         "kingseeker - tiles.tsx",
-        "undead_burg/map_001.tmx"
+        "undead_burg/map_001.tmx",
+        "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleMap.tmx"
     ]
 }
