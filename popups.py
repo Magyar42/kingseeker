@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from debug import debug
 from support import *
+from random import choice
 
 # Prompts to press a button
 class Prompt:
@@ -197,19 +198,8 @@ class gameMenu:
         self.details_index_boons = None
         self.boon_active = False
 
-        self.selection_index = 0
-        self.selection_time = None
-        self.can_move_selection = True
-
-        self.boon_index = 0
-        self.boon_time = None
-        self.can_move_boon = True
-
         self.details_toggle_time = None
         self.details_can_toggle = True
-
-        self.options_list = ["equipment", "inventory", "status", "system"]
-        self.icons_list = import_folder("assets/graphics/ui/menu/menu_options")
 
         self.resource_name_list = list(resources.keys())
         self.resource_num_list = list(resources.values())
@@ -218,6 +208,14 @@ class gameMenu:
 
         self.menu = itemMenu()
 
+        self.boons = []
+        # Only load boons (not sub-boons) for the display
+        for current_boon in interface_details["boons"]["list"]:
+            if not boon_data[current_boon]["is_subboon"]:
+                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+                self.boons.append(current_boon_surf)
+
+    def update_boons(self):
         self.boons = []
         # Only load boons (not sub-boons) for the display
         for current_boon in interface_details["boons"]["list"]:
@@ -554,3 +552,165 @@ class itemMenu:
         if selected: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box_selected.png").convert_alpha()
         else: itembox_surf = pygame.image.load("assets/graphics/ui/interface/item_box.png").convert_alpha()
         self.display_surface.blit(itembox_surf, rect)
+
+# Boons Menu
+class BoonsMenu:
+    def __init__(self, toggle_screen_effect, enable_player_control):
+        self.display_surface = pygame.display.get_surface()
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+
+        self.toggle_screen_effect = toggle_screen_effect
+        self.enable_player_control = enable_player_control
+
+        self.boon_icons = []
+        self.item_box = pygame.image.load("assets/graphics/ui/interface/item_box.png").convert_alpha()
+        self.item_box_selected = pygame.image.load("assets/graphics/ui/interface/item_box_selected.png").convert_alpha()
+    
+    def generate_boons(self, covenant):
+        player_boons = interface_details["boons"]["list"]
+        core_boons = boons_core[covenant]["list"]
+
+        # Set bool - if false, only core boons can be chosen from
+        core_boons_set = False
+        for boon in player_boons:
+            if boon in core_boons:
+                core_boons_set = True
+                break
+        
+        boons_choice = []
+        if not core_boons_set: # Use core boons only
+
+            # Add all core boons to pool of available boons
+            for boon in core_boons:
+                if boon not in player_boons:
+                    boons_choice.append(boon)
+
+        else: # Use core + general boons
+            boons_list = list(boon_data.keys())
+            trimmed_boons_list = []
+            for boon in boons_list:
+                
+                ## [Remove unavailable sub-boons]
+                # If any boons available are sub-boons...
+                if boon_data[boon]["is_subboon"] == True:
+
+                    # ... find their parent boon...
+                    for parent_boon in boons_list:
+                        if boon_data[parent_boon]["subboons"] != None:
+                            if boon in boon_data[parent_boon]["subboons"]:
+                                # ... and if their parent boon is NOT owned, remove the subboon from the list
+                                if parent_boon in player_boons:
+                                    trimmed_boons_list.append(boon)
+                                    break
+                
+                ## [Remove already-selected boons]
+                elif boon not in player_boons:
+                    trimmed_boons_list.append(boon)
+            
+            # Find 4 random options from trimmed list
+            for selection in range(4):
+                new_boon = choice(trimmed_boons_list)
+                boons_choice.append(new_boon)
+                trimmed_boons_list.remove(new_boon)
+        print(boons_choice)
+
+        self.boon_icons = []
+        # Only load boons (not sub-boons) for the display
+        for current_boon in boons_choice:
+            if not boon_data[current_boon]["is_subboon"]:
+                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+            else:
+                current_boon_surf = pygame.image.load("assets/graphics/ui/interface_icons/boons/general_subboon.png")
+            self.boon_icons.append(current_boon_surf)
+        
+        return boons_choice
+
+    def display(self, options_list):
+        prev_height = 0
+        for num, boon in enumerate(options_list):
+            added_height = self.boon_details(boon, num, prev_height)
+            prev_height += added_height
+
+    def boon_details(self, boon, num, prev_height):
+        # Background
+        if boon_data[boon]["desc2"] != "":
+            bg_rect_size = (700, 147)
+        else:
+            bg_rect_size = (700, 107)
+
+        x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[0] // 2)
+        y = (self.display_surface.get_size()[1] // 2) - 300 + prev_height
+
+        main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
+        icon_surface = self.boon_icons[num]
+        icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(10, 0))
+
+        # Icon + BG [Updates with hover]
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+        if hit:
+            pygame.draw.rect(self.display_surface, UI_SELECTED_COLOUR, main_rect.inflate(10, 10))
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, main_rect.inflate(10, 10), 3)
+            self.display_surface.blit(self.item_box_selected, icon_rect)
+
+            if player_inputs["light attack"]:
+                self.add_boon(boon) # If LMB pressed, select boon
+                player_inputs["light attack"] = False
+        else:
+            pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
+            self.display_surface.blit(self.item_box, icon_rect)
+        
+        self.display_surface.blit(icon_surface, icon_rect)
+
+        # Name
+        title_surface = self.font14.render(f"{boon_data[f'{boon}']['name']}", True, "white")
+        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 15))
+        text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
+        text_fade.fill(TEXT_BG_COLOUR)
+        text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(100, 10))
+        self.display_surface.blit(text_fade, text_fade_rect)
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Subtext
+        if boon_data[f'{boon}']['parent'] != None:
+            parent = boon_data[f'{boon}']['parent']
+            subtext = f"{boon_data[f'{boon}']['cat']} | {boon_data[f'{parent}']['name']}"
+        else:
+            subtext = boon_data[f'{boon}']['cat']
+
+        cat_surface = self.font12.render(subtext, True, "white")
+        cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 40))
+        cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
+        cat_fade.fill(TEXT_BG_COLOUR)
+        cat_fade_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(100, 35))
+        self.display_surface.blit(cat_fade, cat_fade_rect)
+        self.display_surface.blit(cat_surface, cat_rect)
+
+        # Desc 1
+        desc1 = boon_data[f"{boon}"]["desc1"]
+        split_current_line = desc1.split("|")
+        while len(split_current_line) < 4:
+            split_current_line.append("")
+        for subline in range(4):
+            text_surf = self.font12.render(split_current_line[subline], False, "white")
+            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 75 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+        # Desc 2
+        desc2 = boon_data[f"{boon}"]["desc2"]
+        split_current_line = desc2.split("|")
+        while len(split_current_line) < 4:
+            split_current_line.append("")
+        for subline in range(4):
+            text_surf = self.font12.render(split_current_line[subline], False, "white")
+            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 115 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+        
+        return bg_rect_size[1] + 20
+
+    def add_boon(self, boon):
+        interface_details["boons"]["list"].append(boon)
+        self.enable_player_control()
+        print(interface_details["boons"]["list"])

@@ -187,6 +187,8 @@ class Player(Entity):
         # kingseeker
         self.ongoing_run = False
         self.selected_spell_index = 0
+        self.trigger_boons_update = False
+        self.any_interface_open = False
     
     def resetPlayer(self):
         self.health = player_data['dependent_variables']['health']
@@ -276,155 +278,156 @@ class Player(Entity):
             self.popup.displayMenu(self)
 
     def input(self):
-        keys = pygame.key.get_pressed()
+        if not self.any_interface_open:
+            keys = pygame.key.get_pressed()
 
-        if self.can_toggle_menu and not self.submenu_open:
-            if keys[pygame.K_ESCAPE] and not self.menu_open:
-                self.menu_open = True
-                self.can_toggle_menu = False
-                self.menu_toggle_time = pygame.time.get_ticks()
-                #self.resting = True
-            elif keys[pygame.K_ESCAPE] and self.menu_open:
-                self.menu_open = False
-                self.can_toggle_menu = False
-                self.menu_toggle_time = pygame.time.get_ticks()
-                self.resting = False
+            if self.can_toggle_menu and not self.submenu_open:
+                if keys[pygame.K_ESCAPE] and not self.menu_open:
+                    self.menu_open = True
+                    self.can_toggle_menu = False
+                    self.menu_toggle_time = pygame.time.get_ticks()
+                    #self.resting = True
+                elif keys[pygame.K_ESCAPE] and self.menu_open:
+                    self.menu_open = False
+                    self.can_toggle_menu = False
+                    self.menu_toggle_time = pygame.time.get_ticks()
+                    self.resting = False
 
-        # If the input is pressed during another attack, set action to false
-        # Otherwise, the action will be "queued"
-        if self.attacking:
-            player_inputs["cast spell"] = False
-            player_inputs["light attack"] = False
-            player_inputs["heavy attack"] = False
-        
-        # If the SAME input is pressed during the COOLDOWN, set action to false
-        # Otherwise, the action will be "queued"
-        if self.casting_spell: player_inputs["cast spell"] = False
-        elif self.light_attacking: player_inputs["light attack"] = False
-        elif self.heavy_attacking: player_inputs["heavy attack"] = False
+            # If the input is pressed during another attack, set action to false
+            # Otherwise, the action will be "queued"
+            if self.attacking:
+                player_inputs["cast spell"] = False
+                player_inputs["light attack"] = False
+                player_inputs["heavy attack"] = False
+            
+            # If the SAME input is pressed during the COOLDOWN, set action to false
+            # Otherwise, the action will be "queued"
+            if self.casting_spell: player_inputs["cast spell"] = False
+            elif self.light_attacking: player_inputs["light attack"] = False
+            elif self.heavy_attacking: player_inputs["heavy attack"] = False
 
 
-        if not self.attacking and not self.resting and not self.rolling and not self.stunned:
-            if not self.dead:
-                # estus input
-                if keys[pygame.K_f] and not self.drinking_estus:       # Todo: change to not use index, but name, so that any item can be assigned to quick use 
-                    
-                    if interface_details["values"]["current estus"] > 0:
-                        self.drinking_estus = True
-                        self.estus_use_time = pygame.time.get_ticks()
-                        self.use_item_effect()
-
-                        interface_details["values"]["current estus"] -= 1
-                        self.health_increase += 300 # todo: include estus level in amount of hp recovered AND update HP numbers
-                        if self.health_increase >= player_data['dependent_variables']['health']:
-                            self.health_increase = player_data['dependent_variables']['health']
-                        self.estus_sound.play()
-
-                # movement input
-                if keys[pygame.K_w]:
-                    self.direction.y = -1
-                    self.status = "up"
-                elif keys[pygame.K_s]:
-                    self.direction.y = 1
-                    self.status = "down"
-                else:
-                    self.direction.y = 0
-
-                if keys[pygame.K_a]:
-                    self.direction.x = -1
-                    self.status = "left"
-                elif keys[pygame.K_d]:
-                    self.direction.x = 1
-                    self.status = "right"
-                else:
-                    self.direction.x = 0
-                
-                # roll input
-                if keys[pygame.K_e] and not self.rolling:
-                    if self.stamina_target - (self.stamina_roll) >= 0:
-                        self.frame_index = 0
-                        if self.status == "up_idle": self.direction.y = -1
-                        if self.status == "down_idle": self.direction.y = 1
-                        if self.status == "left_idle": self.direction.x = -1
-                        if self.status == "right_idle": self.direction.x = 1
-
-                        self.stamina_target -= (self.stamina_roll) # Effect on stamina
-                        self.rolling = True
-                        self.roll_duration = pygame.time.get_ticks()
-                        self.move(50, self.sprite_type)
-                        #self.speed /= 2
-
-                # skill input
-                # todo: skill effect
-                if keys[pygame.K_q] and not self.using_skill:
-                    # todo: check stamina/mana cost and take away as needed
-                    print("Skill used!")
-
-                    self.attacking = True
-                    self.attack_time = pygame.time.get_ticks()
-                    self.using_skill = True
-                    self.skill_use_time = pygame.time.get_ticks()
-
-                # spell cast
-                # todo: spell effect
-                if player_inputs["cast spell"] and not self.casting_spell:
-                    # todo: check stamina/mana cost and take away as needed
-                    if self.stamina_target - self.stamina_magic_mult >= 0:
-                        self.stamina_target -= self.stamina_magic_mult
+            if not self.attacking and not self.resting and not self.rolling and not self.stunned:
+                if not self.dead:
+                    # estus input
+                    if keys[pygame.K_f] and not self.drinking_estus:       # Todo: change to not use index, but name, so that any item can be assigned to quick use 
                         
-                        spell_name = interface_details["spells"][self.spell_index+1]
-                        spell_power = (magic_data[spell_name]["strength"] + interface_details["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
-                        spell_fp_cost = magic_data[spell_name]["cost"]
-                        self.create_magic(spell_name, spell_power, spell_fp_cost)
+                        if interface_details["values"]["current estus"] > 0:
+                            self.drinking_estus = True
+                            self.estus_use_time = pygame.time.get_ticks()
+                            self.use_item_effect()
+
+                            interface_details["values"]["current estus"] -= 1
+                            self.health_increase += 300 # todo: include estus level in amount of hp recovered AND update HP numbers
+                            if self.health_increase >= player_data['dependent_variables']['health']:
+                                self.health_increase = player_data['dependent_variables']['health']
+                            self.estus_sound.play()
+
+                    # movement input
+                    if keys[pygame.K_w]:
+                        self.direction.y = -1
+                        self.status = "up"
+                    elif keys[pygame.K_s]:
+                        self.direction.y = 1
+                        self.status = "down"
+                    else:
+                        self.direction.y = 0
+
+                    if keys[pygame.K_a]:
+                        self.direction.x = -1
+                        self.status = "left"
+                    elif keys[pygame.K_d]:
+                        self.direction.x = 1
+                        self.status = "right"
+                    else:
+                        self.direction.x = 0
+                    
+                    # roll input
+                    if keys[pygame.K_e] and not self.rolling:
+                        if self.stamina_target - (self.stamina_roll) >= 0:
+                            self.frame_index = 0
+                            if self.status == "up_idle": self.direction.y = -1
+                            if self.status == "down_idle": self.direction.y = 1
+                            if self.status == "left_idle": self.direction.x = -1
+                            if self.status == "right_idle": self.direction.x = 1
+
+                            self.stamina_target -= (self.stamina_roll) # Effect on stamina
+                            self.rolling = True
+                            self.roll_duration = pygame.time.get_ticks()
+                            self.move(50, self.sprite_type)
+                            #self.speed /= 2
+
+                    # skill input
+                    # todo: skill effect
+                    if keys[pygame.K_q] and not self.using_skill:
+                        # todo: check stamina/mana cost and take away as needed
+                        print("Skill used!")
 
                         self.attacking = True
                         self.attack_time = pygame.time.get_ticks()
-                        self.casting_spell = True
-                        self.spell_use_time = pygame.time.get_ticks()
+                        self.using_skill = True
+                        self.skill_use_time = pygame.time.get_ticks()
 
-                        player_inputs["cast spell"] = False
+                    # spell cast
+                    # todo: spell effect
+                    if player_inputs["cast spell"] and not self.casting_spell:
+                        # todo: check stamina/mana cost and take away as needed
+                        if self.stamina_target - self.stamina_magic_mult >= 0:
+                            self.stamina_target -= self.stamina_magic_mult
+                            
+                            spell_name = interface_details["spells"][self.spell_index+1]
+                            spell_power = (magic_data[spell_name]["strength"] + interface_details["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
+                            spell_fp_cost = magic_data[spell_name]["cost"]
+                            self.create_magic(spell_name, spell_power, spell_fp_cost)
 
-                # attack input - light
-                if player_inputs["light attack"] and not self.light_attacking:
-                    if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
-                        self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
+                            self.attacking = True
+                            self.attack_time = pygame.time.get_ticks()
+                            self.casting_spell = True
+                            self.spell_use_time = pygame.time.get_ticks()
 
-                        self.attacking = True
-                        self.attack_time = pygame.time.get_ticks()
-                        self.light_attacking = True
-                        self.light_attack_time = pygame.time.get_ticks()
+                            player_inputs["cast spell"] = False
 
-                        self.create_attack()
-                        self.weapon_attack_sound.play()
-                        player_inputs["light attack"] = False
+                    # attack input - light
+                    if player_inputs["light attack"] and not self.light_attacking:
+                        if self.stamina_target - (self.stamina_light_attack_mult * self.weapon_weight) >= 0:
+                            self.stamina_target -= (self.stamina_light_attack_mult * self.weapon_weight) # Effect on stamina
 
-                # attack input - heavy
-                if player_inputs["heavy attack"] and not self.heavy_attacking:
-                    if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
-                        self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
+                            self.attacking = True
+                            self.attack_time = pygame.time.get_ticks()
+                            self.light_attacking = True
+                            self.light_attack_time = pygame.time.get_ticks()
 
-                        self.attacking = True
-                        self.attack_time = pygame.time.get_ticks()
-                        self.heavy_attacking = True
-                        self.heavy_attack_time = pygame.time.get_ticks()
+                            self.create_attack()
+                            self.weapon_attack_sound.play()
+                            player_inputs["light attack"] = False
 
-                        self.create_attack()
-                        self.weapon_attack_sound.play()
-                        player_inputs["heavy attack"] = False
+                    # attack input - heavy
+                    if player_inputs["heavy attack"] and not self.heavy_attacking:
+                        if self.stamina_target - (self.stamina_heavy_attack_mult * self.weapon_weight) >= 0:
+                            self.stamina_target -= (self.stamina_heavy_attack_mult * self.weapon_weight) # Effect on stamina
+
+                            self.attacking = True
+                            self.attack_time = pygame.time.get_ticks()
+                            self.heavy_attacking = True
+                            self.heavy_attack_time = pygame.time.get_ticks()
+
+                            self.create_attack()
+                            self.weapon_attack_sound.play()
+                            player_inputs["heavy attack"] = False
 
 
-                # mousewheel - scroll through spells
-                if player_inputs["scroll spell"]:
+                    # mousewheel - scroll through spells
+                    if player_inputs["scroll spell"]:
 
-                    self.scrolling_spells = True
-                    self.spell_scroll_time = pygame.time.get_ticks()
+                        self.scrolling_spells = True
+                        self.spell_scroll_time = pygame.time.get_ticks()
 
-                    self.spell_index -= player_inputs["scroll direction"]
-                    if self.spell_index > 2: self.spell_index = 0
-                    elif self.spell_index < 0: self.spell_index = 2
+                        self.spell_index -= player_inputs["scroll direction"]
+                        if self.spell_index > 2: self.spell_index = 0
+                        elif self.spell_index < 0: self.spell_index = 2
 
-                    player_inputs["scroll spell"] = False
-                    player_inputs["scroll direction"] = 0
+                        player_inputs["scroll spell"] = False
+                        player_inputs["scroll direction"] = 0
                 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -505,6 +508,15 @@ class Player(Entity):
             self.image.set_alpha(alpha)
         else:
             self.image.set_alpha(255)
+    
+    # Update boons display - called from level's enable_player_control()
+    def update_boons(self):
+        self.popup.boons = []
+        # Only load boons (not sub-boons) for the display
+        for current_boon in interface_details["boons"]["list"]:
+            if not boon_data[current_boon]["is_subboon"]:
+                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+                self.popup.boons.append(current_boon_surf)
 
     def get_full_weapon_damage(self):
         base_damage = player_data['dependent_variables']['attack']
@@ -598,7 +610,11 @@ class Player(Entity):
         if self.poise < self.max_poise and self.knocked_back:
             self.poise += 0.1
             self.poise = round(self.poise, 1)
-            
+    
+    def display_overlay(self):
+        bg_overlay = pygame.Surface((WIDTH, HEIGHT)).convert_alpha()
+        bg_overlay.fill(TEXT_BG_COLOUR)
+        self.display_surface.blit(bg_overlay, (0,0))
 
     def update(self):
         self.enemy_collision("horizontal", self.attackable_sprites)
@@ -614,5 +630,6 @@ class Player(Entity):
         self.check_death()
         #self.check_player_poise()
 
-        # Todo: place the following in a method
         if self.menu_open: self.main_menu()
+        if self.trigger_boons_update: self.update_boons()
+        if self.any_interface_open: self.display_overlay()

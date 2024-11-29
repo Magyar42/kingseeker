@@ -22,6 +22,7 @@ from bloodstain import Bloodstain
 # from boss import HurtBoxes
 from npc import NPC
 from interactable_items import SummonSign
+from popups import BoonsMenu
 
 class Level:
     def __init__(self, map_id):
@@ -68,6 +69,10 @@ class Level:
         self.create_map(True, self.map_id)
 
         self.ui = UI()
+        self.boons_menu = BoonsMenu(self.toggle_menu, self.enable_player_control)
+        self.boons_menu_open = False
+        self.boon_options = None
+
         # self.upgrade = Upgrades(self.player, self.toggle_menu)
         self.bloodstain_present = False
 
@@ -315,7 +320,9 @@ class Level:
                                     npc_id = "transition_prompt"
                                     effect = self.load_new_chamber
 
-                                    if map_id == "000": reward = choice(boon_summons)
+                                    if map_id == "000": # todo: change back
+                                        # reward = choice(boon_summons)
+                                        reward = "sunlight_summon"
                                     else: reward = choice(list(chamber_rewards.keys()))
 
                                     unique_id = transition_ids[0]
@@ -334,7 +341,13 @@ class Level:
                                 else: enemy_name = "bamboo" # todo: change
                                 Enemy(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.death_effect)
 
-        if map_id not in safe_rooms: self.create_enemy_spawns(self.player, self.region, self.enemy_spawn_coords)
+        # Spawn enemies if NOT in safe room
+        if map_id not in safe_rooms:
+            self.create_enemy_spawns(self.player, self.region, self.enemy_spawn_coords)
+        # If in reward-first room, spawn the reward
+        if map_id in reward_first_rooms:
+            self.spawn_reward()
+
         if trigger_region_title:
             self.toggle_screen_effect()
             x = self.display_surface.get_size()[0] // 2
@@ -537,8 +550,20 @@ class Level:
         print("Lever pulled!")
     
     def summon_sign_effect(self, covenant):
-        # todo: effect
+        self.player.resting = True
+        self.boons_menu_open = True
+        self.player.any_interface_open = True
+        self.boon_options = self.boons_menu.generate_boons(covenant)
         print(f"{covenant} summon sign activated!")
+
+    # Enables player movement, removing any screen-effects
+    def enable_player_control(self):
+        self.player.resting = False
+        self.boons_menu_open = False
+        self.player.any_interface_open = False
+        self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
+
+        self.player.trigger_boons_update = True
     
     def activated_message_effect(self, id, pos):
         if not self.displaying_message:
@@ -632,6 +657,7 @@ class Level:
             
             self.available_chambers = chambers_per_region[self.region]
             trigger_region_title = True
+            self.reward = reward
 
         # todo add check for region minus end room AND the room before
         # this is because ideally that room will have 1 exit, and will also not have any reward set
@@ -648,6 +674,7 @@ class Level:
             self.available_chambers.remove(chamber_id) # Prevents same chamber from being loaded in a run
             self.reward = reward
 
+        print(self.reward)
         self.map_id = chamber_id
         # Removes all sprites
         for sprite_group in self.sprite_groups_list:
@@ -678,6 +705,8 @@ class Level:
 
         self.update_dynamic_sprites()
         self.check_enemy_spawns()
+
+        if self.boons_menu_open: self.boons_menu.display(self.boon_options)
         
         # Testing
         # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")
