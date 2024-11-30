@@ -511,11 +511,13 @@ class Player(Entity):
     # Update boons display - called from level's enable_player_control()
     def update_boons(self):
         self.popup.boons = []
+        self.popup.boons_names = []
         # Only load boons (not sub-boons) for the display
         for current_boon in interface_details["boons"]["list"]:
             if not boon_data[current_boon]["is_subboon"]:
                 current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
                 self.popup.boons.append(current_boon_surf)
+                self.popup.boons_names.append(current_boon)
 
     def get_full_weapon_damage(self):
         base_damage = player_data['dependent_variables']['attack']

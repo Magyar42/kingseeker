@@ -40,9 +40,10 @@ credits_info = [
 BOSS_HP_WIDTH = 700
 BOSS_HP_OFFSET = 80
 BAR_HEIGHT = 20
+ITEM_BOX_SIZE_BIG = 100
 ITEM_BOX_SIZE = 80
 ITEM_BOX_SIZE_SMALL = 60
-UI_FONT = "assets/fonts/PublicPixel-z84yD.ttf"
+UI_FONT = "assets/fonts/PublicPixel-z84yD.ttf"  # "assets/fonts/PublicPixel-z84yD.ttf"
 BACKUP_FONT = "assets/fonts/joystix.ttf"
 HUMANITY_BOX_WIDTH = 58
 HUMANITY_BOX_HEIGHT = 58
@@ -62,6 +63,7 @@ UI_SELECTED_COLOUR = "#5c3604"       #"#44190a"
 COLOURKEY = "#ff2bf4"
 HOVER_COLOUR= "#3e1403"
 TEXT_BG_COLOUR = (17, 17, 17, 150)
+TEXT_TITLE_COLOUR = "#FFF1D2"
 
 # UI Colours
 HEALTH_COLOUR = "#741E20"
@@ -84,7 +86,7 @@ boon_data = {
     # Core Boons
     "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
-    "boon_2": {"name": "Lightning Strike", "category": "Warriors of Sunlight", "desc1": "Primary/secondary attack emits chain-lightning|when damaging a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+    "boon_2": {"name": "Lightning Strike", "category": "Warriors of Sunlight", "desc1": "Primary/secondary attack emits|chain-lightning when damaging a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
     "boon_3": {"name": "Electrifying Skill", "category": "Warriors of Sunlight", "desc1": "Ability emits chain-lightning when damaging|a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
@@ -100,13 +102,13 @@ boon_data = {
     "boon_8": {"name": "Unrelenting Drive", "category": "Warriors of Sunlight", "desc1": "Killing an enemy while health is at 100%|boosts damage by 2% for 4s.", "desc2": "This effect can stack up to 5 times.", "subboons": ["boon_15", "boon_16"], "is_subboon": False, "cat": "Boon", "parent": None},
 
     # Sub Boons
-    "boon_9": {"name": "Empowered Faith", "category": "Warriors of Sunlight", "desc1": "Increases shockwave chance to 75%.", "desc2": "Increases shockwave size by 25%.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_5"},
+    "boon_9": {"name": "Empowered Faith", "category": "Warriors of Sunlight", "desc1": "Increases shockwave chance by 50% and|shockwave size by 25%.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_5"},
     
-    "boon_10": {"name": "Divine Drivel", "category": "Warriors of Sunlight", "desc1": "Enemies hit by shockwaves are stunned for 1s.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_5"},
+    "boon_10": {"name": "Divine Drivel", "category": "Warriors of Sunlight", "desc1": "Enemies hit by shockwaves are stunned for|1s.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_5"},
 
-    "boon_11": {"name": "Repulsion", "category": "Warriors of Sunlight", "desc1": "Each chain-lightning effect's damage increases|per bounce.", "desc2": "The final hit from a chain-lightning effect|releases a small shockwave.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_6"},
+    "boon_11": {"name": "Repulsion", "category": "Warriors of Sunlight", "desc1": "Each chain-lightning effect's damage|increases per bounce.", "desc2": "The final hit from a chain-lightning effect|releases a small shockwave.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_6"},
     
-    "boon_12": {"name": "Electrifying Deflection", "category": "Warriors of Sunlight", "desc1": "Enemies hit by chain-lighting have a 25% of being stunned|for 1s.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_6"},
+    "boon_12": {"name": "Electrifying Deflection", "category": "Warriors of Sunlight", "desc1": "Enemies hit by chain-lighting have a 25% of|being stunned for 1s.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_6"},
 
     "boon_13": {"name": "Deepened Devotion", "category": "Warriors of Sunlight", "desc1": "Soothing Sunlight also fully restores mana and stamina.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_7"},
     

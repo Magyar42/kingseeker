@@ -270,29 +270,6 @@ class Level:
                                     self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect)
                             elif column == "388":
                                 self.bonfire = Bonfire(0, (x, y), [self.visible_sprites, self.obstacle_sprites, self.interactable_sprites], self.restart_world, self.check_humanity_restored, self.check_bonfire_lit, self.check_bonfire_rest, self.toggle_menu, self.toggle_screen_effect, self.kindle_bonfire_visuals)
-                            # elif column == "396":
-                            #     item_id = 1
-                            #     if ground_item_list[item_id][0] == 0:
-                            #         FloorItem(item_id, (x, y), [self.visible_sprites, self.interactable_sprites])
-                            #     #self.flooritem.item_setup(item_id, (x, y), [self.visible_sprites, self.interactable_sprites])
-                            # elif column == "397":
-                            #     item_id = 3
-                            #     chest_id = 0
-                            #     if chest_list[chest_id] == 0: chest_opened = False
-                            #     else: chest_opened = True
-                            #     Chest(chest_id, item_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.spawn_chest_item, chest_opened)
-                            # elif column == "398":
-                            #     lever_id = 1
-                            #     if lever_list[lever_id] == 0: lever_pulled = False
-                            #     else: lever_pulled = True
-                            #     Lever(lever_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.activated_lever_effect, lever_pulled)
-                            # elif column == "399":
-                            #     message_id = 1
-                            #     Message(message_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.activated_message_effect)
-                            # else:
-                            #     if column == "389":
-                            #         enemy_name = "asylum_demon"
-                            #         self.boss = Boss(enemy_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.attackable_sprites, self.damage_player, self.trigger_death_particles, self.add_xp, self.update_hurtboxes, self.destroy_hurtboxes, self.check_victory_achieved)
                             elif column == "277": # Potential enemy spawns
                                 self.enemy_spawn_coords.append([x, y])
                             elif column in npc_list:
@@ -568,9 +545,9 @@ class Level:
     # def spawn_chest_item(self, id, pos):
     #     FloorItem(id, pos, [self.visible_sprites, self.interactable_sprites], True)
     
-    def activated_lever_effect(self, id, pos):
-        # todo: do an effect depending on the lever id
-        print("Lever pulled!")
+    # def activated_lever_effect(self, id, pos):
+    #     # todo: do an effect depending on the lever id
+    #     print("Lever pulled!")
     
     def summon_sign_effect(self, covenant):
         self.player.resting = True

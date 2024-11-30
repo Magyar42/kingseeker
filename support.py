@@ -95,16 +95,42 @@ def getSlotData(slot, data): #right_hand_data # todo: be abke to change what ite
         slot["slot2"][item] = iteminfo[index]
     # print(slot["slot2"])
 
-#def sortInventoryStacks():
-    # for each item in inventory
-    # go to dictionary and get stack amount
-    # return back to inventory and divide item into stack amounts
+# Create a dynamically-sized UI background
+def createUI(surface, width, height, pos, type=""):
+    # Set UI type
+    if type != "": type = "_" + type
 
-def checkControllerInput():
-    if len(controller_list) != 0:
-        CURRENT_CONTROLLER = controller_list(0)
+    # Load images
+    path = "assets/graphics/ui/interface"
+    bg_topleft = pygame.image.load(f"{path}/bg_topleft{type}.png").convert_alpha()
+    bg_topright = pygame.image.load(f"{path}/bg_topright{type}.png").convert_alpha()
+    bg_bottomleft = pygame.image.load(f"{path}/bg_bottomleft{type}.png").convert_alpha()
+    bg_bottomright = pygame.image.load(f"{path}/bg_bottomright{type}.png").convert_alpha()
+    bg_border = pygame.image.load(f"{path}/bg_border.png").convert_alpha()
+    bg_body = pygame.image.load(f"{path}/bg_body{type}.png").convert_alpha()
 
-        if CURRENT_CONTROLLER.get_button(0): print("Button 0 pressed")
-        if CURRENT_CONTROLLER.get_button(1): print("Button 1 pressed")
-        if CURRENT_CONTROLLER.get_button(2): print("Button 2 pressed")
-        if CURRENT_CONTROLLER.get_button(3): print("Button 3 pressed")
+    # Find necessary values
+    corner_width = bg_topleft.get_width()
+    corner_height = bg_topleft.get_height()
+    border_width = width - (2 * corner_width)
+    border_height = height - (2 * corner_height)
+
+    # Scale body and border
+    bg_border_top = pygame.transform.scale(bg_border, (border_width + 40, 10)).convert_alpha()
+    bg_border_bottom =  pygame.transform.rotate(pygame.transform.scale(bg_border, (border_width + 40, 10)), 180).convert_alpha()
+    bg_border_left =  pygame.transform.rotate(pygame.transform.scale(bg_border, (border_height + 40, 10)), 90).convert_alpha()
+    bg_border_right =  pygame.transform.rotate(pygame.transform.scale(bg_border, (border_height + 40, 10)), -90).convert_alpha()
+    bg_body_resized = pygame.transform.scale(bg_body, (border_width + 40 + 16, border_height + 40 + 16)).convert_alpha()
+
+    # Blit surfaces
+    surface.blit(bg_topleft, (pos[0] - 20, pos[1] - 20))
+    surface.blit(bg_topright, (pos[0] + corner_width + border_width + 20, pos[1] - 20))
+    surface.blit(bg_bottomleft, (pos[0] - 20, pos[1] + corner_height + border_height + 20))
+    surface.blit(bg_bottomright, (pos[0] + corner_width + border_width + 20, pos[1] + corner_height + border_height + 20))
+
+    surface.blit(bg_border_top, (pos[0] + corner_width - 20, pos[1] + 2 - 20))
+    surface.blit(bg_border_bottom, (pos[0] + corner_width - 20, pos[1] + (2 * corner_height) + border_height - 10 - 2 + 20))
+    surface.blit(bg_border_left, (pos[0] + 2 - 20, pos[1] + corner_height - 20))
+    surface.blit(bg_border_right, (pos[0] + (2 * corner_width) + border_width - 10 - 2 + 20, pos[1] + corner_height - 20))
+
+    surface.blit(bg_body_resized, (pos[0] - 8, pos[1] - 8))
