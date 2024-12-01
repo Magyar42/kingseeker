@@ -123,8 +123,8 @@ class UI:
     def selection_box(self, left, top, triggered):
         bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
 
-        if triggered: itembox_surf = pygame.image.load(f"{self.box_path}/item_box_selected.png").convert_alpha()
-        else: itembox_surf = pygame.image.load(f"{self.box_path}/item_box.png").convert_alpha()
+        if triggered: itembox_surf = pygame.image.load(f"{self.box_path}/input_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load(f"{self.box_path}/input_box.png").convert_alpha()
         self.display_surface.blit(itembox_surf, bg_rect)
         
         return bg_rect

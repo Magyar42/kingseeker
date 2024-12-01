@@ -14,7 +14,7 @@ def mm_newgame():
 
     pygame.mixer.music.stop()
     pygame.mixer.music.load("assets/audio/MainTheme.mp3")
-    pygame.mixer.music.set_volume(0.8)
+    pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(loops = -1)
     game.run_game()
 
@@ -214,7 +214,7 @@ class Game:
 
 
 pygame.mixer.music.load("assets/audio/Soles of Fire.mp3")
-pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(loops = -1)
 
 select_sfx = pygame.mixer.Sound("assets/audio/sfx/CURSOL_SELECT.wav")
