@@ -218,27 +218,17 @@ class gameMenu:
                 self.boons.append(current_boon_surf)
                 self.boons_names.append(current_boon)
 
-    def update_boons(self):
-        self.boons = []
-        self.boons_names = []
-        # Only load boons (not sub-boons) for the display
-        for current_boon in interface_details["boons"]["list"]:
-            if not boon_data[current_boon]["is_subboon"]:
-                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
-                self.boons.append(current_boon_surf)
-                self.boons_names.append(current_boon)
+    # def update_boons(self):
+    #     self.boons = []
+    #     self.boons_names = []
+    #     # Only load boons (not sub-boons) for the display
+    #     for current_boon in interface_details["boons"]["list"]:
+    #         if not boon_data[current_boon]["is_subboon"]:
+    #             current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+    #             self.boons.append(current_boon_surf)
+    #             self.boons_names.append(current_boon)
 
     def selection_cooldown(self):
-        # if not self.can_move_selection:
-        #     current_time = pygame.time.get_ticks()
-        #     if current_time - self.selection_time >= 200:
-        #         self.can_move_selection = True
-
-        # if not self.can_move_boon:
-        #     current_time = pygame.time.get_ticks()
-        #     if current_time - self.boon_time >= 200:
-        #         self.can_move_boon = True
-        
         if not self.details_can_toggle:
             current_time = pygame.time.get_ticks()
             if current_time - self.details_toggle_time >= 200:
@@ -247,32 +237,22 @@ class gameMenu:
     # Esc Menu - Shows items + boons
     def displayMenu(self, player):
         # ITEMS Display
-        bg_rect_size = (150, 215)
-        option_rect_size = (25, 25)
-        x = (self.display_surface.get_size()[0] - 170) # - (bg_rect_size[0] // 2)
-        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 300
-        main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
+        bg_rect_size = (90, 140)
+        option_rect_size = (32, 32)
+        x = (self.display_surface.get_size()[0] - 140)
+        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 250
 
-        title_surface = self.font.render("ITEMS", True, UPGRADE_TEXT_COLOUR)
-        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, -15))
-        text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
-        text_fade.fill(TEXT_BG_COLOUR)
-        text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, -20))
-
-        self.display_surface.blit(text_fade, text_fade_rect)
-        self.display_surface.blit(title_surface, title_rect)
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
 
         # Set to None every tick so that it displays nothing if nothing is hovered over currently
         self.details_index_items = None
         if not self.boon_active: self.details_index_boons = None
+        x_pos_box = x + bg_rect_size[0] - option_rect_size[0] - 5
 
         pos = pygame.mouse.get_pos()
         for resource in self.resource_name_list:
             index = self.resource_name_list.index(resource)
-            if index >= 4:
-                item_rect = pygame.Rect(x + 90, y + (option_rect_size[1] + 5) * (self.resource_name_list.index(resource) - 4), option_rect_size[0], option_rect_size[1])
-            else:
-                item_rect = pygame.Rect(x, y + (option_rect_size[1] + 5) * self.resource_name_list.index(resource), option_rect_size[0], option_rect_size[1])
+            item_rect = pygame.Rect(x_pos_box, y + (option_rect_size[1] + 5) * self.resource_name_list.index(resource), option_rect_size[0], option_rect_size[1])
             
             if item_rect.collidepoint(pos):
                 self.details_index_items = index
@@ -280,9 +260,15 @@ class gameMenu:
             else: selected = False
             self.menu.display(index, item_rect, selected, self.resource_num_list[index])
 
-        # BOONS Display        
+        # BOONS Display
+        bg_rect_size = (90, 30 + (len(self.boons)) * 45)
+        x = (self.display_surface.get_size()[0] - 140)
+        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 250
+
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, 50), "dark")
+
         for slot in range(len(self.boons)):
-            boon_rect = pygame.Rect(1170, 30 + (slot * 45), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+            boon_rect = pygame.Rect(1145, 50 + (slot * 45), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
             
             if boon_rect.collidepoint(pos) and not self.boon_active:
                 self.details_index_boons = slot
@@ -303,7 +289,7 @@ class gameMenu:
             if self.boon_active: 
                 # Blit again to draw on top of all boons
                 # self.boon_active locks self.details_index_boons, preventing it from being changed
-                active_boon_rect = pygame.Rect(1170, 30 + (self.details_index_boons * 45), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
+                active_boon_rect = pygame.Rect(1145, 50 + (self.details_index_boons * 45), ITEM_BOX_SIZE, ITEM_BOX_SIZE)
                 self.menu.boon_display(active_boon_rect, True)
                 active_boon_img = self.boons[self.details_index_boons]
                 self.display_surface.blit(active_boon_img, active_boon_rect)
@@ -311,74 +297,52 @@ class gameMenu:
                 if not active_boon_rect.collidepoint(pos):
                     # Unlocks self.details_index_boons
                     self.boon_active = False
-
-
-        # EXTRA lines
-        # tt1_surface = self.font.render("ESC: Close items view", True, UPGRADE_TEXT_COLOUR)
-        # tt1_rect = tt1_surface.get_rect(midleft = (10, 675))
-        # text_fade_tt1 = pygame.Surface((tt1_rect.w + 10, tt1_rect.h + 10)).convert_alpha()
-        # text_fade_tt1.fill(TEXT_BG_COLOUR)
-        # text_fade_tt1_rect = tt1_surface.get_rect(midleft = tt1_rect.midleft + pygame.math.Vector2(-5, -5))
-
-        # self.display_surface.blit(text_fade_tt1, text_fade_tt1_rect)
-        # self.display_surface.blit(tt1_surface, tt1_rect)
     
     # Details Menu - Item details
     def item_details(self, player, resource, font):
         # Background
-        bg_rect_size = (600, 167)
-        x = (self.display_surface.get_size()[0] - 790) # - (bg_rect_size[0] // 2)
-        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 222
+        bg_rect_size = (700, 197)
+        x = (self.display_surface.get_size()[0] - 890) # - (bg_rect_size[0] // 2)
+        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 221
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
-        pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
+        text_rect_pos = main_rect.topleft + pygame.math.Vector2(120, 50)
+        text_rect_size = (bg_rect_size[0] - 20 - 20 - 100, (bg_rect_size[1] - 80) // 2)
+
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
+        createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "basic")
+        createUI(self.display_surface, text_rect_size[0], text_rect_size[1] - 35, (text_rect_pos[0], text_rect_pos[1] + text_rect_size[1] + 45), "basic")
 
         # Name
-        title_surface = font.render(f"{resource.title()}", True, "white")
-        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(70, 15))
-        text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
-        text_fade.fill(TEXT_BG_COLOUR)
-        text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(65, 10))
-        self.display_surface.blit(text_fade, text_fade_rect)
+        title_surface = font.render(f"| {resource.upper()}", True, TEXT_TITLE_COLOUR)
+        title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 15))
         self.display_surface.blit(title_surface, title_rect)
 
         # Image
-        img_rect = pygame.Rect(main_rect.topleft[0], main_rect.topleft[1], 60, 60)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, img_rect)
         index = self.resource_name_list.index(resource)
-        self.display_surface.blit(self.resource_icon_list_highres[index], img_rect)
+        icon_surface = self.resource_icon_list_highres[index]
+        icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(15, 0))
 
-        # Category
-        cat = resource_details[f"{resource}"][0]
-        cat_surface = pygame.font.Font(UI_FONT, 12).render(cat, True, "white")
-        cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(70, 40))
-        cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
-        cat_fade.fill(TEXT_BG_COLOUR)
-        cat_fade_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(65, 35))
-        self.display_surface.blit(cat_fade, cat_fade_rect)
-        self.display_surface.blit(cat_surface, cat_rect)
+        createUI(self.display_surface, 60, 60, (icon_rect.topleft))
+        self.display_surface.blit(icon_surface, icon_rect)
 
-        # Can by found by...
+        # Info
         found_text = resource_details[f"{resource}"][2]
         split_current_line = found_text.split("|")
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, "white")
-            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 75 + (subline * 15)))
+            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
-        # separator_rect = pygame.Rect(main_rect.midleft[0] + 5, main_rect.midleft[1] + 20, 530, 1)
-        # pygame.draw.rect(self.display_surface, "white", separator_rect)
-
-        # Can be used in...
+        # Lore
         used_text = resource_details[f"{resource}"][3]
         split_current_line = used_text.split("|")
-        while len(split_current_line) < 4:
+        while len(split_current_line) < 3:
             split_current_line.append("")
-        for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, "white")
-            text_rect = text_surf.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 115 + (subline * 15)))
+        for subline in range(3):
+            text_surf = pygame.font.Font(UI_FONT, 11).render(split_current_line[subline], False, UI_BG_LIGHT_COLOUR)
+            text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, text_rect_size[1] + 45 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
 
     # Details Menu - Boon details
@@ -390,8 +354,6 @@ class gameMenu:
         x = (self.display_surface.get_size()[0] - 790) - 100
         y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) - 250
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
-        # pygame.draw.rect(self.display_surface, UI_BG_COLOUR, main_rect.inflate(10, 10))
-        # pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, main_rect.inflate(10, 10), 3)
         text_rect_pos = main_rect.topleft + pygame.math.Vector2(120, 50)
         text_rect_size = (bg_rect_size[0] - 20 - 20 - 100, bg_rect_size[1] - 50 - 20 - 10)
 
@@ -408,21 +370,7 @@ class gameMenu:
         # Name
         title_surface = font.render(f"| {boon_data[f'{boon}']['name'].upper()}", True, TEXT_TITLE_COLOUR)
         title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(105, 15))
-        # text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
-        # text_fade.fill(TEXT_BG_COLOUR)
-        # text_fade_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 10))
-        # self.display_surface.blit(text_fade, text_fade_rect)
         self.display_surface.blit(title_surface, title_rect)
-
-        # Category
-        # cat = f"{boon_data[f'{boon}']['category']}"
-        # cat_surface = pygame.font.Font(UI_FONT, 12).render(cat, True, "black")
-        # cat_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(5, 40))
-        # cat_fade = pygame.Surface((cat_rect.w + 10, cat_rect.h + 10)).convert_alpha()
-        # cat_fade.fill(TEXT_BG_COLOUR)
-        # cat_fade_rect = cat_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 35))
-        # self.display_surface.blit(cat_fade, cat_fade_rect)
-        # self.display_surface.blit(cat_surface, cat_rect)
 
         # Desc 1
         desc1 = boon_data[f"{boon}"]["desc1"]
@@ -545,21 +493,16 @@ class itemMenu:
 
     def display_names(self, surface, rect, num):
         #colour = UPGRADE_TEXT_COLOUR_SELECTED if selected else UPGRADE_TEXT_COLOUR
-        colour = UPGRADE_TEXT_COLOUR
+        colour = TEXT_TITLE_COLOUR
 
         title_surface = self.font.render(str(num), True, colour)
-        title_rect = title_surface.get_rect(midleft = rect.midright + pygame.math.Vector2(10, 0))
-
-        text_fade = pygame.Surface((title_rect.w + 10, title_rect.h + 10)).convert_alpha()
-        text_fade.fill(TEXT_BG_COLOUR)
-        text_fade_rect = title_surface.get_rect(midleft = rect.midright + pygame.math.Vector2(5, -5))
-
-        surface.blit(text_fade, text_fade_rect)
+        title_rect = title_surface.get_rect(midright = rect.midleft + pygame.math.Vector2(-10, 0))
         surface.blit(title_surface, title_rect)
 
     def display(self, index, rect, selected, num):
-        if selected: pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR_ACTIVE, rect, 3)
-        else: pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, rect, 3)
+        if selected: itembox_surf = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+        else: itembox_surf = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+        self.display_surface.blit(itembox_surf, rect)
         
         self.display_surface.blit(self.resource_icon_list[index], rect)
         self.display_names(self.display_surface, rect, num)

@@ -57,6 +57,7 @@ TINY_FONT_SIZE = 10
 # General Colours
 WATER_COLOUR = "#71ddee"
 UI_BG_COLOUR = "#222222"
+UI_BG_LIGHT_COLOUR = "#696868"
 UI_BORDER_COLOUR = "#111111"
 TEXT_COLOUR = "#EEEEEE"
 UI_SELECTED_COLOUR = "#5c3604"       #"#44190a"
@@ -240,7 +241,7 @@ CANNOT_KINDLE = "Cannot kindle flame further."
 covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon", "velka"]
 npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
 boon_summons = ["sunlight_summon", "chaos_summon", "darkwraith_summon", "darkmoon_summon", "velkas_tome"]
-resources_names = ["soul_remnants", "humanities", "souvenirs of reprisal", "sunlight medals", "titanite shards", "titanite chunks", "titanite slabs", "demon titanite"]
+resources_names = ["soul_remnants", "humanity sprites", "souvenirs of reprisal", "sunlight medals", "titanite shards", "titanite chunks", "titanite slabs", "demon titanite"]
 
 # Region Values
 region_values = {

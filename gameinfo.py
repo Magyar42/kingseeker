@@ -37,14 +37,14 @@ npc_conversations = {
 # Meta-Progression Resources
 resources = {
     "soul remnants": 30,
-    "humanities": 11,
+    "humanity sprites": 11,
 
-    "souvenirs of reprisal": 2,
-    "sunlight medals": 3,
+    # "souvenirs of reprisal": 2,
+    # "sunlight medals": 3,
 
-    "titanite shards": 4,
+    # "titanite shards": 4,
     "titanite chunks": 3,
-    "titanite slabs": 0,
+    # "titanite slabs": 0,
     "demon titanite": 1,
 }
 
@@ -56,21 +56,28 @@ covenant_ranks = {
     "chaos servants": 0,
 }
 
+# "Remains of a powerful soul belonging to a great warrior.", "Gained after death, amount scaling with the|number of level-ups in a run."
+# Rare black sprite found on corpses, distinct from the soul that resides within all creatures.
+
 # Resource Info
 resource_details = {
-    "soul remnants": ["Level-up Resource", "Remains of a powerful soul belonging to a great warrior.", "Gained after death, amount scaling with the|number of level-ups in a run.", "Can be spent at the Fire Keeper to gain|permanent level-ups."],
-    "humanities": ["Level-up Resource | Covenant Offering", "Rare black sprite found on corpses, distinct from the soul that resides within all creatures.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be spent at the Firelink bonfire to gain|permanent unique effects.|Can be offered to the Chaos Servants and|Darkwraiths to increase Covenant rank."],
+    "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be spent on permanent level-ups.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
+
+    "humanity sprites": ["Level-up Resource | Covenant Offering", "", ">Dropped by some enemies.|>Found in various locations.|>Can be spent on permanent unique bonuses|in several ways.", "Rare black sprite found on human remains. Thought|to be somehow distinct from the soul."],
 
     "souvenirs of reprisal": ["Covenant Offering", "Blood-drained, shrunken ear. Souvenir taken from subduing the guilty.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Blades of the Darkmoon|to increase Covenant rank."],
     "sunlight medals": ["Covenant Offering", "Warm medal, engraved with the symbol of the Sun. Represents Lord Gwyn's firstborn, who lost the status of deity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Warriors of Sunlight to|increase Covenant rank."],
     "eyes of death": ["Covenant Offering", "Eyes taken from those afflicted by curses of petrification. Known to be used to spread death.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Gravelord Servants to|increase Covenant rank."],
     "dragon scales": ["Covenant Offering", "Scales peeled from an ancient dragon. Highly sought after for its rarity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Path of the Dragon to|increase Covenant rank."],
-
     "titanite shards": ["Upgrade Material", "Most common titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +3."],
     "large titanite shards": ["Upgrade Material", "Larger and rarer titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +6."],
-    "titanite chunks": ["Upgrade Material", "Highly valuable titanite material found only in Lordran. Etched into weapons for reinforcement.", "Can be found in chambers.", "Can be used to strengthen standard weapons|to +9."],
-    "titanite slabs": ["Upgrade Material", "Legendary titanite material of a nameless blacksmith deity. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen standard weapons|to +10 and demon/twinkling weapons to +5."],
-    "demon titanite": ["Upgrade Material", "Special titanite stolen from a faceless stone beast known as a Titanite Demon.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen demon weapons to +4."],
+    
+    "titanite chunks": ["Upgrade Material", "", ">Found in various locations.|>Can be bought from various vendors.|>Can be used to permanently upgrade|standard weapons.", "Titanite is the heirloom of a nameless blacksmith|deity. All that remains are fragments and shards."],
+
+    "titanite slabs": ["Upgrade Material", "Legendary titanite material of a nameless blacksmith deity. Etched into weapons for reinforcement.", ">Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen standard weapons|to +10 and demon/twinkling weapons to +5."],
+
+    "demon titanite": ["Upgrade Material", "", ">Dropped by Titanite Demons.|>Can be bought from various vendors.|>Can be used to permanently upgrade|infernal weapons.", "Great beasts arose from slabs of Titanite after the|blacksmith deity's death."],
+
     "twinkling titanite": ["Upgrade Material", "Titanite imbued with a particularly powerful energy of unknown origin.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen twinkling weapons|to +4."],
 }
 
