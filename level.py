@@ -349,7 +349,7 @@ class Level:
     #     if self.hurtbox: self.hurtbox.kill()
     #     self.hurtbox = None
 
-    def create_attack(self):
+    def create_attack(self, attack_type):
         self.current_attack = Weapon(self.player, [self.visible_sprites]) # self.attack_sprites
         
         direction = self.player.status.split("_")[0]
@@ -362,7 +362,7 @@ class Level:
         #     pos = self.player.rect.center + pygame.math.Vector2(0, -32)
         # elif direction == "down":
         #     pos = self.player.rect.center + pygame.math.Vector2(0, 32)
-        self.animation_player.create_attack("sword_1", pos, [self.visible_sprites, self.attack_sprites], "weapon", direction, self.create_attack_hurtboxes, self.destroy_attack_hurtboxes, 0.20)
+        self.animation_player.create_attack(attack_type, pos, [self.visible_sprites], "weapon", direction, self.create_attack_hurtboxes, self.destroy_attack_hurtboxes, 0.20)
 
     def create_magic(self, name, strength, cost):
         self.current_attack = Catalyst(self.player, [self.visible_sprites])
@@ -373,15 +373,17 @@ class Level:
         elif name == "icecrag_burst":
             self.magic_player.icecrag_burst(self.player, cost, [self.visible_sprites, self.attack_sprites])
 
-    def create_attack_hurtboxes(self, frame, attack_type):
-        current_hurtboxes_details = list(attack_hurtbox_data[attack_type][frame])
+    def create_attack_hurtboxes(self, frame, attack_type, direction):
+        current_hurtboxes_details = list(attack_hurtbox_data[direction][attack_type][frame])
 
         x_base = self.player.rect.x
         y_base = self.player.rect.y
         
         for box in current_hurtboxes_details:
             self.hurtbox = Hurtboxes([self.attack_sprites, self.visible_sprites], x_base+box[0], y_base+box[1], box[2], box[3])
-            self.destroy_attack_hurtboxes(frame)
+            # self.destroy_attack_hurtboxes(frame) # Makes hurtboxes invisible
+
+        # todo!!! make hitboxes disappear after
         
         # print(f"{frame}: {current_hurtboxes_objects}")
         # self.current_hurtboxes.append(current_hurtboxes_objects) # Save list X to list containing all hurtboxes currently

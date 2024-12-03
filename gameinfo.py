@@ -101,22 +101,22 @@ player_unlocks = {
 # Player details for per run
 interface_details = {
     "light_attack": {
-        "class": "sword", "name": "broadsword_light", "cooldown": 100, "base damage": 15, "knockback": 0, "stamina_use": 15,
+        "class": "sword", "name": "broadsword_light", "cooldown": 520, "base damage": 15, "knockback": 0, "stamina_use": 15,
     },
     "heavy_attack": {
-        "class": "sword", "name": "broadsword_heavy", "cooldown": 200, "base damage": 30, "knockback": 1, "stamina_use": 30,
+        "class": "sword", "name": "broadsword_heavy", "cooldown": 750, "base damage": 30, "knockback": 1, "stamina_use": 25,
     },
     "catalyst": {
-        "class": "pyromancy", "name": "pyromancy_flame", "cooldown": 100, "base damage": 5,
+        "class": "pyromancy", "name": "pyromancy_flame", "cooldown": 5000, "base damage": 5,
     },
     "skill": {
-        "name": "skill_1", "cooldown": None, "base damage": None, "effects": None, "infusion": None,
+        "name": "skill_1", "cooldown": 400, "base damage": 10, "stamina_use": 25,
     },
     # "rings": {
     #     "ring 1": None, "ring 2": None,
     # },
     "boons": {
-        "list": ["boon_5", "boon_6", "boon_9", "boon_10", "boon_11"],
+        "list": ["boon_5", "boon_6", "boon_9", "boon_11"],
     },
     "spells": {
         1: "heal", 2: "fire_surge", 3: "icecrag_burst",
@@ -133,7 +133,7 @@ interface_details = {
 
 # Hidden numbers which can be affected by boons
 player_data = {
-    "dependent_variables": {"health": 400, "mana": 100, "stamina": 60, "speed": 5, "poise": 42.1, "attack": 10, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0.005},
+    "dependent_variables": {"health": 400, "mana": 100, "stamina": 60, "speed": 5, "poise": 42.1, "attack": 5, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0.005},
 
     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
 
