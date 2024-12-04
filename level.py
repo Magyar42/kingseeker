@@ -354,14 +354,6 @@ class Level:
         
         direction = self.player.status.split("_")[0]
         pos = self.player.rect.center
-        # if direction == "right":
-        #     pos = self.player.rect.center + pygame.math.Vector2(32, 0)
-        # elif direction == "left":
-        #     pos = self.player.rect.center + pygame.math.Vector2(-32, 0)
-        # elif direction == "up":
-        #     pos = self.player.rect.center + pygame.math.Vector2(0, -32)
-        # elif direction == "down":
-        #     pos = self.player.rect.center + pygame.math.Vector2(0, 32)
         self.animation_player.create_attack(attack_type, pos, [self.visible_sprites], "weapon", direction, self.create_attack_hurtboxes, self.destroy_attack_hurtboxes, 0.20)
 
     def create_magic(self, name, strength, cost):

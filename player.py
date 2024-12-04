@@ -363,10 +363,11 @@ class Player(Entity):
                             #self.speed /= 2
 
                     # skill input
-                    # todo: skill effect
                     if keys[pygame.K_q] and not self.using_skill:
                         if self.stamina_target - self.stamina_skill_cost >= 0:
                             self.stamina_target -= self.stamina_skill_cost # Effect on stamina
+                            self.direction.x = 0
+                            self.direction.y = 0
 
                             self.attacking = True
                             self.attack_time = pygame.time.get_ticks()
