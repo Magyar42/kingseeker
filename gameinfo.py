@@ -12,6 +12,7 @@ global_settings = {
 }
 
 # NPC Stuff
+# Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {
     "firekeeper": [
         ["???", 0, False, "Placeholder"],
