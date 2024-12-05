@@ -182,7 +182,7 @@ class NPC(pygame.sprite.Sprite):
                     icon_surface = pygame.image.load(f"assets/graphics/ui/npc/{self.npc_id}.png").convert_alpha()
                     icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(15, 0))
 
-                    createUI(self.display_surface, 56, 56, (icon_rect.topleft[0] + 10, icon_rect.topleft[1] + 10), "basic")
+                    createUI(self.display_surface, 56, 56, (icon_rect.topleft[0] + 10, icon_rect.topleft[1] + 10))
                     self.display_surface.blit(icon_surface, icon_rect)
 
                     # Convo Body

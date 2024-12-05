@@ -107,7 +107,7 @@ def createUI(surface, width, height, pos, type="", padding = 20):
     bg_topright = pygame.image.load(f"{path}/bg_topright{type}.png").convert_alpha()
     bg_bottomleft = pygame.image.load(f"{path}/bg_bottomleft{type}.png").convert_alpha()
     bg_bottomright = pygame.image.load(f"{path}/bg_bottomright{type}.png").convert_alpha()
-    bg_border = pygame.image.load(f"{path}/bg_border.png").convert_alpha()
+    bg_border = pygame.image.load(f"{path}/bg_border{type}.png").convert_alpha()
     bg_body = pygame.image.load(f"{path}/bg_body{type}.png").convert_alpha()
 
     # Find necessary values
