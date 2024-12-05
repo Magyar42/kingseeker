@@ -14,25 +14,32 @@ global_settings = {
 # NPC Stuff
 # Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {
-    "firekeeper": [
-        ["???", 0, False, "Placeholder"],
-        ["Fire Keeper", 100, False, "Welcome to the bonfire, Undead.", "I am the Fire Keeper.", "I tend to the flame, and to thee.", "The fire fades, and soon only dark shall|remain.", "To this end, I am at thy side."],
-        ["Fire Keeper", 1, False, "Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels..."],
-        ["Fire Keeper", 2, False, "Erm... what the sigma?"],
-        ["Fire Keeper", 99, False, "Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever."],
-    ],
-    "logan": [
-        ["???", 0, False, "Placeholder"],
-        ["Big Hat Logan", 1, False, "...", "My thanks, my name is Logan.", "You must be an Undead."]
-    ],
-    "crestfallen": [
-        ["???", 0, False, "Placeholder"],
-        ["Crestfallen Warrior", 100, False, "Well, what do we have here? You must be a|new arrival.", "Let me guess. Fate of the Undead, right?|Well, you're not the first.", "Well, since you're here... Let me help you|out.", "There are actually two Bells of Awakening.", "One's up above, in the Undead Church. The|other is far, far below, in the ruins at|the base of Blighttown.", "Ring them both, and something happens... |Brilliant, right?", "Not much to go on, but I have a feeling|that won't stop you.", "Hah hah hah hah..."],
-    ],
-    "frampt": [
-        ["???", 0, False, "Placeholder"],
-        ["Kingseeker Frampt", 100, False, "Ahh, hello.", "Was it you who rang the Bells of|Awakening?", "I am the primordial serpent, Kingseeker|Frampt, close friend of the Great Lord|Gwyn.", "Chosen Undead, who has rung the Bells of|Awakening. I wish to elucidate your fate.", "Do you seek such enlightenment?", "Chosen Undead. Your fate...", "... is to succeed the Great Lord Gwyn.|So that you may link the Fire, cast away|the Dark, and undo the curse of the|Undead.", "To this end, you must visit Anor Londo,|and acquire the Lordvessel. "],
-    ],
+    "firekeeper": {
+        "000": {
+            "name": "???", "priority": 0, "completed": False, "text": [""],
+        },
+        "001": {
+            "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper.", "I tend to the flame, and to thee.", "The fire fades, and soon only dark shall|remain.", "To this end, I am at thy side.", ""],
+        },
+        "002": {
+            "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels..."],
+        },
+        "003": {
+            "name": "Fire Keeper", "priority": 99, "completed": False, "text": ["Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever."],
+        },
+    },
+    # "logan": [
+    #     ["???", 0, False, "Placeholder"],
+    #     ["Big Hat Logan", 1, False, "...", "My thanks, my name is Logan.", "You must be an Undead."]
+    # ],
+    # "crestfallen": [
+    #     ["???", 0, False, "Placeholder"],
+    #     ["Crestfallen Warrior", 100, False, "Well, what do we have here? You must be a|new arrival.", "Let me guess. Fate of the Undead, right?|Well, you're not the first.", "Well, since you're here... Let me help you|out.", "There are actually two Bells of Awakening.", "One's up above, in the Undead Church. The|other is far, far below, in the ruins at|the base of Blighttown.", "Ring them both, and something happens... |Brilliant, right?", "Not much to go on, but I have a feeling|that won't stop you.", "Hah hah hah hah..."],
+    # ],
+    # "frampt": [
+    #     ["???", 0, False, "Placeholder"],
+    #     ["Kingseeker Frampt", 100, False, "Ahh, hello.", "Was it you who rang the Bells of|Awakening?", "I am the primordial serpent, Kingseeker|Frampt, close friend of the Great Lord|Gwyn.", "Chosen Undead, who has rung the Bells of|Awakening. I wish to elucidate your fate.", "Do you seek such enlightenment?", "Chosen Undead. Your fate...", "... is to succeed the Great Lord Gwyn.|So that you may link the Fire, cast away|the Dark, and undo the curse of the|Undead.", "To this end, you must visit Anor Londo,|and acquire the Lordvessel. "],
+    # ],
 }
 
 # Meta-Progression Resources

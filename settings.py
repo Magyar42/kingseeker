@@ -85,7 +85,7 @@ weapon_data = {
 boon_data = {
     ## Warriors of Sunlight
     # Core Boons
-    "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+    "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted|when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
     "boon_2": {"name": "Lightning Strike", "category": "Warriors of Sunlight", "desc1": "Primary/secondary attack emits|chain-lightning when damaging a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 

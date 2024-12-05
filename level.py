@@ -334,9 +334,8 @@ class Level:
             y = self.display_surface.get_size()[1] // 4
             self.animation_player.create_macro(f"{self.region}", (x, y), [self.screen_sprites], None, 0.20, 0, self.toggle_screen_effect)
 
-    def blit_reward_icon(self, reward, pos):
-        # self.display_surface.blit(img, (100, 100))
-        self.animation_player.create_icon(f"{reward}", pos, [self.visible_sprites], "ambient", 0.10)
+    def blit_reward_icon(self, reward, pos, is_npc=False):
+        self.animation_player.create_icon(f"{reward}", pos, [self.visible_sprites], "ambient", 0.10, is_npc)
 
     def update_map(self, pos):       # triggered on player death, enemy death, item pickup
         self.bloodstain = Bloodstain(pos, [self.visible_sprites, self.interactable_sprites], self.check_souls_retrieval)
