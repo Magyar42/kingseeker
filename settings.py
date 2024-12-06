@@ -3,10 +3,6 @@
 
 from gameinfo import *
 
-CONTROLLER_ACTIVE = False
-controller_list = []
-CURRENT_CONTROLLER = None
-
 # Setup
 WIDTH    = 1280
 HEIGHT   = 720
@@ -111,7 +107,7 @@ boon_data = {
     
     "boon_12": {"name": "Electrifying Deflection", "category": "Warriors of Sunlight", "desc1": "Enemies hit by chain-lighting have a 25% of|being stunned for 1s.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_6"},
 
-    "boon_13": {"name": "Deepened Devotion", "category": "Warriors of Sunlight", "desc1": "Soothing Sunlight also fully restores mana and stamina.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_7"},
+    "boon_13": {"name": "Deepened Devotion", "category": "Warriors of Sunlight", "desc1": "Soothing Sunlight also fully restores mana|and stamina.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_7"},
     
     "boon_14": {"name": "Holy Protection", "category": "Warriors of Sunlight", "desc1": "Increases defense and speed by 30% for 6s after use.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_7"},
 
@@ -210,7 +206,7 @@ boss_data = {
 
 # Pop-ups
 current_prompts = []
-PROMPT_HEIGHT = 30
+PROMPT_HEIGHT = 20
 PROMPT_GAP = 10
 PROMPT_FONT_SIZE = 14
 

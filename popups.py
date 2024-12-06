@@ -17,17 +17,20 @@ class Prompt:
         # current_prompts.append(f"{button}: {type}")
 
         x = self.display_surface.get_size()[0] // 2
-        y = self.display_surface.get_size()[1] - (PROMPT_HEIGHT + PROMPT_GAP) # * len(current_prompts)
+        y = self.display_surface.get_size()[1] - (PROMPT_HEIGHT + PROMPT_GAP) - 20 # * len(current_prompts)
 
-        text_surface = self.font.render(str(f"[{button}] {text}"), False, TEXT_COLOUR).convert_alpha()
+        text_surface = self.font.render(str(f"[{button}] {text.upper()}"), False, TEXT_TITLE_COLOUR).convert_alpha()
         text_rect = text_surface.get_rect(center = (x, y))
 
         self.displayPrompt(text_rect, text_surface)
     
     def displayPrompt(self, rect, surface):
-        pygame.draw.rect(self.display_surface, UI_BG_COLOUR, rect.inflate(10, 10))
+
+        createUI(self.display_surface, rect.width, rect.height, (rect.x, rect.y), "dark")
+
+        #pygame.draw.rect(self.display_surface, UI_BG_COLOUR, rect.inflate(10, 10))
         self.display_surface.blit(surface, rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, rect.inflate(10, 10), 4)
+        #pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, rect.inflate(10, 10), 4)
 
 # Popup on item pickup
 class ItemPopup:
@@ -236,11 +239,12 @@ class gameMenu:
     
     # Esc Menu - Shows items + boons
     def displayMenu(self, player):
+
         # ITEMS Display
         bg_rect_size = (90, 140)
         option_rect_size = (32, 32)
         x = (self.display_surface.get_size()[0] - 140)
-        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 250
+        y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 250 - 60
 
         createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
 
@@ -583,9 +587,9 @@ class BoonsMenu:
         # Only load boons (not sub-boons) for the display
         for current_boon in boons_choice:
             if not boon_data[current_boon]["is_subboon"]:
-                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
+                current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons_big/{current_boon}.png")
             else:
-                current_boon_surf = pygame.image.load("assets/graphics/ui/interface_icons/boons/general_subboon.png")
+                current_boon_surf = pygame.image.load("assets/graphics/ui/interface_icons/boons_big/general_subboon.png")
             self.boon_icons.append(current_boon_surf)
         
         return boons_choice
@@ -604,25 +608,26 @@ class BoonsMenu:
             bg_rect_size = (700, 127)
 
         x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[0] // 2)
-        y = (self.display_surface.get_size()[1] // 2) - 320 + prev_height
+        y = (self.display_surface.get_size()[1] // 2) - 280 + prev_height
 
         main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
         text_rect_pos = main_rect.topleft + pygame.math.Vector2(135, 80)
         text_rect_size = (bg_rect_size[0] - 20 - 20 - 100 - 15, bg_rect_size[1] - 50 - 10 - 20 - 20)
 
         # Icon + BG [Updates with hover]
-        icon_surface = pygame.image.load(f"assets/graphics/ui/interface_icons/boons_big/{boon}.png")
+        # icon_surface = pygame.image.load(f"assets/graphics/ui/interface_icons/boons_big/{boon}.png")
+        icon_surface = self.boon_icons[num]
         icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(5, 0))
 
         pos = pygame.mouse.get_pos()
         hit = main_rect.collidepoint(pos)
         if hit:
-            createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green")
-            self.display_surface.blit(self.big_boon_frame_selected, icon_rect)
-
             if player_inputs["light attack"]:
+                createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green_dark")
                 self.add_boon(boon) # If LMB pressed, select boon
-                player_inputs["light attack"] = False
+            else:
+                createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green")
+            self.display_surface.blit(self.big_boon_frame_selected, icon_rect)
         else:
             createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
             self.display_surface.blit(self.big_boon_frame, icon_rect)
@@ -671,4 +676,4 @@ class BoonsMenu:
     def add_boon(self, boon):
         interface_details["boons"]["list"].append(boon)
         self.enable_player_control()
-        print(interface_details["boons"]["list"])
+        player_inputs["light attack"] = False

@@ -235,6 +235,9 @@ class Level:
         if map_id not in safe_rooms: self.chamber_cleared = False
         else: self.chamber_cleared = True
 
+        if self.region == "firelink_shrine": prevent_player_input = True
+        else: prevent_player_input = False
+
         layouts = {
             "boundary": import_csv_layout(f"assets/map/{self.region}/{map_id}/map_FloorBlocks.csv"),
             #"grass": import_csv_layout("assets/map/map_Grass.csv"),
@@ -267,7 +270,7 @@ class Level:
                         if style == "entities":
                             if column == "394":
                                 if player_reset:
-                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect)
+                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect, prevent_player_input)
                             elif column == "388":
                                 self.bonfire = Bonfire(0, (x, y), [self.visible_sprites, self.obstacle_sprites, self.interactable_sprites], self.restart_world, self.check_humanity_restored, self.check_bonfire_lit, self.check_bonfire_rest, self.toggle_menu, self.toggle_screen_effect, self.kindle_bonfire_visuals)
                             elif column == "277": # Potential enemy spawns
@@ -614,6 +617,7 @@ class Level:
 
         # Loads stuff
         self.map_id = map
+        self.region = "firelink_shrine"
         self.chamber_wave_active = False
         self.chamber_active_enemies = 0
         self.region_chambers_done = 0

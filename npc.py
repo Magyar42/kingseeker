@@ -114,6 +114,8 @@ class NPC(pygame.sprite.Sprite):
             if not self.interacting_npc:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_q]:
+                    player.direction.y = 0
+                    player.direction.x = 0
                     if self.npc_id != "transition_prompt":
                         self.interacting_npc = True
                         self.initiate_npc(player)
