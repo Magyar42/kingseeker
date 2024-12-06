@@ -24,6 +24,8 @@ class AnimationPlayer():
             'sparkle': import_folder('assets/graphics/particles/sparkle'),
 
             'sword_1': import_folder('assets/graphics/particles/player_attack/sword_1'),
+            'sword_2': import_folder('assets/graphics/particles/player_attack/sword_2'),
+            'sword_skill': import_folder('assets/graphics/particles/player_attack/sword_skill'),
  
             # deaths
             'squid': import_folder('assets/graphics/particles/smoke'),
@@ -169,7 +171,7 @@ class AttackEffect(pygame.sprite.Sprite):
         self.frame_index += self.animation_speed
         
         # Trigger hurtbox effect every frame
-        self.create_attack_hurtboxes(int(self.frame_index), self.attack_type)
+        self.create_attack_hurtboxes(int(self.frame_index), self.attack_type, self.direction)
 
         # Destroy prev hurtboxes
         # self.destroy_attack_hurtboxes(int(self.frame_index))

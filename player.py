@@ -31,12 +31,12 @@ class Player(Entity):
 
         # Determines how long the player "freezes" when performing an attack
         self.attacking = False
-        self.attack_cooldown = 300
+        self.attack_cooldown = 700  # todo: dynamically update!!
         self.attack_time = None
 
         # Determines the cooldown between skill attacks
         self.using_skill = False
-        self.skill_cooldown = 5000
+        self.skill_cooldown = interface_details["skill"]["cooldown"]
         self.skill_use_time = None
 
         # Determines the cooldown between magic attacks
@@ -46,12 +46,12 @@ class Player(Entity):
 
         # Determines the cooldown between light attacks
         self.light_attacking = False
-        self.light_attack_cooldown = 520
+        self.light_attack_cooldown = interface_details["light_attack"]["cooldown"]
         self.light_attack_time = None
 
         # Determines the cooldown between heavy attacks
         self.heavy_attacking = False
-        self.heavy_attack_cooldown = 750
+        self.heavy_attack_cooldown = interface_details["heavy_attack"]["cooldown"]
         self.heavy_attack_time = None
 
         self.obstacle_sprites = obstacle_sprites
@@ -78,6 +78,7 @@ class Player(Entity):
         # stats
         self.stamina_light_attack_cost = interface_details["light_attack"]["stamina_use"]
         self.stamina_heavy_attack_cost = interface_details["heavy_attack"]["stamina_use"]
+        self.stamina_skill_cost = interface_details["skill"]["stamina_use"]
         self.stamina_magic_mult = 4 # todo: per spell
 
         self.health = player_data['dependent_variables']['health']
@@ -225,6 +226,7 @@ class Player(Entity):
             "dead": [],
             "item": [],
             "stunned": [],
+            "invisible": [],
             # Unused
             "special1": [],
             "special2": [],
@@ -234,44 +236,48 @@ class Player(Entity):
             self.animations[animation] = import_folder(full_path)
     
     def get_status(self):
-        if self.direction.x == 0 and self.direction.y == 0:
-            if not "idle" in self.status and not "attack" in self.status and not "roll" in self.status and not "dead" in self.status and not "item" in self.status and not "stunned" in self.status:
-                self.status = self.status + "_idle"
-        
-        if self.attacking:
-            self.direction.x = 0
-            self.direction.y = 0
-            if not "attack" in self.status:
-                if "idle" in self.status:
-                    self.status = self.status.replace("_idle", "_attack")
-                elif "dead" in self.status or "stunned" in self.status:
-                    pass
-                else:
-                    self.status = self.status + "_attack"
-        elif self.rolling:
-            if not "roll" in self.status:
-                if "idle" in self.status:
-                    self.status = self.status.replace("_idle", "_roll")
-                elif "dead" in self.status or "stunned" in self.status:
-                    pass
-                else:
-                    self.frame_index = 0
-                    self.status = self.status + "_roll"
-        elif self.drinking_estus:
-            self.status = "item"
-            self.resting = True
-            self.direction.x = 0
-            self.direction.y = 0
+        if self.status != "invisible":
+            if self.direction.x == 0 and self.direction.y == 0:
+                if not "idle" in self.status and not "attack" in self.status and not "roll" in self.status and not "dead" in self.status and not "item" in self.status and not "stunned" in self.status:
+                    self.status = self.status + "_idle"
+            
+            if self.attacking:
+                self.direction.x = 0
+                self.direction.y = 0
+                if not "attack" in self.status:
+                    if "idle" in self.status:
+                        self.status = self.status.replace("_idle", "_attack")
+                    elif "dead" in self.status or "stunned" in self.status:
+                        pass
+                    else:
+                        self.status = self.status + "_attack"
+            elif self.rolling:
+                if not "roll" in self.status:
+                    if "idle" in self.status:
+                        self.status = self.status.replace("_idle", "_roll")
+                    elif "dead" in self.status or "stunned" in self.status:
+                        pass
+                    else:
+                        self.frame_index = 0
+                        self.status = self.status + "_roll"
+            elif self.drinking_estus:
+                self.status = "item"
+                self.resting = True
+                self.direction.x = 0
+                self.direction.y = 0
 
-            estus_image = pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png").convert_alpha()
-            x, y = centreImage(estus_image)
-            self.display_surface.blit(estus_image, (x, y - 40))
+                estus_image = pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png").convert_alpha()
+                x, y = centreImage(estus_image)
+                self.display_surface.blit(estus_image, (x, y - 40))
 
-        else:
-            if "attack" in self.status:
-                self.status = self.status.replace("_attack", "")
-            elif "roll" in self.status:
-                self.status = self.status.replace("_roll", "")
+            else:
+                if "attack" in self.status:
+                    self.status = self.status.replace("_attack", "")
+                elif "roll" in self.status:
+                    self.status = self.status.replace("_roll", "")
+        else:       # If player IS invisible
+            if not self.attacking:
+                self.status = "down_idle"
 
     def main_menu(self):
         if self.menu_open:
@@ -345,7 +351,7 @@ class Player(Entity):
 
                     if not self.prevent_player_input:
                         # estus input
-                        if keys[pygame.K_f] and not self.drinking_estus:       # Todo: change to not use index, but name, so that any item can be assigned to quick use 
+                        if keys[pygame.K_f] and not self.drinking_estus:  
                             
                             if interface_details["values"]["current estus"] > 0:
                                 self.drinking_estus = True
@@ -359,15 +365,20 @@ class Player(Entity):
                                 self.estus_sound.play()
 
                         # skill input
-                        # todo: skill effect
                         if keys[pygame.K_q] and not self.using_skill:
-                            # todo: check stamina/mana cost and take away as needed
-                            print("Skill used!")
+                            if self.stamina_target - self.stamina_skill_cost >= 0:
+                                self.stamina_target -= self.stamina_skill_cost # Effect on stamina
+                                self.direction.x = 0
+                                self.direction.y = 0
 
-                            self.attacking = True
-                            self.attack_time = pygame.time.get_ticks()
-                            self.using_skill = True
-                            self.skill_use_time = pygame.time.get_ticks()
+                                self.attacking = True
+                                self.attack_time = pygame.time.get_ticks()
+                                self.using_skill = True
+                                self.skill_use_time = pygame.time.get_ticks()
+
+                                self.create_attack("sword_skill")
+                                self.status = "invisible"
+                                self.weapon_attack_sound.play()
 
                         # spell cast
                         # todo: spell effect
@@ -398,7 +409,7 @@ class Player(Entity):
                                 self.light_attacking = True
                                 self.light_attack_time = pygame.time.get_ticks()
 
-                                self.create_attack()
+                                self.create_attack("sword_1")
                                 self.weapon_attack_sound.play()
                                 player_inputs["light attack"] = False
 
@@ -412,7 +423,7 @@ class Player(Entity):
                                 self.heavy_attacking = True
                                 self.heavy_attack_time = pygame.time.get_ticks()
 
-                                self.create_attack()
+                                self.create_attack("sword_2")
                                 self.weapon_attack_sound.play()
                                 player_inputs["heavy attack"] = False
 
@@ -434,7 +445,7 @@ class Player(Entity):
         current_time = pygame.time.get_ticks()
 
         if self.attacking:
-            if current_time - self.attack_time >= self.attack_cooldown + interface_details["light_attack"]["cooldown"]:
+            if current_time - self.attack_time >= self.attack_cooldown:
                 self.attacking = False
                 self.destroy_attack()
         
@@ -522,12 +533,12 @@ class Player(Entity):
                 self.popup.boons_names.append(current_boon)
 
     def get_full_weapon_damage(self):
+        if self.light_attacking: attack = "light_attack"
+        elif self.heavy_attacking: attack = "heavy_attack"
+        else: attack = "skill" # todo: get skill/ability damage
+
         base_damage = player_data['dependent_variables']['attack']
-        #weapon_damage = weapon_data[self.weapon]["damage"]
-        #weapon_damage = right_hand_data[list(right_hand_data.keys())[self.weapon_index]]["damage"]
-        weapon_damage = interface_details["light_attack"]["base damage"]
-        
-        # todo: add check for light/heavy attack, and alter damage/stamina usage/use time accordingly
+        weapon_damage = interface_details[attack]["base damage"]
 
         return base_damage + weapon_damage
     

@@ -4,19 +4,29 @@ from settings import *
 class Hurtboxes(pygame.sprite.Sprite):
     def __init__(self, groups, x, y, width, height):
         super().__init__(groups)
+        if HURTBOX_DEBUG: hitbox = "hitbox_debug"
+        else: hitbox = "hitbox_default"
+
         self.sprite_type = "attack"
         self.display_surface = pygame.display.get_surface()
-        self.image = pygame.transform.scale(pygame.image.load("assets/graphics/hitbox.png"), (width, height)).convert_alpha()
+        self.image = pygame.transform.scale(pygame.image.load(f"assets/graphics/{hitbox}.png"), (width, height)).convert_alpha()
         #self.rect = self.image.get_rect(topleft = (100, 100))
 
         self.rect = pygame.Rect(x, y, width, height)
+
+        self.speed = 0.20
+        self.index = 0
+        self.max_index = 1
         #pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.rect)
     
-    # def create_hurtboxes(self, x, y, width, height):
-    #     self.rect = pygame.Rect(x, y, width, height)
-    #     pygame.draw.rect(self.display_surface, UI_BG_COLOUR, self.rect)
+    def kill_hurtboxes_check(self):
+        self.index += self.speed
 
-# todo: could call class at level init and then call the above method to create hurtboxes
+        if self.index >= self.max_index:
+            self.kill()
+
+    def update(self):
+        self.kill_hurtboxes_check()
 
 class Weapon(pygame.sprite.Sprite):
     def __init__(self, player, groups):
