@@ -12,39 +12,47 @@ global_settings = {
 }
 
 # NPC Stuff
+# Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {
-    "firekeeper": [
-        ["???", 0, False, "Placeholder"],
-        ["Fire Keeper", 100, False, "Welcome to the bonfire, Undead.", "I am the Fire Keeper.", "I tend to the flame, and to thee.", "The fire fades, and soon only dark shall|remain.", "To this end, I am at thy side."],
-        ["Fire Keeper", 1, False, "Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels..."],
-        ["Fire Keeper", 2, False, "Erm... what the sigma?"],
-        ["Fire Keeper", 99, False, "Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever."],
-    ],
-    "logan": [
-        ["???", 0, False, "Placeholder"],
-        ["Big Hat Logan", 1, False, "...", "My thanks, my name is Logan.", "You must be an Undead."]
-    ],
-    "crestfallen": [
-        ["???", 0, False, "Placeholder"],
-        ["Crestfallen Warrior", 100, False, "Well, what do we have here? You must be a|new arrival.", "Let me guess. Fate of the Undead, right?|Well, you're not the first.", "Well, since you're here... Let me help you|out.", "There are actually two Bells of Awakening.", "One's up above, in the Undead Church. The|other is far, far below, in the ruins at|the base of Blighttown.", "Ring them both, and something happens... |Brilliant, right?", "Not much to go on, but I have a feeling|that won't stop you.", "Hah hah hah hah..."],
-    ],
-    "frampt": [
-        ["???", 0, False, "Placeholder"],
-        ["Kingseeker Frampt", 100, False, "Ahh, hello.", "Was it you who rang the Bells of|Awakening?", "I am the primordial serpent, Kingseeker|Frampt, close friend of the Great Lord|Gwyn.", "Chosen Undead, who has rung the Bells of|Awakening. I wish to elucidate your fate.", "Do you seek such enlightenment?", "Chosen Undead. Your fate...", "... is to succeed the Great Lord Gwyn.|So that you may link the Fire, cast away|the Dark, and undo the curse of the|Undead.", "To this end, you must visit Anor Londo,|and acquire the Lordvessel. "],
-    ],
+    "firekeeper": {
+        "000": {
+            "name": "???", "priority": 0, "completed": False, "text": [""],
+        },
+        "001": {
+            "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper.", "I tend to the flame, and to thee.", "The fire fades, and soon only dark shall|remain.", "To this end, I am at thy side.", ""],
+        },
+        "002": {
+            "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels..."],
+        },
+        "003": {
+            "name": "Fire Keeper", "priority": 99, "completed": False, "text": ["Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever."],
+        },
+    },
+    # "logan": [
+    #     ["???", 0, False, "Placeholder"],
+    #     ["Big Hat Logan", 1, False, "...", "My thanks, my name is Logan.", "You must be an Undead."]
+    # ],
+    # "crestfallen": [
+    #     ["???", 0, False, "Placeholder"],
+    #     ["Crestfallen Warrior", 100, False, "Well, what do we have here? You must be a|new arrival.", "Let me guess. Fate of the Undead, right?|Well, you're not the first.", "Well, since you're here... Let me help you|out.", "There are actually two Bells of Awakening.", "One's up above, in the Undead Church. The|other is far, far below, in the ruins at|the base of Blighttown.", "Ring them both, and something happens... |Brilliant, right?", "Not much to go on, but I have a feeling|that won't stop you.", "Hah hah hah hah..."],
+    # ],
+    # "frampt": [
+    #     ["???", 0, False, "Placeholder"],
+    #     ["Kingseeker Frampt", 100, False, "Ahh, hello.", "Was it you who rang the Bells of|Awakening?", "I am the primordial serpent, Kingseeker|Frampt, close friend of the Great Lord|Gwyn.", "Chosen Undead, who has rung the Bells of|Awakening. I wish to elucidate your fate.", "Do you seek such enlightenment?", "Chosen Undead. Your fate...", "... is to succeed the Great Lord Gwyn.|So that you may link the Fire, cast away|the Dark, and undo the curse of the|Undead.", "To this end, you must visit Anor Londo,|and acquire the Lordvessel. "],
+    # ],
 }
 
 # Meta-Progression Resources
 resources = {
     "soul remnants": 30,
-    "humanities": 11,
+    "humanity sprites": 11,
 
-    "souvenirs of reprisal": 2,
-    "sunlight medals": 3,
+    # "souvenirs of reprisal": 2,
+    # "sunlight medals": 3,
 
-    "titanite shards": 4,
+    # "titanite shards": 4,
     "titanite chunks": 3,
-    "titanite slabs": 0,
+    # "titanite slabs": 0,
     "demon titanite": 1,
 }
 
@@ -56,21 +64,28 @@ covenant_ranks = {
     "chaos servants": 0,
 }
 
+# "Remains of a powerful soul belonging to a great warrior.", "Gained after death, amount scaling with the|number of level-ups in a run."
+# Rare black sprite found on corpses, distinct from the soul that resides within all creatures.
+
 # Resource Info
 resource_details = {
-    "soul remnants": ["Level-up Resource", "Remains of a powerful soul belonging to a great warrior.", "Gained after death, amount scaling with the|number of level-ups in a run.", "Can be spent at the Fire Keeper to gain|permanent level-ups."],
-    "humanities": ["Level-up Resource | Covenant Offering", "Rare black sprite found on corpses, distinct from the soul that resides within all creatures.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be spent at the Firelink bonfire to gain|permanent unique effects.|Can be offered to the Chaos Servants and|Darkwraiths to increase Covenant rank."],
+    "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be spent on permanent level-ups.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
+
+    "humanity sprites": ["Level-up Resource | Covenant Offering", "", ">Dropped by some enemies.|>Found in various locations.|>Can be spent on permanent unique bonuses|in several ways.", "Rare black sprite found on human remains. Thought|to be somehow distinct from the soul."],
 
     "souvenirs of reprisal": ["Covenant Offering", "Blood-drained, shrunken ear. Souvenir taken from subduing the guilty.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Blades of the Darkmoon|to increase Covenant rank."],
     "sunlight medals": ["Covenant Offering", "Warm medal, engraved with the symbol of the Sun. Represents Lord Gwyn's firstborn, who lost the status of deity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Warriors of Sunlight to|increase Covenant rank."],
     "eyes of death": ["Covenant Offering", "Eyes taken from those afflicted by curses of petrification. Known to be used to spread death.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Gravelord Servants to|increase Covenant rank."],
     "dragon scales": ["Covenant Offering", "Scales peeled from an ancient dragon. Highly sought after for its rarity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Path of the Dragon to|increase Covenant rank."],
-
     "titanite shards": ["Upgrade Material", "Most common titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +3."],
     "large titanite shards": ["Upgrade Material", "Larger and rarer titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +6."],
-    "titanite chunks": ["Upgrade Material", "Highly valuable titanite material found only in Lordran. Etched into weapons for reinforcement.", "Can be found in chambers.", "Can be used to strengthen standard weapons|to +9."],
-    "titanite slabs": ["Upgrade Material", "Legendary titanite material of a nameless blacksmith deity. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen standard weapons|to +10 and demon/twinkling weapons to +5."],
-    "demon titanite": ["Upgrade Material", "Special titanite stolen from a faceless stone beast known as a Titanite Demon.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen demon weapons to +4."],
+    
+    "titanite chunks": ["Upgrade Material", "", ">Found in various locations.|>Can be bought from various vendors.|>Can be used to permanently upgrade|standard weapons.", "Titanite is the heirloom of a nameless blacksmith|deity. All that remains are fragments and shards."],
+
+    "titanite slabs": ["Upgrade Material", "Legendary titanite material of a nameless blacksmith deity. Etched into weapons for reinforcement.", ">Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen standard weapons|to +10 and demon/twinkling weapons to +5."],
+
+    "demon titanite": ["Upgrade Material", "", ">Dropped by Titanite Demons.|>Can be bought from various vendors.|>Can be used to permanently upgrade|infernal weapons.", "Great beasts arose from slabs of Titanite after the|blacksmith deity's death."],
+
     "twinkling titanite": ["Upgrade Material", "Titanite imbued with a particularly powerful energy of unknown origin.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen twinkling weapons|to +4."],
 }
 

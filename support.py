@@ -96,8 +96,9 @@ def getSlotData(slot, data): #right_hand_data # todo: be abke to change what ite
     # print(slot["slot2"])
 
 # Create a dynamically-sized UI background
-def createUI(surface, width, height, pos, type=""):
-    # Set UI type
+# Widens given width/height by 20px by default
+def createUI(surface, width, height, pos, type="", padding = 20):
+    # Set UI type/padding
     if type != "": type = "_" + type
 
     # Load images
@@ -106,7 +107,7 @@ def createUI(surface, width, height, pos, type=""):
     bg_topright = pygame.image.load(f"{path}/bg_topright{type}.png").convert_alpha()
     bg_bottomleft = pygame.image.load(f"{path}/bg_bottomleft{type}.png").convert_alpha()
     bg_bottomright = pygame.image.load(f"{path}/bg_bottomright{type}.png").convert_alpha()
-    bg_border = pygame.image.load(f"{path}/bg_border.png").convert_alpha()
+    bg_border = pygame.image.load(f"{path}/bg_border{type}.png").convert_alpha()
     bg_body = pygame.image.load(f"{path}/bg_body{type}.png").convert_alpha()
 
     # Find necessary values
@@ -123,14 +124,14 @@ def createUI(surface, width, height, pos, type=""):
     bg_body_resized = pygame.transform.scale(bg_body, (border_width + 40 + 16, border_height + 40 + 16)).convert_alpha()
 
     # Blit surfaces
-    surface.blit(bg_topleft, (pos[0] - 20, pos[1] - 20))
-    surface.blit(bg_topright, (pos[0] + corner_width + border_width + 20, pos[1] - 20))
-    surface.blit(bg_bottomleft, (pos[0] - 20, pos[1] + corner_height + border_height + 20))
-    surface.blit(bg_bottomright, (pos[0] + corner_width + border_width + 20, pos[1] + corner_height + border_height + 20))
+    surface.blit(bg_topleft, (pos[0] - padding, pos[1] - padding))
+    surface.blit(bg_topright, (pos[0] + corner_width + border_width + padding, pos[1] - padding))
+    surface.blit(bg_bottomleft, (pos[0] - padding, pos[1] + corner_height + border_height + padding))
+    surface.blit(bg_bottomright, (pos[0] + corner_width + border_width + padding, pos[1] + corner_height + border_height + padding))
 
-    surface.blit(bg_border_top, (pos[0] + corner_width - 20, pos[1] + 2 - 20))
-    surface.blit(bg_border_bottom, (pos[0] + corner_width - 20, pos[1] + (2 * corner_height) + border_height - 10 - 2 + 20))
-    surface.blit(bg_border_left, (pos[0] + 2 - 20, pos[1] + corner_height - 20))
-    surface.blit(bg_border_right, (pos[0] + (2 * corner_width) + border_width - 10 - 2 + 20, pos[1] + corner_height - 20))
+    surface.blit(bg_border_top, (pos[0] + corner_width - padding, pos[1] + 2 - padding))
+    surface.blit(bg_border_bottom, (pos[0] + corner_width - padding, pos[1] + (2 * corner_height) + border_height - 10 - 2 + padding))
+    surface.blit(bg_border_left, (pos[0] + 2 - padding, pos[1] + corner_height - padding))
+    surface.blit(bg_border_right, (pos[0] + (2 * corner_width) + border_width - 10 - 2 + padding, pos[1] + corner_height - padding))
 
     surface.blit(bg_body_resized, (pos[0] - 8, pos[1] - 8))

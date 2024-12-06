@@ -78,6 +78,7 @@ class AnimationPlayer():
 
             # items
             'estus': import_folder('assets/graphics/particles/estus'),
+            'available_icon': import_folder('assets/graphics/ui/available'),
 
             # reward icons
             'great_soul': import_folder('assets/graphics/ui/rewards/great_soul'),
@@ -115,9 +116,9 @@ class AnimationPlayer():
         animation_frames = self.frames[animation_type]
         AttackEffect(pos, animation_frames, groups, sprite_type, direction, animation_type, create_attack_hurtboxes, destroy_attack_hurtboxes, speed, effect)
     
-    def create_icon(self, animation_type, pos, groups, sprite_type, speed=0.15):
+    def create_icon(self, animation_type, pos, groups, sprite_type, speed=0.15, dont_loop=False):
         animation_frames = self.frames[animation_type]
-        TempIcon(pos, animation_frames, groups, sprite_type, speed)
+        TempIcon(pos, animation_frames, groups, sprite_type, speed, dont_loop)
     
     def create_macro(self, animation_type, pos, groups, effect, speed, remain_time, toggle_screen_effect):
         animation_frames = self.frames[animation_type]
@@ -191,7 +192,7 @@ class AttackEffect(pygame.sprite.Sprite):
         # print(self.frame_index)
 
 class TempIcon(pygame.sprite.Sprite):
-    def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15):
+    def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15, dont_loop=False):
         super().__init__(groups)
         self.sprite_type = sprite_type
         self.frame_index = 0
@@ -199,11 +200,13 @@ class TempIcon(pygame.sprite.Sprite):
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
+        self.dont_loop = dont_loop
     
     def animate(self):
         self.frame_index += self.animation_speed
         if self.frame_index >= len(self.frames):
-            self.frame_index = 0
+            if not self.dont_loop: self.frame_index = 0
+            else: self.kill()
         else:
             self.image = self.frames[int(self.frame_index)]
     

@@ -21,7 +21,6 @@ class NPC(pygame.sprite.Sprite):
         self.npc_id = npc_id
         self.unique_id = unique_id
         self.import_graphics()
-        self.available_icon = pygame.transform.scale(pygame.image.load("assets/graphics/interactable_entities/npcs/available.png"), (8,39)).convert_alpha()
         self.image = pygame.transform.rotate(self.animations[self.npc_id][self.frame_index], self.rotate_val)
 
         self.pos = pos
@@ -39,11 +38,12 @@ class NPC(pygame.sprite.Sprite):
 
         self.click_time = None
         self.can_click = True
-        self.current_prio = -1
-        self.current_index = -1
+        self.current_prio = 0
+        self.current_index = 0
 
         self.current_line_index = 0 # Current line spoken by the NPC, part of a list with all the lines of one conversation
         self.convo = None   
+        self.convo_text_list = []
         self.talked_to = False  
         self.effect = effect  
         self.reward = reward
@@ -107,46 +107,33 @@ class NPC(pygame.sprite.Sprite):
     def player_interact(self, player):
         player_distance = self.get_player_dist(player)
         if player_distance <= self.use_radius and not self.talked_to and self.chamber_cleared:
-            # print(f"{round(player_distance)}m from {self.npc_id}!")
+
             if self.npc_id != "transition_prompt": self.prompt.createPrompt("NPC", "Q", "Talk")
-            else:
-                # for region in list(chambers_per_region.keys()):
-                #     if self.map_id in chambers_per_region[region]:
-                self.prompt.createPrompt("NPC", "Q", f"Continue ({self.reward})")
+            else: self.prompt.createPrompt("NPC", "Q", "Continue")
 
             if not self.interacting_npc:
                 keys = pygame.key.get_pressed()
-
                 if keys[pygame.K_q]:
+                    player.direction.y = 0
+                    player.direction.x = 0
                     if self.npc_id != "transition_prompt":
                         self.interacting_npc = True
                         self.initiate_npc(player)
-                        # print(chest_list)
-                        # self.chest_sound.play()
-                        # self.status = "opening"
-                        # print("opening")
-                        # chest_list[self.chest_id] = 1
-                        # Effects after opening (spawning item) done in self.animate
-                        # due to only happening once chest opening animation played
                     else:
-                        # print(self.reward)
                         self.effect(self.reward, self.unique_id)
 
     def initiate_npc(self, player):
         if self.interacting_npc:
             self.interact_time = pygame.time.get_ticks()
 
-            # todo: screen effect gfx
-
             player.resting = True
             player.npc_chatting = True
-            self.current_prio = -1
-            self.current_index = -1
+            self.current_prio = 0
+            self.current_index = 0
 
             # Bring up UI and grab the npc name, icon and convo to use (done at self.interact_interface)
             # Each convo has a priority set - the one with the highest one is used, if available
             # Most have requirements to be available
-            # If several available convos have the same priority, a random one is chosen between those
 
     def player_input(self, player):
         keys = pygame.key.get_pressed()
@@ -156,83 +143,97 @@ class NPC(pygame.sprite.Sprite):
                 self.can_click = False
                 self.click_time = pygame.time.get_ticks()
 
-                # Continues to next line if able
-                if self.current_line_index + 3 >= len(self.convo) - 1:
+                self.current_line_index += 1
+    
+    def interact_interface(self, player):
+        if self.get_player_dist(player) <= self.use_radius:
+            if f'{self.npc_id}' in npc_conversations.keys():
+                name, self.convo = self.retrieve_conversation()
+                self.convo_text_list = self.convo["text"]
+                # debug(f"Prio: {self.current_prio} | Index: {self.current_index}")
+
+                # End dialogue if needed
+                if self.current_line_index >= len(self.convo_text_list) - 1:
                     player.resting = False
                     player.npc_chatting = False
 
-                    self.convo[2] = True # Marks last convo as done
                     self.talked_to = True
-                    # self.current_prio = 0
-                    # self.current_index = 0
                     self.current_line_index = 0
+
+                    self.convo["completed"] = True # Marks last convo as done
                 else:
-                    self.current_line_index += 1
-    
-    def interact_interface(self, player):
-        if player.npc_chatting and self.get_player_dist(player) <= self.use_radius:
-            if f'{self.npc_id}' in npc_conversations.keys():
-                self.player_input(player)
-                self.click_cooldown()
+                    self.player_input(player)
+                    self.click_cooldown()
 
-                bg_rect_size = (700, 150)
-                name_rect_size = (370, 30)
+                    bg_rect_size = (800, 140)
+                    x = 50
+                    y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2) + 250
+                    main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
+                    text_rect_pos = main_rect.topleft + pygame.math.Vector2(135, 60)
+                    text_rect_size = (bg_rect_size[0] - 20 - 20 - 100 - 15, bg_rect_size[1] - 50 - 10 - 20)
 
-                # x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[1])
-                # y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2)
+                    createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
+                    createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "basic")
 
-                name, self.convo = self.retrieve_conversation()
-                debug(f"Prio: {self.current_prio} | Index: {self.current_index}")
+                    # NPC Name
+                    title_surface = pygame.font.Font(UI_FONT, 16).render(f"| {name.upper()}", True, TEXT_TITLE_COLOUR)
+                    title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(120, 20))
+                    self.display_surface.blit(title_surface, title_rect)
 
-                # BG
-                menu_rect = pygame.Rect(290, 550, bg_rect_size[0], bg_rect_size[1])
-                pygame.draw.rect(self.display_surface, UI_BG_COLOUR, menu_rect.inflate(10, 10))
-                pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, menu_rect.inflate(10, 10), 5)
+                    # Image    
+                    icon_surface = pygame.image.load(f"assets/graphics/ui/npc/{self.npc_id}.png").convert_alpha()
+                    icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(15, 0))
 
-                # NPC Name
-                name_rect = pygame.Rect(290, 515, name_rect_size[0], name_rect_size[1])
-                pygame.draw.rect(self.display_surface, UI_BG_COLOUR, name_rect.inflate(10, 10))
-                pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, name_rect.inflate(10, 10), 5)
-                name_surf = self.font.render(name, False, "white")
-                name_text_rect = name_surf.get_rect(midleft = name_rect.midleft + pygame.math.Vector2(10, 0))
-                self.display_surface.blit(name_surf, name_text_rect)
+                    createUI(self.display_surface, 56, 56, (icon_rect.topleft[0] + 10, icon_rect.topleft[1] + 10))
+                    self.display_surface.blit(icon_surface, icon_rect)
 
-                # Image
-                npc_portrait = pygame.transform.scale(pygame.image.load(f"assets/graphics/ui/npc/{self.npc_id}.png"), (256, 256)).convert_alpha()
-                portrait_rect = pygame.Rect(20, 444, 256, 256)
-                pygame.draw.rect(self.display_surface, UI_BG_COLOUR, portrait_rect.inflate(10, 10))
-                pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, portrait_rect.inflate(10, 10), 5)
-                self.display_surface.blit(npc_portrait, portrait_rect)
-
-                # Convo Body
-                if self.current_line_index + 3 <= len(self.convo) - 1:
-                    split_current_line = self.convo[self.current_line_index + 3].split("|")
-                    while len(split_current_line) < 4:
-                        split_current_line.append("")
+                    # Convo Body
+                    # if self.current_line_index + 3 <= len(self.convo) - 1:
+                    #     split_current_line = self.convo[self.current_line_index + 3].split("|")
+                    #     while len(split_current_line) < 4:
+                    #         split_current_line.append("")
+                        
+                    #     for subline in range(4):
+                    #         text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+                    #         text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
+                    #         self.display_surface.blit(text_surf, text_rect)
                     
+                    split_current_line = self.convo_text_list[self.current_line_index].split("|")
+                    
+                    while len(split_current_line) < 4: split_current_line.append("")
+                        
                     for subline in range(4):
-                        text_surf = self.textfont.render(split_current_line[subline], False, "white")
-                        text_rect = text_surf.get_rect(topleft = menu_rect.topleft + pygame.math.Vector2(20, 20 + (subline * 30)))
+                        text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+                        text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
                         self.display_surface.blit(text_surf, text_rect)
-            # else:
-            #     player.resting = False
-            #     player.npc_chatting = False
     
     def retrieve_conversation(self):
-        # print(npc_conversations)
         current_npc = npc_conversations[f'{self.npc_id}']
 
-        # Find the conversation with the highest priority (todo: add checks for the ones with requirements)
+        # Find available convos
+        available_convos = []
         for convo in current_npc:
-            prio = int(convo[1])
-            if prio > self.current_prio and not convo[2]:
-                self.current_prio = prio
-                self.current_index = current_npc.index(convo)
+            if not current_npc[convo]["completed"]: available_convos.append(convo)
+            
+        # Choose convo with highest priority (todo: add checks for the ones with requirements)
+        self.current_prio = 0
+        self.current_index = "000"
+        for convo in available_convos:
+            if current_npc[convo]["priority"] > self.current_prio:
+                self.current_prio = current_npc[convo]["priority"]
+                self.current_index = convo
 
-        # Get information to display
+            # # Find the conversation with the highest priority (todo: add checks for the ones with requirements)
+            # for convo in current_npc:
+            #     prio = int(convo[1])
+            #     if prio > self.current_prio and not convo[2]:
+            #         self.current_prio = prio
+            #         self.current_index = current_npc.index(convo)
+
+         # Get information to display
         chosen_convo = current_npc[self.current_index]
-        display_name = chosen_convo[0]
-        
+        display_name = chosen_convo["name"]
+            
         return display_name, chosen_convo
     
     def cooldowns(self):
@@ -252,6 +253,10 @@ class NPC(pygame.sprite.Sprite):
         if self.npc_id == "transition_prompt":
             pos += pygame.math.Vector2(32, 32)
             self.blit_reward_icon(reward, pos)
+        else:
+            if not self.talked_to:
+                pos += pygame.math.Vector2(32, -20)
+                self.blit_reward_icon("available_icon", pos, True)
     
     def update(self):
         self.animate()
@@ -263,8 +268,9 @@ class NPC(pygame.sprite.Sprite):
             if not self.icon_blitted:
                 self.draw_next_reward(self.reward, self.pos)
                 self.icon_blitted = True
+        if self.npc_id != "transition_prompt": self.draw_next_reward("available_icon", self.pos)
     
     def npc_update(self, player, bool):
         self.player_interact(player)
-        self.interact_interface(player)
+        if player.npc_chatting: self.interact_interface(player)
         self.chamber_cleared = bool

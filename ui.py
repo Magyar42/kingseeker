@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from gameinfo import *
-from support import centreImage, centreImageNum
+from support import *
 
 class UI:
     def __init__(self):
@@ -96,15 +96,14 @@ class UI:
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, bg_rect, 3)
 
     def show_xp(self, xp):
-        x = self.display_surface.get_size()[0] - 35
-        y = self.display_surface.get_size()[1] - 20
+        x = self.display_surface.get_size()[0] - 50
+        y = self.display_surface.get_size()[1] - 20 - 20
 
-        text_surface = self.font.render(str(int(xp)), False, TEXT_COLOUR)
+        text_surface = self.font.render(str(int(xp)), False, TEXT_TITLE_COLOUR)
         text_rect = text_surface.get_rect(bottomright = (x, y))
 
-        pygame.draw.rect(self.display_surface, UI_BG_COLOUR, text_rect.inflate(20, 20))
+        createUI(self.display_surface, text_rect.width, text_rect.height, (text_rect.x, text_rect.y), "dark")
         self.display_surface.blit(text_surface, text_rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOUR, text_rect.inflate(20, 20), 3)
     
     # def show_humanity(self, humanity):
     #     if humanity < 10:

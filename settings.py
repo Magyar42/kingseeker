@@ -3,10 +3,6 @@
 
 from gameinfo import *
 
-CONTROLLER_ACTIVE = False
-controller_list = []
-CURRENT_CONTROLLER = None
-
 # Setup
 WIDTH    = 1280
 HEIGHT   = 720
@@ -57,6 +53,7 @@ TINY_FONT_SIZE = 10
 # General Colours
 WATER_COLOUR = "#71ddee"
 UI_BG_COLOUR = "#222222"
+UI_BG_LIGHT_COLOUR = "#696868"
 UI_BORDER_COLOUR = "#111111"
 TEXT_COLOUR = "#EEEEEE"
 UI_SELECTED_COLOUR = "#5c3604"       #"#44190a"
@@ -84,7 +81,7 @@ weapon_data = {
 boon_data = {
     ## Warriors of Sunlight
     # Core Boons
-    "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+    "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted|when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
     "boon_2": {"name": "Lightning Strike", "category": "Warriors of Sunlight", "desc1": "Primary/secondary attack emits|chain-lightning when damaging a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
@@ -110,7 +107,7 @@ boon_data = {
     
     "boon_12": {"name": "Electrifying Deflection", "category": "Warriors of Sunlight", "desc1": "Enemies hit by chain-lighting have a 25% of|being stunned for 1s.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_6"},
 
-    "boon_13": {"name": "Deepened Devotion", "category": "Warriors of Sunlight", "desc1": "Soothing Sunlight also fully restores mana and stamina.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_7"},
+    "boon_13": {"name": "Deepened Devotion", "category": "Warriors of Sunlight", "desc1": "Soothing Sunlight also fully restores mana|and stamina.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_7"},
     
     "boon_14": {"name": "Holy Protection", "category": "Warriors of Sunlight", "desc1": "Increases defense and speed by 30% for 6s after use.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_7"},
 
@@ -209,7 +206,7 @@ boss_data = {
 
 # Pop-ups
 current_prompts = []
-PROMPT_HEIGHT = 30
+PROMPT_HEIGHT = 20
 PROMPT_GAP = 10
 PROMPT_FONT_SIZE = 14
 
@@ -240,7 +237,7 @@ CANNOT_KINDLE = "Cannot kindle flame further."
 covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon", "velka"]
 npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
 boon_summons = ["sunlight_summon", "chaos_summon", "darkwraith_summon", "darkmoon_summon", "velkas_tome"]
-resources_names = ["soul_remnants", "humanities", "souvenirs of reprisal", "sunlight medals", "titanite shards", "titanite chunks", "titanite slabs", "demon titanite"]
+resources_names = ["soul_remnants", "humanity sprites", "souvenirs of reprisal", "sunlight medals", "titanite shards", "titanite chunks", "titanite slabs", "demon titanite"]
 
 # Region Values
 region_values = {
