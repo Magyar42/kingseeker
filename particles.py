@@ -1,6 +1,7 @@
 import pygame
 from support import import_folder
 from random import choice
+from settings import *
 
 class AnimationPlayer():
     def __init__(self):
@@ -23,6 +24,7 @@ class AnimationPlayer():
             'thunder': import_folder('assets/graphics/particles/thunder'),
             'sparkle': import_folder('assets/graphics/particles/sparkle'),
 
+            'player_spin': import_folder('assets/graphics/particles/player_attack/player_spin'),
             'sword_1': import_folder('assets/graphics/particles/player_attack/sword_1'),
             'sword_2': import_folder('assets/graphics/particles/player_attack/sword_2'),
             'sword_skill': import_folder('assets/graphics/particles/player_attack/sword_skill'),
@@ -32,9 +34,7 @@ class AnimationPlayer():
             'raccoon': import_folder('assets/graphics/particles/smoke'),
             'spirit': import_folder('assets/graphics/particles/smoke'),
             'bamboo': import_folder('assets/graphics/particles/smoke'),
-    
             'undead_warrior': import_folder('assets/graphics/particles/smoke'),
-
             'player': import_folder('assets/graphics/particles/smoke2'),
 
             # spawning
@@ -173,25 +173,23 @@ class AttackEffect(pygame.sprite.Sprite):
         # Trigger hurtbox effect every frame
         self.create_attack_hurtboxes(int(self.frame_index), self.attack_type, self.direction)
 
-        # Destroy prev hurtboxes
-        # self.destroy_attack_hurtboxes(int(self.frame_index))
-
         if self.frame_index >= len(self.frames):
             if self.effect != None: self.effect()
             self.kill()
         else:
-            if self.direction == "down":
-                self.image = self.frames[int(self.frame_index)]
-            elif self.direction == "left":
-                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], -90)
-            elif self.direction == "up":
-                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
-            else:
-                self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
+            if self.attack_type not in static_player_attacks:
+                if self.direction == "down":
+                    self.image = self.frames[int(self.frame_index)]
+                elif self.direction == "left":
+                    self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], -90)
+                elif self.direction == "up":
+                    self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 180)
+                else:
+                    self.image = pygame.transform.rotate(self.frames[int(self.frame_index)], 90)
+            else: self.image = self.frames[int(self.frame_index)]
     
     def update(self):
         self.animate()
-        # print(self.frame_index)
 
 class TempIcon(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups, sprite_type, speed=0.15, dont_loop=False):

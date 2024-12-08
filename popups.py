@@ -142,7 +142,7 @@ class Decision:
                 self.can_move_selection = False
                 self.selection_time = pygame.time.get_ticks()
 
-            if keys[pygame.K_q]:
+            if keys[pygame.K_f]:
                 self.can_move_selection = False
                 self.selection_time = pygame.time.get_ticks()
                 # print(f"{len(self.options_list)}, {self.options_list}")

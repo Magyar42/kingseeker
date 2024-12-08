@@ -108,12 +108,12 @@ class NPC(pygame.sprite.Sprite):
         player_distance = self.get_player_dist(player)
         if player_distance <= self.use_radius and not self.talked_to and self.chamber_cleared:
 
-            if self.npc_id != "transition_prompt": self.prompt.createPrompt("NPC", "Q", "Talk")
-            else: self.prompt.createPrompt("NPC", "Q", "Continue")
+            if self.npc_id != "transition_prompt": self.prompt.createPrompt("NPC", "F", "Talk")
+            else: self.prompt.createPrompt("NPC", "F", "Continue")
 
             if not self.interacting_npc:
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_q]:
+                if keys[pygame.K_f]:
                     player.direction.y = 0
                     player.direction.x = 0
                     if self.npc_id != "transition_prompt":

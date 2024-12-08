@@ -352,7 +352,7 @@ class Level:
     #     self.hurtbox = None
 
     def create_attack(self, attack_type):
-        self.current_attack = Weapon(self.player, [self.visible_sprites]) # self.attack_sprites
+        #self.current_attack = Weapon(self.player, [self.visible_sprites]) # self.attack_sprites
         
         direction = self.player.status.split("_")[0]
         pos = self.player.rect.center

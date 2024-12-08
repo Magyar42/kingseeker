@@ -61,12 +61,12 @@ class Bloodstain(pygame.sprite.Sprite):
     def player_interact(self, player):
         player_distance = self.get_player_dist(player)
         if player_distance <= self.use_radius:
-            self.prompt.createPrompt("Retrieval", "Q", "Retrieve Souls")
+            self.prompt.createPrompt("Retrieval", "F", "Retrieve Souls")
 
             if not self.retrieving_souls:
                 keys = pygame.key.get_pressed()
 
-                if keys[pygame.K_q]:
+                if keys[pygame.K_f]:
                     self.status = "retrieved"
                     self.retrieval_effects(player)
                     self.kill()

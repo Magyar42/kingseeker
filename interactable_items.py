@@ -78,7 +78,7 @@ from debug import debug
 #     def player_interact(self, player):
 #         player_distance = self.get_player_dist(player)
 #         if player_distance <= self.use_radius and self.status == "active":
-#             self.prompt.createPrompt("Item Pickup", "Q", "Pick up item")
+#             self.prompt.createPrompt("Item Pickup", "F", "Pick up item")
 
 #             if not self.retrieving_item:
 #                 keys = pygame.key.get_pressed()
@@ -118,10 +118,10 @@ from debug import debug
 
 #     def display_item_popup(self, player):
 #         for i in range(len(self.itemlist)):
-#             self.item_popup.createPrompt("Item Popup", "Q", self.itemlist[i], self.numlist[i], i+1)
+#             self.item_popup.createPrompt("Item Popup", "F", self.itemlist[i], self.numlist[i], i+1)
         
 #         # check for player input of Q, if so then set bool to false
-#         self.prompt.createPrompt("Remove Popup", "Q", "OK")
+#         self.prompt.createPrompt("Remove Popup", "F", "OK")
 
 #         keys = pygame.key.get_pressed()
 #         if keys[pygame.K_q] and not self.retrieving_item:
@@ -225,7 +225,7 @@ from debug import debug
 #     def player_interact(self, player):
 #         player_distance = self.get_player_dist(player)
 #         if player_distance <= self.use_radius and self.status == "closed":
-#             self.prompt.createPrompt("Chest", "Q", "Open chest")
+#             self.prompt.createPrompt("Chest", "F", "Open chest")
 
 #             if not self.opening_chest:
 #                 keys = pygame.key.get_pressed()
@@ -326,7 +326,7 @@ from debug import debug
 #     def player_interact(self, player):
 #         player_distance = self.get_player_dist(player)
 #         if player_distance <= self.use_radius and self.status == "inactive":
-#             self.prompt.createPrompt("Lever", "Q", "Pull lever")
+#             self.prompt.createPrompt("Lever", "F", "Pull lever")
 
 #             if not self.activating_lever:
 #                 keys = pygame.key.get_pressed()
@@ -416,7 +416,7 @@ from debug import debug
     # def player_interact(self, player):
     #     player_distance = self.get_player_dist(player)
     #     if player_distance <= self.use_radius and self.status == "idle":
-    #         self.prompt.createPrompt("Message", "Q", "Read message")
+    #         self.prompt.createPrompt("Message", "F", "Read message")
 
     #         if not self.activating_message:
     #             keys = pygame.key.get_pressed()
@@ -519,7 +519,7 @@ class SummonSign(pygame.sprite.Sprite):
     def player_interact(self, player):
         player_distance = self.get_player_dist(player)
         if player_distance <= self.use_radius and self.status == "idle":
-            self.prompt.createPrompt("Summon Sign", "Q", "Activate Summon Sign")
+            self.prompt.createPrompt("Summon Sign", "F", "Activate Summon Sign")
 
             if not self.opening_sign:
                 keys = pygame.key.get_pressed()

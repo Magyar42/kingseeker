@@ -103,23 +103,23 @@ class Bonfire(pygame.sprite.Sprite):
             # Using an active bonfire
             if self.status == "idle":
                 if not player.resting and not player.menu_open:
-                    self.prompt.createPrompt("Checkpoint", "Q", "Rest at bonfire")
+                    self.prompt.createPrompt("Checkpoint", "F", "Rest at bonfire")
 
                 if not self.using_bonfire:
                     keys = pygame.key.get_pressed()
 
-                    if keys[pygame.K_q] and not player.resting:
+                    if keys[pygame.K_f] and not player.resting:
                         self.rest_effects(player)
 
             # Lighting an inactive bonfire
             if self.status == "unlit":
                 if not player.resting and not player.menu_open:
-                    self.prompt.createPrompt("Checkpoint", "Q", "Light bonfire")
+                    self.prompt.createPrompt("Checkpoint", "F", "Light bonfire")
                 
                 if not self.using_bonfire:
                     keys = pygame.key.get_pressed()
 
-                    if keys[pygame.K_q] and not player.resting:
+                    if keys[pygame.K_f] and not player.resting:
                         self.light_bonfire_effects()
 
     def light_bonfire_effects(self):

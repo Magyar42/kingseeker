@@ -9,7 +9,9 @@ HEIGHT   = 720
 FPS      = 60
 TILESIZE = 64
 MM_COLOUR = "#121010"
+
 HURTBOX_DEBUG = False
+static_player_attacks = ["player_spin"]
 
 # Main Menu
 credits_info = [
@@ -161,6 +163,17 @@ velka_boons = {
 # Attack Hurtboxes # x offset from player|y offset from player|width|height
 attack_hurtbox_data = {
     "down":{
+        "player_spin": {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            7: [],
+            8: [],
+        },
         "sword_1": {
             0: [[64, 0, 64, 64]],
             1: [[-64, 0, 64, 64], [-32, 64, 128, 64]],
@@ -191,6 +204,17 @@ attack_hurtbox_data = {
         },
     },
     "up":{
+        "player_spin": {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            7: [],
+            8: [],
+        },
         "sword_1": {
             0: [[-64, 0, 64, 64]],
             1: [[64, 0, 64, 64], [-32, -64, 128, 64]],
@@ -221,6 +245,17 @@ attack_hurtbox_data = {
         },
     },
     "left":{
+        "player_spin": {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            7: [],
+            8: [],
+        },
         "sword_1": {
             0: [[0, 64, 64, 64]],
             1: [[0, -64, 64, 64], [-64, -32, 64, 128]],
@@ -251,6 +286,17 @@ attack_hurtbox_data = {
         },
     },
     "right":{
+        "player_spin": {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            7: [],
+            8: [],
+        },
         "sword_1": {
             0: [[0, -64, 64, 64]],
             1: [[0, 64, 64, 64], [64, -32, 64, 128]],

@@ -31,7 +31,7 @@ class Player(Entity):
 
         # Determines how long the player "freezes" when performing an attack
         self.attacking = False
-        self.attack_cooldown = 700  # todo: dynamically update!!
+        self.attack_cooldown = 650  # todo: dynamically update!!
         self.attack_time = None
 
         # Determines the cooldown between skill attacks
@@ -105,23 +105,14 @@ class Player(Entity):
 
         # attributes
         self.attributes = {
-            "VITALITY": 11,
-            "ATTUNEMENT": 8,
-            "ENDURANCE": 12,
-            "STRENGTH": 13,
-            "PERCEPTION": 9,
+            "VITALITY": 1,
+            "ENDURANCE": 1,
+            "STRENGTH": 1,
+            "DEXTERITY": 1,
+            "INTELLIGENCE": 1,
+            "FAITH": 1,
         }
-        self.level = 4
-
-        self.max_attributes = {
-            "VITALITY": 99,
-            "ATTUNEMENT": 99,
-            "ENDURANCE": 99,
-            "STRENGTH": 99,
-            "PERCEPTION": 99,
-        }
-        self.max_level = 495
-        self.max_humanity = 99
+        self.level = 1
 
         self.upgrade_equation = get_upgrade_cost(self.level)
         interface_details['values']['levelup_cost'] = round(self.upgrade_equation)
@@ -335,7 +326,7 @@ class Player(Entity):
                         self.direction.x = 0
 
                     # roll input
-                    if keys[pygame.K_e] and not self.rolling:
+                    if keys[pygame.K_LSHIFT] and not self.rolling:
                         if self.stamina_target - (self.stamina_roll) >= 0:
                             self.frame_index = 0
                             if self.status == "up_idle": self.direction.y = -1
@@ -351,7 +342,7 @@ class Player(Entity):
 
                     if not self.prevent_player_input:
                         # estus input
-                        if keys[pygame.K_f] and not self.drinking_estus:  
+                        if keys[pygame.K_e] and not self.drinking_estus:  
                             
                             if interface_details["values"]["current estus"] > 0:
                                 self.drinking_estus = True
@@ -376,6 +367,7 @@ class Player(Entity):
                                 self.using_skill = True
                                 self.skill_use_time = pygame.time.get_ticks()
 
+                                self.create_attack("player_spin")
                                 self.create_attack("sword_skill")
                                 self.status = "invisible"
                                 self.weapon_attack_sound.play()

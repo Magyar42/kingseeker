@@ -92,8 +92,7 @@ resource_details = {
 # Base attributes
 player_attributes = {
     "Vigour": 1,
-    "Endurance": 1,
-    "Attunement": 1,
+    "Endurance": 1,,
     "Strength": 1,
     "Dexterity": 1,
     "Intelligence": 1,
