@@ -91,12 +91,12 @@ resource_details = {
 
 # Base attributes
 player_attributes = {
-    "Vigour": 1,
-    "Endurance": 1,,
-    "Strength": 1,
-    "Dexterity": 1,
-    "Intelligence": 1,
-    "Faith": 1,
+    "VITALITY": 1,
+    "ENDURANCE": 1,
+    "STRENGTH": 1,
+    "DEXTERITY": 1,
+    "INTELLIGENCE": 1,
+    "FAITH": 1,
 }
 
 # Permanent Unlocks

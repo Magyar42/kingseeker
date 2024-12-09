@@ -3,9 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleMap.tmx",
+    "activeFile": "old/kingseeker_base_floor.tsx",
     "expandedProjectPaths": [
-        "."
+        ".",
+        "undead_burg",
+        "old"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -25,29 +27,53 @@
         },
         "kingseeker - extras.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 0.5,
+            "scaleInDock": 0.33,
             "scaleInEditor": 1
         },
         "kingseeker - objects.tsx": {
             "dynamicWrapping": true,
-            "scaleInDock": 0.5,
+            "scaleInDock": 0.33,
             "scaleInEditor": 1
         },
         "kingseeker - tiles.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 0.5,
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "old/Extras.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "old/firelink.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 908.6666666666667,
+                "y": 1049.3333333333333
+            }
+        },
+        "old/kingseeker_base_floor.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "old/kingseeker_objects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "undead_burg/map_001.tmx": {
             "scale": 0.37294921875,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1278.9945011783188,
-                "y": 580.5079863838702
+                "x": 1277.6538360827444,
+                "y": 579.1673212882954
             }
         }
     },
-    "last.exportedFilePath": "C:/Users/krist/Documents/repos/kingseeker/assets/map/undead_burg/001",
+    "last.exportedFilePath": "C:/Users/krist/Documents/repos/kingseeker/assets/map/firelink_shrine/000",
+    "last.imagePath": "C:/Users/krist/Documents/repos/kingseeker/assets/graphics/objects",
     "map.height": 30,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
@@ -58,14 +84,20 @@
         "kingseeker - extras.tsx",
         "kingseeker - objects.tsx",
         "kingseeker - tiles.tsx",
-        "undead_burg/map_001.tmx",
-        "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleMap.tmx"
+        "old/firelink.tmx",
+        "old/kingseeker_base_floor.tsx",
+        "old/Extras.tsx",
+        "old/kingseeker_objects.tsx"
     ],
     "project": "kingseeker.tiled-project",
     "recentFiles": [
         "kingseeker - extras.tsx",
         "kingseeker - objects.tsx",
         "kingseeker - tiles.tsx",
+        "old/firelink.tmx",
+        "old/kingseeker_objects.tsx",
+        "old/Extras.tsx",
+        "old/kingseeker_base_floor.tsx",
         "undead_burg/map_001.tmx",
         "C:/Users/krist/Downloads/Kenney Game Assets All-in-1 2.6.0/2D assets/Tiny Dungeon/Tiled/sampleMap.tmx"
     ]

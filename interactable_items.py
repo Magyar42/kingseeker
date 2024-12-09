@@ -513,7 +513,6 @@ class SummonSign(pygame.sprite.Sprite):
         return distance
     
     def summon_sign_ui_effect(self):
-        # todo
         self.interact_effect(self.covenant)
 
     def player_interact(self, player):
@@ -540,4 +539,104 @@ class SummonSign(pygame.sprite.Sprite):
         self.cooldowns()
     
     def sign_update(self, player):
+        self.player_interact(player)
+
+class PerkPillar(pygame.sprite.Sprite):
+    def __init__(self, pillar_type, pos, groups, interact_effect):
+        super().__init__(groups)
+        self.interact_effect = interact_effect
+        self.display_surface = pygame.display.get_surface()
+        self.frame_index = 0
+        self.animation_speed = 0.20
+        self.sprite_type = "pillar"
+        self.type = pillar_type
+
+        self.import_graphics("perk_pillar")
+        self.status = "idle"
+        self.image = self.animations[self.status][self.frame_index]
+
+        self.pos = pos
+        self.rect = self.image.get_rect(topleft = pos)
+        self.hitbox = self.rect.inflate(-30, -40)
+        self.use_radius = 150
+
+        self.prompt = Prompt()
+        self.item_popup = ItemPopup()
+
+        self.opening_sign = False
+        self.open_cooldown = 500
+        self.open_time = None
+
+        self.sign_sound = pygame.mixer.Sound("assets/audio/sfx/ghost.wav")
+        self.sign_sound.set_volume(0.25)
+    
+    def import_graphics(self, name):
+        self.animations = {
+            "idle": [],
+            "active": [],
+            "activating": [],
+        }
+        main_path = f"assets/graphics/interactable_entities/{name}/"
+        for animation in self.animations.keys():
+            full_path = main_path + animation
+            self.animations[animation] = import_folder(full_path, True, (65, 165))
+
+    def animate(self):
+        animation = self.animations[self.status]
+        
+        self.frame_index += self.animation_speed
+        if self.frame_index  >= len(animation):
+            # Keep open after opening animation plays
+            if self.status == "activating":
+                self.status = "active"
+                self.pillar_ui_effect()
+                self.frame_index = len(animation) - 1
+            else:
+                self.frame_index = 0
+        else:
+            self.display_surface.blit(self.image, self.rect)
+
+        self.image = animation[int(self.frame_index)]
+
+    def get_player_dist(self, player):
+        floor_item_vector = pygame.math.Vector2(self.rect.center)
+        player_vector = pygame.math.Vector2(player.rect.center)
+
+        distance = (player_vector - floor_item_vector).magnitude()
+
+        return distance
+    
+    def pillar_ui_effect(self):
+        self.interact_effect(self.type)
+
+    def player_interact(self, player):
+        player_distance = self.get_player_dist(player)
+        if player_distance <= self.use_radius and self.status == "idle":
+            match self.type:
+                case "perks": display_string = "View Perks of Humanity"
+                case "levels": display_string = "Strengthen Attributes"
+                case "bonfire": display_string = "Rest at Bonfire"
+                case "weapons": display_string = "Switch Weapons"
+                case "anvil": display_string = "Improve Weapons"
+            self.prompt.createPrompt("Summon Sign", "F", f"{display_string}")
+
+            if not self.opening_sign:
+                keys = pygame.key.get_pressed()
+
+                if keys[pygame.K_f]:
+                    self.sign_sound.play()
+                    self.status = "activating"
+
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.opening_sign:
+            if current_time - self.open_time >= self.open_cooldown:
+                self.opening_sign = False
+    
+    def update(self):
+        self.animate()
+        self.cooldowns()
+    
+    def pillar_update(self, player):
         self.player_interact(player)
