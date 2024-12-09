@@ -73,7 +73,7 @@ class Level:
         self.create_map(True, self.map_id)
 
         self.ui = UI()
-        self.boons_menu = BoonsMenu(self.toggle_menu, self.enable_player_control)
+        self.boons_menu = BoonsMenu(self.toggle_menu, self.boons_postmenu)
         self.boons_menu_open = False
         self.boon_options = None
 
@@ -311,7 +311,7 @@ class Level:
 
                                     unique_id = transition_ids[0]
                                     transition_ids.pop(0)
-                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_cleared, self.blit_reward_icon, self.map_id, effect, reward, unique_id, rotate_val)
+                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_cleared, self.blit_reward_icon, self.lock_player, self.enable_player_control, self.map_id, effect, reward, unique_id, rotate_val)
                             elif column in pillar_list:
                                 if column == "386": pillar_type = "perks"
                                 elif column == "364": pillar_type = "levels"
@@ -553,26 +553,34 @@ class Level:
     #     # todo: do an effect depending on the lever id
     #     print("Lever pulled!")
 
-    def trigger_pillar_effect(self): # todo
-        self.player.resting = True
-        self.player.any_interface_open = True
+    def trigger_pillar_effect(self, type): # todo
+        self.lock_player()
         print("Perk pillar activated!")
     
     def summon_sign_effect(self, covenant):
-        self.player.resting = True
+        self.lock_player()
         self.boons_menu_open = True
-        self.player.any_interface_open = True
         self.boon_options = self.boons_menu.generate_boons(covenant)
         print(f"{covenant} summon sign activated!")
+    
+    # Prevents player movement and prevents TAB menu toggle
+    def lock_player(self):
+        self.player.any_interface_open = True
+        self.player.resting = True
+        self.player.direction.y = 0
+        self.player.direction.x = 0
 
     # Enables player movement, removing any screen-effects
     def enable_player_control(self):
         self.player.resting = False
-        self.boons_menu_open = False
         self.player.any_interface_open = False
+    
+    def boons_postmenu(self):
+        self.boons_menu_open = False
         self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
 
         self.player.trigger_boons_update = True
+        self.enable_player_control()
     
     def activated_message_effect(self, id, pos):
         if not self.displaying_message:
