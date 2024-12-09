@@ -346,23 +346,6 @@ enemy_data = {
                        'attack_type': 'slash', 'attack_sound':'assets/audio/sfx/attack/slash.wav', 'speed': 4, 'attack_radius': 100, 'notice_radius': 200},
 }
 
-# Boss Data # todo: change for kingseeker
-boss_data = {
-    'asylum_demon': {
-        'health': 800,
-        'xp': 2000,
-        'damage': 20,
-        'attack_type': 'slash',
-        'attack_sound': 'assets/audio/sfx/attack/slash.wav',
-        'speed': 2,
-        'resistance': 100,
-        'attack_radius': 100,
-        'notice_radius': 500,
-        'attack_types': ['slam', 'swing', 'swing_down', 'fly'],
-        'drops': ["Humanity", 1, "Big Pilgrim's Key", 1],
-    },
-}
-
 # Pop-ups
 current_prompts = []
 PROMPT_HEIGHT = 20
@@ -384,15 +367,7 @@ HITBOX_OFFSET = {
     "invisible": 0,
 }
 
-# Decision Data
-RESTORE_HUMANITY_TEXT = "Offer humanity and undo Hollowing?"
-KINDLE_TEXT = "Offer humanity and kindle flame?"
-ALREADY_HUMAN_TEXT = "You are already in Human form."
-NEED_HUMANITY_TEXT = "You do not have any humanity."
-REQUIRES_HUMAN_TEXT = "Must be in Human form."
-CANNOT_KINDLE = "Cannot kindle flame further."
-
-# misc
+# Misc
 covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon", "velka"]
 npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
 pillar_list = ["386", "364", "342", "320", "298"]
@@ -432,13 +407,7 @@ reward_first_rooms = [
 chamber_rewards = { # todo: make sure of the chance section
     # "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
     # "humanity": { "chance": 1, "min": 2, "max": 5 },
-
-    # "souvenir_of_reprisal": { "chance": 1, "min": 2, "max": 4 },
-    # "sunlight_medal": { "chance": 1, "min": 2, "max": 4 },
-
-    # "titanite_shard": { "chance": 1, "min": 2, "max": 4 },
     # "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
-    # "titanite_slab": { "chance": 0.25, "min": 1, "max": 1 },
     # "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
 
     "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
@@ -448,4 +417,53 @@ chamber_rewards = { # todo: make sure of the chance section
     # "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
 
     # "vendor": { "chance": 0.5, "min": 1, "max": 1 },
+}
+
+# Gifts of Humanity - Values
+humanity_gifts_defines = {
+    "1": [200, 400, 600, 800, 1000],
+    "2": [1, 2, 3, 4, 5],
+    "3": [1, 2, 3],
+    "4": [0, 1000, 2000, 3000, 4000],
+    "5": [1, 1.10, 1.20, 1.30, 1.40],
+    "6": [1, 1.10, 1.20, 1.30, 1.40],
+}
+
+# Gifts of Humanity - Costs [in humanity sprites]
+humanity_gifts_costs = {
+    "1": [0, 5, 10, 15, 20],
+    "2": [0, 3, 6, 12, 24],
+    "3": [0, 10, 20],
+    "4": [0, 2, 4, 6, 8, 10],
+    "5": [1, 6, 10, 14, 18, 22],
+    "6": [1, 5, 10, 15, 20, 30],
+}
+
+# Resource Info
+resource_details = {
+    "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be spent on permanent level-ups.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
+
+    "humanity sprites": ["Level-up Resource | Covenant Offering", "", ">Dropped by some enemies.|>Found in various locations.|>Can be spent on permanent unique bonuses|in several ways.", "Rare black sprite found on human remains. Thought|to be somehow distinct from the soul."],
+
+    "souvenirs of reprisal": ["Covenant Offering", "Blood-drained, shrunken ear. Souvenir taken from subduing the guilty.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Blades of the Darkmoon|to increase Covenant rank."],
+    "sunlight medals": ["Covenant Offering", "Warm medal, engraved with the symbol of the Sun. Represents Lord Gwyn's firstborn, who lost the status of deity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Warriors of Sunlight to|increase Covenant rank."],
+    "eyes of death": ["Covenant Offering", "Eyes taken from those afflicted by curses of petrification. Known to be used to spread death.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Gravelord Servants to|increase Covenant rank."],
+    "dragon scales": ["Covenant Offering", "Scales peeled from an ancient dragon. Highly sought after for its rarity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Path of the Dragon to|increase Covenant rank."],
+    "titanite shards": ["Upgrade Material", "Most common titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +3."],
+    "large titanite shards": ["Upgrade Material", "Larger and rarer titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +6."],
+    
+    "titanite chunks": ["Upgrade Material", "", ">Found in various locations.|>Can be bought from various vendors.|>Can be used to permanently upgrade|standard weapons.", "Titanite is the heirloom of a nameless blacksmith|deity. All that remains are fragments and shards."],
+
+    "titanite slabs": ["Upgrade Material", "Legendary titanite material of a nameless blacksmith deity. Etched into weapons for reinforcement.", ">Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen standard weapons|to +10 and demon/twinkling weapons to +5."],
+
+    "demon titanite": ["Upgrade Material", "", ">Dropped by Titanite Demons.|>Can be bought from various vendors.|>Can be used to permanently upgrade|infernal weapons.", "Great beasts arose from slabs of Titanite after the|blacksmith deity's death."],
+
+    "twinkling titanite": ["Upgrade Material", "Titanite imbued with a particularly powerful energy of unknown origin.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen twinkling weapons|to +4."],
+}
+
+# UI Info
+ui_data = {
+    "HEALTH_BAR_WIDTH": player_data['dependent_variables']['health'] * 0.5,
+    "STAMINA_BAR_WIDTH": player_data['dependent_variables']['stamina'] * 2,
+    "MANA_BAR_WIDTH": player_data['dependent_variables']['mana'] * 1,
 }

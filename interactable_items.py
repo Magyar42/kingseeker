@@ -613,7 +613,7 @@ class PerkPillar(pygame.sprite.Sprite):
         player_distance = self.get_player_dist(player)
         if player_distance <= self.use_radius and self.status == "idle":
             match self.type:
-                case "perks": display_string = "View Perks of Humanity"
+                case "perks": display_string = "View Gifts of Humanity"
                 case "levels": display_string = "Strengthen Attributes"
                 case "bonfire": display_string = "Rest at Bonfire"
                 case "weapons": display_string = "Switch Weapons"
