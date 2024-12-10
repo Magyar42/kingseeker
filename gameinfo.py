@@ -70,7 +70,7 @@ player_attributes = {
 
 # Gifts of Humanity
 player_gifts = {
-    "1": 0,
+    "1": 1,
     "2": 0,
     "3": 0,
     "4": 0,
@@ -120,11 +120,9 @@ interface_details = {
 
 # Hidden numbers which can be affected by boons
 player_data = {
-    "dependent_variables": {"health": 400, "mana": 100, "stamina": 60, "speed": 5, "poise": 42.1, "attack": 5, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0.005},
+    "dependent_variables": {"health": 200, "mana": 50, "stamina": 50, "speed": 5, "defense": 0.25, "poise": 40, "attack": 5, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0},
 
     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
-
-    "defense": {"physical def.": 128, "magic def.": 139, "fire def.": 125, "lightning def.": 132},
 }
 
 # Player inputs (mainly used for mouse)

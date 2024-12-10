@@ -523,7 +523,7 @@ class SummonSign(pygame.sprite.Sprite):
             if not self.opening_sign:
                 keys = pygame.key.get_pressed()
 
-                if keys[pygame.K_q]:
+                if keys[pygame.K_f]:
                     self.sign_sound.play()
                     self.status = "activating"
 
@@ -542,9 +542,10 @@ class SummonSign(pygame.sprite.Sprite):
         self.player_interact(player)
 
 class PerkPillar(pygame.sprite.Sprite):
-    def __init__(self, pillar_type, pos, groups, interact_effect):
+    def __init__(self, pillar_type, pos, groups, interact_effect, check_status):
         super().__init__(groups)
         self.interact_effect = interact_effect
+        self.check_status = check_status
         self.display_surface = pygame.display.get_surface()
         self.frame_index = 0
         self.animation_speed = 0.20
@@ -553,6 +554,7 @@ class PerkPillar(pygame.sprite.Sprite):
 
         self.import_graphics("perk_pillar")
         self.status = "idle"
+        self.new_status = "idle"
         self.image = self.animations[self.status][self.frame_index]
 
         self.pos = pos
@@ -637,6 +639,11 @@ class PerkPillar(pygame.sprite.Sprite):
     def update(self):
         self.animate()
         self.cooldowns()
+        self.new_status = self.check_status(self.type)
+
+        # Only set status when already active; otherwise, the status will be
+        # constantly set to idle, as the interface is not active
+        if self.status == "active": self.status = self.new_status
     
     def pillar_update(self, player):
         self.player_interact(player)

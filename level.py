@@ -24,7 +24,7 @@ from weapon import Hurtboxes
 from npc import NPC
 from interactable_items import SummonSign
 from interactable_items import PerkPillar
-from popups import BoonsMenu
+from popups import BoonsMenu, HumanityPowers
 
 class Level:
     def __init__(self, map_id):
@@ -74,7 +74,9 @@ class Level:
 
         self.ui = UI()
         self.boons_menu = BoonsMenu(self.toggle_menu, self.enable_player_control)
+        self.humanity_menu = HumanityPowers(self.toggle_menu, self.enable_player_control)
         self.boons_menu_open = False
+        self.humanity_menu_open = False
         self.boon_options = None
 
         # self.upgrade = Upgrades(self.player, self.toggle_menu)
@@ -318,7 +320,7 @@ class Level:
                                 elif column == "342": pillar_type = "bonfire"
                                 elif column == "320": pillar_type = "weapons"
                                 elif column == "298": pillar_type = "anvil"
-                                PerkPillar(pillar_type, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.trigger_pillar_effect)
+                                PerkPillar(pillar_type, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.trigger_pillar_effect, self.check_status)
                             elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
                                 self.reward_pos = (x, y)
@@ -553,9 +555,12 @@ class Level:
     #     # todo: do an effect depending on the lever id
     #     print("Lever pulled!")
 
-    def trigger_pillar_effect(self): # todo
+    def trigger_pillar_effect(self, type): # todo
         self.player.resting = True
         self.player.any_interface_open = True
+
+        if type == "perks":
+            self.humanity_menu_open = True
         print("Perk pillar activated!")
     
     def summon_sign_effect(self, covenant):
@@ -569,6 +574,7 @@ class Level:
     def enable_player_control(self):
         self.player.resting = False
         self.boons_menu_open = False
+        self.humanity_menu_open = False
         self.player.any_interface_open = False
         self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
 
@@ -608,6 +614,14 @@ class Level:
         self.check_player_stats("Health")
         self.check_player_stats("Stamina")
         self.check_player_stats("Mana")
+
+    def check_status(self, type):
+        if type == "perks":
+            if not self.humanity_menu_open: new_status = "idle"
+            else: new_status = "active"
+        else: new_status = "idle"
+
+        return new_status
 
     def restart_world(self, map = "000"):
         # Removes stuff
@@ -718,6 +732,8 @@ class Level:
         self.check_enemy_spawns()
 
         if self.boons_menu_open: self.boons_menu.display(self.boon_options)
+        if self.humanity_menu_open:
+            self.humanity_menu.display()
         
         # Testing
         # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")

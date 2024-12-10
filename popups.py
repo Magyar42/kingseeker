@@ -194,7 +194,10 @@ class Item:
 class gameMenu:
     def __init__(self, toggle_screen_effect):
         self.display_surface = pygame.display.get_surface()
-        self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+        self.font11 = pygame.font.Font(UI_FONT, 11)
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
         self.toggle_screen_effect = toggle_screen_effect
 
         self.details_index_items = None
@@ -285,9 +288,9 @@ class gameMenu:
 
         # DETAILS toggle
         if self.details_index_items is not None:
-            self.item_details(player, self.resource_name_list[self.details_index_items], pygame.font.Font(UI_FONT, 16))
+            self.item_details(player, self.resource_name_list[self.details_index_items], self.font16)
         if self.details_index_boons is not None:
-            self.boon_details(player, self.boons_names[self.details_index_boons], pygame.font.Font(UI_FONT, 16))
+            self.boon_details(player, self.boons_names[self.details_index_boons], self.font16)
 
             self.boon_active = True
             if self.boon_active: 
@@ -335,7 +338,7 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -345,7 +348,7 @@ class gameMenu:
         while len(split_current_line) < 3:
             split_current_line.append("")
         for subline in range(3):
-            text_surf = pygame.font.Font(UI_FONT, 11).render(split_current_line[subline], False, UI_BG_LIGHT_COLOUR)
+            text_surf = self.font11.render(split_current_line[subline], False, UI_BG_LIGHT_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, text_rect_size[1] + 45 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -382,7 +385,7 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -392,12 +395,12 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 40 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
 
         # SUB BOONS
-        self.subboons_display(boon, pygame.font.Font(UI_FONT, 12), boon_data[f'{boon}']['subboons'], bg_rect_size[1])
+        self.subboons_display(boon, self.font12, boon_data[f'{boon}']['subboons'], bg_rect_size[1])
     
     # todo: clean up the below
     def subboons_display(self, parent_boon, font, child_boons, parent_height):
@@ -416,7 +419,7 @@ class gameMenu:
             createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
 
             # Name
-            title_surface = pygame.font.Font(UI_FONT, 12).render("No sub-boons available for Core Boons.", True, UI_BG_COLOUR)
+            title_surface = self.font12.render("No sub-boons available for Core Boons.", True, UI_BG_COLOUR)
             title_rect = title_surface.get_rect(midleft = text_rect_pos + pygame.math.Vector2(0, 5))
             self.display_surface.blit(title_surface, title_rect)
         else:
@@ -440,7 +443,7 @@ class gameMenu:
                     createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
 
                     # Name
-                    title_surface = pygame.font.Font(UI_FONT, 14).render(f"{boon_data[f'{subboon}']['name'].upper()}", True, UI_BG_COLOUR)
+                    title_surface = self.font14.render(f"{boon_data[f'{subboon}']['name'].upper()}", True, UI_BG_COLOUR)
                     title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 40))
                     self.display_surface.blit(title_surface, title_rect)
 
@@ -450,7 +453,7 @@ class gameMenu:
                     while len(split_current_line) < 4:
                         split_current_line.append("")
                     for subline in range(4):
-                        text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+                        text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
                         text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 30 + (subline * 15)))
                         self.display_surface.blit(text_surf, text_rect)
 
@@ -460,7 +463,7 @@ class gameMenu:
                     while len(split_current_line) < 4:
                         split_current_line.append("")
                     for subline in range(4):
-                        text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+                        text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
                         text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 30 + 40 + subline * 15))
                         self.display_surface.blit(text_surf, text_rect)
                     
@@ -478,7 +481,7 @@ class gameMenu:
                     createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
 
                     # Name
-                    title_surface = pygame.font.Font(UI_FONT, 12).render("???", True, UI_BG_COLOUR)
+                    title_surface = self.font12.render("???", True, UI_BG_COLOUR)
                     title_rect = title_surface.get_rect(midleft = text_rect_pos + pygame.math.Vector2(0, 5))
                     self.display_surface.blit(title_surface, title_rect)
                 prev_subboon_height = bg_rect_size[1] - 50 # Used to dynamically change distance between subboons
@@ -486,7 +489,7 @@ class gameMenu:
 class itemMenu:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
-        self.font = self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
+        self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
 
         self.icons_list = import_folder("assets/graphics/ui/menu/menu_options")
         self.icons_selected_list = import_folder("assets/graphics/ui/menu/menu_options_selected")
@@ -677,3 +680,78 @@ class BoonsMenu:
         interface_details["boons"]["list"].append(boon)
         self.enable_player_control()
         player_inputs["light attack"] = False
+
+# Gifts of Humanity Menu
+class HumanityPowers:
+    def __init__(self, toggle_screen_effect, enable_player_control):
+        self.display_surface = pygame.display.get_surface()
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+
+        self.toggle_screen_effect = toggle_screen_effect
+        self.enable_player_control = enable_player_control
+
+        # todo: icons for each
+
+    def display(self):
+        for num, gift in enumerate(humanity_gifts_text):
+            self.gift_details(gift, num)
+        self.check_input()
+
+    def gift_details(self, gift, num):
+        # Background
+        item_rect_size = (700, 20)
+
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2)
+        y = (self.display_surface.get_size()[1] // 2) - 280 + (num * 70)
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])
+        text_rect_pos = main_rect.topleft + pygame.math.Vector2(0, 0)
+        text_rect_size = (item_rect_size[0], item_rect_size[1])
+
+        # Icon + BG [Updates with hover]
+        # icon_surface = pygame.image.load(f"assets/graphics/ui/interface_icons/boons_big/{boon}.png")
+        # icon_surface = self.boon_icons[num]
+        # icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(5, 0))
+
+        # pos = pygame.mouse.get_pos()
+        # hit = main_rect.collidepoint(pos)
+        # if hit:
+        #     if player_inputs["light attack"]:
+        #         createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green_dark")
+        #         self.add_boon(boon) # If LMB pressed, select boon
+        #     else:
+        #         createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green")
+        #     self.display_surface.blit(self.big_boon_frame_selected, icon_rect)
+        # else:
+        #     createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
+        #     self.display_surface.blit(self.big_boon_frame, icon_rect)
+        # self.display_surface.blit(icon_surface, icon_rect)
+
+        createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
+
+        # Name
+        title_surface = self.font16.render(f"| {humanity_gifts_text[f'{gift}']['name'].upper()}", True, UI_BG_COLOUR)
+        title_rect = title_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(5, 0))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Effect
+        current_gift_level = player_gifts[gift]
+        current_gift_effect = humanity_gifts_defines[gift][current_gift_level]
+        if gift == "5" or gift == "6":
+            current_gift_effect = (current_gift_effect-1) * 100
+            current_gift_effect = f"{current_gift_effect}%"
+
+        effect_surface = self.font16.render(f"| +{current_gift_effect}", True, UI_BG_COLOUR)
+        effect_rect = effect_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(400, 0))
+        self.display_surface.blit(effect_surface, effect_rect)
+
+        # Cost
+        # todo
+
+    def check_input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            self.enable_player_control()
+            player_inputs["light attack"] = False

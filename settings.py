@@ -439,6 +439,16 @@ humanity_gifts_costs = {
     "6": [1, 5, 10, 15, 20, 30],
 }
 
+# Gifts of Humanity - Text
+humanity_gifts_text = {
+    "1": { "name": "Inner Humanity", "desc": "test description! sigma sigma on the wall" },
+    "2": { "name": "Enkindled Flames", "desc": "test description! sigma sigma on the wall" },
+    "3": { "name": "Greater Attunement", "desc": "test description! sigma sigma on the wall" },
+    "4": { "name": "Empowered Soul", "desc": "test description! sigma sigma on the wall" },
+    "5": { "name": "Flourishing Boldness", "desc": "test description! sigma sigma on the wall" },
+    "6": { "name": "Firm Resistance", "desc": "test description! sigma sigma on the wall" },
+}
+
 # Resource Info
 resource_details = {
     "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be spent on permanent level-ups.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
