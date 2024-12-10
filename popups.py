@@ -692,12 +692,17 @@ class HumanityPowers:
         self.toggle_screen_effect = toggle_screen_effect
         self.enable_player_control = enable_player_control
 
+        self.clicked = False
+        self.click_cooldown = 100
+        self.click_time = None
+
         # todo: icons for each
 
     def display(self):
         for num, gift in enumerate(humanity_gifts_text):
             self.gift_details(gift, num)
         self.check_input()
+        self.cooldowns()
 
     def gift_details(self, gift, num):
         # Background
@@ -740,7 +745,7 @@ class HumanityPowers:
         current_gift_level = player_gifts[gift]
         current_gift_effect = humanity_gifts_defines[gift][current_gift_level]
         if gift == "5" or gift == "6":
-            current_gift_effect = (current_gift_effect-1) * 100
+            current_gift_effect = round((current_gift_effect-1) * 100)
             current_gift_effect = f"{current_gift_effect}%"
 
         effect_surface = self.font16.render(f"| +{current_gift_effect}", True, UI_BG_COLOUR)
@@ -748,10 +753,44 @@ class HumanityPowers:
         self.display_surface.blit(effect_surface, effect_rect)
 
         # Cost
-        # todo
+        next_gift_level = current_gift_level + 1
+        next_gift_cost = humanity_gifts_costs[gift][next_gift_level]
+
+        cost_surface = self.font16.render(f"|   {next_gift_cost}", True, UI_BG_COLOUR)
+        cost_rect = cost_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(550, 0))
+        self.display_surface.blit(cost_surface, cost_rect)
+
+        # Button
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+
+        if next_gift_cost != "MAX":
+            if resources["humanity sprites"] >= int(next_gift_cost):
+                if hit:
+                    if player_inputs["light attack"] and not self.clicked:
+                        resources["humanity sprites"] -= int(next_gift_cost)
+                        player_gifts[gift] += 1
+                        player_inputs["light attack"] = False
+
+                        self.clicked = True
+                        self.click_time = pygame.time.get_ticks()
+                    button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+                else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+            else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+        else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+
+        button_text = button_surf.get_rect(midleft = cost_rect.midleft + pygame.math.Vector2(20, 0))
+        self.display_surface.blit(button_surf, button_text)
 
     def check_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             self.enable_player_control()
             player_inputs["light attack"] = False
+    
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.clicked:
+            if current_time - self.click_time >= self.click_cooldown:
+                self.clicked = False

@@ -45,7 +45,7 @@ npc_conversations = {
 # Meta-Progression Resources
 resources = {
     "soul remnants": 30,
-    "humanity sprites": 11,
+    "humanity sprites": 99,
     "titanite chunks": 3,
     "demon titanite": 1,
 }
@@ -70,7 +70,7 @@ player_attributes = {
 
 # Gifts of Humanity
 player_gifts = {
-    "1": 1,
+    "1": 0,
     "2": 0,
     "3": 0,
     "4": 0,
