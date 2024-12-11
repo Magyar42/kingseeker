@@ -449,6 +449,16 @@ humanity_gifts_text = {
     "6": { "name": "Firm Resistance", "desc": "Increases player poise,|allowing more damage to be taken|without being stunned." },
 }
 
+# Base attributes - Text
+player_attributes_text = {
+    "VITALITY": '>Increases base health',
+    "ENDURANCE": ">Increases base stamina|>Increases stamina recovery",
+    "STRENGTH": ">Increases damage for attacks|scaling with STR",
+    "DEXTERITY": ">Increases damage for attacks|scaling with DEX",
+    "INTELLIGENCE": ">Increases base mana|>Increases damage for attacks|scaling with INT",
+    "FAITH": ">Increases base mana|>Increases damage for attacks|scaling with FAI",
+}
+
 # Resource Info
 resource_details = {
     "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be traded for other resources.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
@@ -481,4 +491,7 @@ ui_data = {
 # Misc Lore Text
 lore_misc = {
     "gifts_of_humanity": '"Once, the Lord of Light banished Dark, and all that stemmed|from humanity. And men assumed a fleeting form."',
+    "level_up": '"Souls are the source of all life, and whether Undead, or even|Hollow, one continues to seek them."',
 }
+
+LEVELUP_MULT = 200

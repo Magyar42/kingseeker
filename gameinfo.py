@@ -110,11 +110,12 @@ interface_details = {
     },
     "values": {
         "estus level": 1,
-        "souls": 0,
+        "souls": 99999,
         "lost souls": 0,
         "max estus": 3,
         "current estus": 3,
         "levelup cost": 1,
+        "level": 1,
     }
 }
 

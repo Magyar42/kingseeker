@@ -24,7 +24,7 @@ from weapon import Hurtboxes
 from npc import NPC
 from interactable_items import SummonSign
 from interactable_items import PerkPillar
-from popups import BoonsMenu, HumanityPowers
+from popups import BoonsMenu, HumanityPowers, LevelUp
 
 class Level:
     def __init__(self, map_id):
@@ -75,8 +75,10 @@ class Level:
         self.ui = UI()
         self.boons_menu = BoonsMenu(self.toggle_menu, self.enable_player_control)
         self.humanity_menu = HumanityPowers(self.toggle_menu, self.enable_player_control)
+        self.levelup_menu = LevelUp(self.toggle_menu, self.enable_player_control)
         self.boons_menu_open = False
         self.humanity_menu_open = False
+        self.levelup_menu_open = False
         self.boon_options = None
 
         # self.upgrade = Upgrades(self.player, self.toggle_menu)
@@ -560,6 +562,8 @@ class Level:
 
         if type == "perks":
             self.humanity_menu_open = True
+        elif type == "levels":
+            self.levelup_menu_open = True
         print("Perk pillar activated!")
     
     def summon_sign_effect(self, covenant):
@@ -574,6 +578,7 @@ class Level:
         self.player.resting = False
         self.boons_menu_open = False
         self.humanity_menu_open = False
+        self.levelup_menu_open = False
         self.player.any_interface_open = False
         self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
 
@@ -617,6 +622,9 @@ class Level:
     def check_status(self, type):
         if type == "perks":
             if not self.humanity_menu_open: new_status = "idle"
+            else: new_status = "active"
+        elif type == "levels":
+            if not self.levelup_menu_open: new_status = "idle"
             else: new_status = "active"
         else: new_status = "idle"
 
@@ -733,6 +741,8 @@ class Level:
         if self.boons_menu_open: self.boons_menu.display(self.boon_options)
         if self.humanity_menu_open:
             self.humanity_menu.display()
+        if self.levelup_menu_open:
+            self.levelup_menu.display()
         
         # Testing
         # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")

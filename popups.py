@@ -833,3 +833,158 @@ class HumanityPowers:
         if self.clicked:
             if current_time - self.click_time >= self.click_cooldown:
                 self.clicked = False
+
+# Levelup Menu
+class LevelUp:
+    def __init__(self, toggle_screen_effect, enable_player_control):
+        self.display_surface = pygame.display.get_surface()
+        self.font18 = pygame.font.Font(UI_FONT, 18)
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+        self.font11 = pygame.font.Font(UI_FONT, 11)
+
+        self.toggle_screen_effect = toggle_screen_effect
+        self.enable_player_control = enable_player_control
+
+        self.clicked = False
+        self.click_cooldown = 100
+        self.click_time = None
+
+        self.souls_icon = pygame.image.load("assets/graphics/ui/resources/01_soul remnants.png").convert_alpha()
+
+        # todo: icons for each
+
+    def display(self):
+        self.draw_bg()
+        for num, stat in enumerate(player_attributes):
+            self.stat_details(stat, num)
+        self.check_input()
+        self.cooldowns()
+
+    def draw_bg(self):
+        # Surface
+        bg_rect_size = (740, 520)
+        bg_x = (self.display_surface.get_size()[0] // 2) - (700 // 2) - 20
+        bg_y = (self.display_surface.get_size()[1] // 2) - 300
+
+        main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1])
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (bg_x, bg_y), "dark")
+
+        # Title
+        title_surface = self.font18.render("| STRENGTHEN ATTRIBUTES |", True, TEXT_TITLE_COLOUR)
+        title_rect = title_surface.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 10))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Desc
+        used_text = lore_misc["level_up"]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 3:
+            split_current_line.append("")
+        for subline in range(3):
+            text_surf = self.font11.render(split_current_line[subline], True, TEXT_TITLE_COLOUR)
+            text_rect = text_surf.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 40 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+    def create_tooltip(self, id, pos):
+        
+        tt_size = (350, 40)
+        tt_pos = (pos[0] + 20, pos[1] - tt_size[1] - 20)
+        tt_rect = pygame.Rect(tt_pos[0], tt_pos[1], tt_size[0], tt_size[1])
+
+        createUI(self.display_surface, tt_rect.width, tt_rect.height, tt_pos, "basic")
+
+        used_text = player_attributes_text[id]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 4:
+            split_current_line.append("")
+        for subline in range(4):
+            text_surf = self.font11.render(split_current_line[subline], True, UI_BG_COLOUR)
+            text_rect = text_surf.get_rect(topleft = tt_rect.topleft + pygame.math.Vector2(0, 0 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+    def stat_details(self, stat, num):
+        # Individual Item
+        item_rect_size = (700, 20)
+
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2)
+        y = (self.display_surface.get_size()[1] // 2) - 180 + (num * 70)
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])
+        text_rect_pos = main_rect.topleft + pygame.math.Vector2(0, 0)
+        text_rect_size = (item_rect_size[0], item_rect_size[1])
+
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+        if hit: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "green_light")
+        else: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
+
+        # Name
+        title_surface = self.font16.render(f"| {stat.upper()}", True, UI_BG_COLOUR)
+        title_rect = title_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(5, 0))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Level
+        current_stat_level = player_attributes[stat]
+
+        level_surface = self.font16.render(f"| LVL {current_stat_level}", True, UI_BG_COLOUR)
+        level_rect = level_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(400, 0))
+        self.display_surface.blit(level_surface, level_rect)
+
+        # Cost
+        next_level_cost = interface_details["values"]["level"] * LEVELUP_MULT # todo
+        if player_attributes[stat] >= 25: next_level_cost = "MAX"
+
+        cost_surface = self.font16.render(f"|   {next_level_cost}", True, UI_BG_COLOUR)
+        cost_rect = cost_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(550, 0))
+        icon_rect = self.souls_icon.get_rect(midleft = cost_rect.midright + pygame.math.Vector2(-5, 0))
+        
+        self.display_surface.blit(cost_surface, cost_rect)
+        if current_stat_level != 25: self.display_surface.blit(self.souls_icon, icon_rect)
+
+        # Button
+        button_rect = pygame.Rect(cost_rect.left + 20, cost_rect.top - 8, 32, 32)
+
+        pos = pygame.mouse.get_pos()
+        button_hit = button_rect.collidepoint(pos)
+
+        plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus.png").convert_alpha()
+        button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+
+        if button_hit and self.clicked:
+            button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+            plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus_active.png").convert_alpha()
+        elif player_attributes[stat] != 25:
+            if interface_details["values"]["souls"] >= int(next_level_cost):
+                if button_hit:
+                    if player_inputs["light attack"] and not self.clicked:
+                        interface_details["values"]["souls"] -= int(next_level_cost)
+                        player_attributes[stat] += 1
+                        interface_details["values"]["level"] += 1
+
+                        self.clicked = True
+                        self.click_time = pygame.time.get_ticks()
+                    button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+                else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+        
+        self.display_surface.blit(button_surf, button_rect)
+        self.display_surface.blit(plus_icon, button_rect)
+
+        # Tooltips
+        main_hit = main_rect.collidepoint(pos)
+        if main_hit and not button_hit: self.create_tooltip(stat, pos)
+
+    def check_input(self):
+        player_inputs["light attack"] = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            self.enable_player_control()
+            player_inputs["light attack"] = False
+    
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.clicked:
+            if current_time - self.click_time >= self.click_cooldown:
+                self.clicked = False
