@@ -84,7 +84,7 @@ weapon_data = {
 boon_data = {
     ## Warriors of Sunlight
     # Core Boons
-    "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted|when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+    "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
     "boon_2": {"name": "Lightning Strike", "category": "Warriors of Sunlight", "desc1": "Primary/secondary attack emits|chain-lightning when damaging a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
@@ -424,9 +424,9 @@ humanity_gifts_defines = {
     "1": [200, 400, 600, 800, 1000],
     "2": [1, 2, 3, 4, 5],
     "3": [1, 2, 3],
-    "4": [0, 1000, 2000, 3000, 4000],
-    "5": [1, 1.10, 1.20, 1.30, 1.40],
-    "6": [1, 1.10, 1.20, 1.30, 1.40],
+    "4": [0, 1000, 2000, 3000, 4000, 5000],
+    "5": [1, 1.10, 1.20, 1.30, 1.40, 1.50],
+    "6": [1, 1.10, 1.20, 1.30, 1.40, 1.50],
 }
 
 # Gifts of Humanity - Costs [in humanity sprites]
@@ -441,17 +441,17 @@ humanity_gifts_costs = {
 
 # Gifts of Humanity - Text
 humanity_gifts_text = {
-    "1": { "name": "Inner Humanity", "desc": "test description! sigma sigma on the wall" },
-    "2": { "name": "Enkindled Flames", "desc": "test description! sigma sigma on the wall" },
-    "3": { "name": "Greater Attunement", "desc": "test description! sigma sigma on the wall" },
-    "4": { "name": "Empowered Soul", "desc": "test description! sigma sigma on the wall" },
-    "5": { "name": "Flourishing Boldness", "desc": "test description! sigma sigma on the wall" },
-    "6": { "name": "Firm Resistance", "desc": "test description! sigma sigma on the wall" },
+    "1": { "name": "Inner Humanity", "desc": "Increases health recovered from|using the Estus Flask." },
+    "2": { "name": "Enkindled Flames", "desc": "Increases the number of Estus|Flasks for use from Bonfires." },
+    "3": { "name": "Greater Agility", "desc": "Increases the number of rolls|that can be performed|successively." },
+    "4": { "name": "Empowered Soul", "desc": "Increases the number of Souls|the player begins with in a run." },
+    "5": { "name": "Flourishing Boldness", "desc": "Increases damage dealt against|enemies afflicted by status|effects." },
+    "6": { "name": "Firm Resistance", "desc": "Increases player poise,|allowing more damage to be taken|without being stunned." },
 }
 
 # Resource Info
 resource_details = {
-    "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be spent on permanent level-ups.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
+    "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be traded for other resources.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
 
     "humanity sprites": ["Level-up Resource | Covenant Offering", "", ">Dropped by some enemies.|>Found in various locations.|>Can be spent on permanent unique bonuses|in several ways.", "Rare black sprite found on human remains. Thought|to be somehow distinct from the soul."],
 
@@ -476,4 +476,9 @@ ui_data = {
     "HEALTH_BAR_WIDTH": player_data['dependent_variables']['health'] * 0.5,
     "STAMINA_BAR_WIDTH": player_data['dependent_variables']['stamina'] * 2,
     "MANA_BAR_WIDTH": player_data['dependent_variables']['mana'] * 1,
+}
+
+# Misc Lore Text
+lore_misc = {
+    "gifts_of_humanity": '"Once, the Lord of Light banished Dark, and all that stemmed|from humanity. And men assumed a fleeting form."',
 }

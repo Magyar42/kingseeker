@@ -45,9 +45,9 @@ npc_conversations = {
 # Meta-Progression Resources
 resources = {
     "soul remnants": 30,
-    "humanity sprites": 99,
-    "titanite chunks": 3,
-    "demon titanite": 1,
+    "humanity sprites": 72,
+    "titanite chunks": 9,
+    "demon titanite": 4,
 }
 
 # Covenant Ranks

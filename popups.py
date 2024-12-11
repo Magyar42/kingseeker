@@ -19,7 +19,7 @@ class Prompt:
         x = self.display_surface.get_size()[0] // 2
         y = self.display_surface.get_size()[1] - (PROMPT_HEIGHT + PROMPT_GAP) - 20 # * len(current_prompts)
 
-        text_surface = self.font.render(str(f"[{button}] {text.upper()}"), False, TEXT_TITLE_COLOUR).convert_alpha()
+        text_surface = self.font.render(str(f"[{button}] {text.upper()}"), True, TEXT_TITLE_COLOUR).convert_alpha()
         text_rect = text_surface.get_rect(center = (x, y))
 
         self.displayPrompt(text_rect, text_surface)
@@ -47,8 +47,8 @@ class ItemPopup:
         x = self.display_surface.get_size()[0] // 2
         y = self.display_surface.get_size()[1] - (PROMPT_HEIGHT * 2) * pos - 50
 
-        text_surface = self.font.render(str(f"{text}"), False, TEXT_COLOUR)
-        num_surface = self.font.render(str(f"[{num}]"), False, TEXT_COLOUR)
+        text_surface = self.font.render(str(f"{text}"), True, TEXT_COLOUR)
+        num_surface = self.font.render(str(f"[{num}]"), True, TEXT_COLOUR)
         text_rect = text_surface.get_rect(center = (x, y))
 
         display_rect = pygame.Rect(text_rect.left - 40, text_rect.top, text_rect.w + 80, text_rect.h * 3)
@@ -125,7 +125,7 @@ class Decision:
             item = Item(x, y + 90 + (option_rect_size[1] + 5) * self.options_list.index(option), option_rect_size[0], option_rect_size[1], index, self.font)
             item.display(self.display_surface, self.selection_index, option)
         
-        text_body_surface = self.font.render(body, False, TEXT_COLOUR)
+        text_body_surface = self.font.render(body, True, TEXT_COLOUR)
         text_body_rect = text_body_surface.get_rect(center = main_rect.center)
         self.display_surface.blit(text_body_surface, text_body_rect)
    
@@ -175,7 +175,7 @@ class Item:
         #colour = UPGRADE_TEXT_COLOUR_SELECTED if selected else UPGRADE_TEXT_COLOUR
         colour = UPGRADE_TEXT_COLOUR
 
-        title_surface = self.font.render(name, False, colour)
+        title_surface = self.font.render(name, True, colour)
         title_rect = title_surface.get_rect(center = self.rect.center)
 
         surface.blit(title_surface, title_rect)
@@ -224,16 +224,6 @@ class gameMenu:
                 self.boons.append(current_boon_surf)
                 self.boons_names.append(current_boon)
 
-    # def update_boons(self):
-    #     self.boons = []
-    #     self.boons_names = []
-    #     # Only load boons (not sub-boons) for the display
-    #     for current_boon in interface_details["boons"]["list"]:
-    #         if not boon_data[current_boon]["is_subboon"]:
-    #             current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
-    #             self.boons.append(current_boon_surf)
-    #             self.boons_names.append(current_boon)
-
     def selection_cooldown(self):
         if not self.details_can_toggle:
             current_time = pygame.time.get_ticks()
@@ -242,6 +232,7 @@ class gameMenu:
     
     # Esc Menu - Shows items + boons
     def displayMenu(self, player):
+        self.resource_num_list = list(resources.values())
 
         # ITEMS Display
         bg_rect_size = (90, 140)
@@ -338,7 +329,7 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -348,7 +339,7 @@ class gameMenu:
         while len(split_current_line) < 3:
             split_current_line.append("")
         for subline in range(3):
-            text_surf = self.font11.render(split_current_line[subline], False, UI_BG_LIGHT_COLOUR)
+            text_surf = self.font11.render(split_current_line[subline], True, UI_BG_LIGHT_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, text_rect_size[1] + 45 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -385,7 +376,7 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -395,7 +386,7 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 40 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -453,7 +444,7 @@ class gameMenu:
                     while len(split_current_line) < 4:
                         split_current_line.append("")
                     for subline in range(4):
-                        text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+                        text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
                         text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 30 + (subline * 15)))
                         self.display_surface.blit(text_surf, text_rect)
 
@@ -463,7 +454,7 @@ class gameMenu:
                     while len(split_current_line) < 4:
                         split_current_line.append("")
                     for subline in range(4):
-                        text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+                        text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
                         text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 30 + 40 + subline * 15))
                         self.display_surface.blit(text_surf, text_rect)
                     
@@ -660,7 +651,7 @@ class BoonsMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -670,7 +661,7 @@ class BoonsMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 40 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
         
@@ -685,9 +676,11 @@ class BoonsMenu:
 class HumanityPowers:
     def __init__(self, toggle_screen_effect, enable_player_control):
         self.display_surface = pygame.display.get_surface()
+        self.font18 = pygame.font.Font(UI_FONT, 18)
         self.font16 = pygame.font.Font(UI_FONT, 16)
         self.font14 = pygame.font.Font(UI_FONT, 14)
         self.font12 = pygame.font.Font(UI_FONT, 12)
+        self.font11 = pygame.font.Font(UI_FONT, 11)
 
         self.toggle_screen_effect = toggle_screen_effect
         self.enable_player_control = enable_player_control
@@ -696,45 +689,77 @@ class HumanityPowers:
         self.click_cooldown = 100
         self.click_time = None
 
+        self.humanity_icon = pygame.image.load("assets/graphics/ui/resources/03_humanities.png").convert_alpha()
+
         # todo: icons for each
 
     def display(self):
+        self.draw_bg()
         for num, gift in enumerate(humanity_gifts_text):
             self.gift_details(gift, num)
         self.check_input()
         self.cooldowns()
 
+    def draw_bg(self):
+        # Surface
+        bg_rect_size = (740, 520)
+        bg_x = (self.display_surface.get_size()[0] // 2) - (700 // 2) - 20
+        bg_y = (self.display_surface.get_size()[1] // 2) - 300
+
+        main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1])
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (bg_x, bg_y), "dark")
+
+        # Title
+        title_surface = self.font18.render("| GIFTS OF HUMANITY |", True, TEXT_TITLE_COLOUR)
+        title_rect = title_surface.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 10))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Desc
+        used_text = lore_misc["gifts_of_humanity"]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 3:
+            split_current_line.append("")
+        for subline in range(3):
+            text_surf = self.font11.render(split_current_line[subline], True, TEXT_TITLE_COLOUR)
+            text_rect = text_surf.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 40 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+        # desc_surface = self.font11.render("Once, the Lord of Light banished Dark, and all that stemmed from humanity. And men assumed a fleeting form.", True, TEXT_TITLE_COLOUR)
+        # desc_rect = desc_surface.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 25))
+        # self.display_surface.blit(desc_surface, desc_rect)
+
+    def create_tooltip(self, id, pos):
+        
+        tt_size = (350, 40)
+        tt_pos = (pos[0] + 20, pos[1] - tt_size[1] - 20)
+        tt_rect = pygame.Rect(tt_pos[0], tt_pos[1], tt_size[0], tt_size[1])
+
+        createUI(self.display_surface, tt_rect.width, tt_rect.height, tt_pos, "basic")
+
+        used_text = humanity_gifts_text[id]["desc"]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 4:
+            split_current_line.append("")
+        for subline in range(4):
+            text_surf = self.font11.render(split_current_line[subline], True, UI_BG_COLOUR)
+            text_rect = text_surf.get_rect(topleft = tt_rect.topleft + pygame.math.Vector2(0, 0 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
     def gift_details(self, gift, num):
-        # Background
+        # Individual Item
         item_rect_size = (700, 20)
 
         x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2)
-        y = (self.display_surface.get_size()[1] // 2) - 280 + (num * 70)
+        y = (self.display_surface.get_size()[1] // 2) - 180 + (num * 70)
 
         main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])
         text_rect_pos = main_rect.topleft + pygame.math.Vector2(0, 0)
         text_rect_size = (item_rect_size[0], item_rect_size[1])
 
-        # Icon + BG [Updates with hover]
-        # icon_surface = pygame.image.load(f"assets/graphics/ui/interface_icons/boons_big/{boon}.png")
-        # icon_surface = self.boon_icons[num]
-        # icon_rect = icon_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(5, 0))
-
-        # pos = pygame.mouse.get_pos()
-        # hit = main_rect.collidepoint(pos)
-        # if hit:
-        #     if player_inputs["light attack"]:
-        #         createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green_dark")
-        #         self.add_boon(boon) # If LMB pressed, select boon
-        #     else:
-        #         createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green")
-        #     self.display_surface.blit(self.big_boon_frame_selected, icon_rect)
-        # else:
-        #     createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
-        #     self.display_surface.blit(self.big_boon_frame, icon_rect)
-        # self.display_surface.blit(icon_surface, icon_rect)
-
-        createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+        if hit: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "green_light")
+        else: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
 
         # Name
         title_surface = self.font16.render(f"| {humanity_gifts_text[f'{gift}']['name'].upper()}", True, UI_BG_COLOUR)
@@ -758,31 +783,45 @@ class HumanityPowers:
 
         cost_surface = self.font16.render(f"|   {next_gift_cost}", True, UI_BG_COLOUR)
         cost_rect = cost_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(550, 0))
+        icon_rect = self.humanity_icon.get_rect(midleft = cost_rect.midright + pygame.math.Vector2(-5, 0))
+        
         self.display_surface.blit(cost_surface, cost_rect)
+        if next_gift_cost != "MAX": self.display_surface.blit(self.humanity_icon, icon_rect)
 
         # Button
-        pos = pygame.mouse.get_pos()
-        hit = main_rect.collidepoint(pos)
+        button_rect = pygame.Rect(cost_rect.left + 20, cost_rect.top - 8, 32, 32)
 
-        if next_gift_cost != "MAX":
+        pos = pygame.mouse.get_pos()
+        button_hit = button_rect.collidepoint(pos)
+
+        plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus.png").convert_alpha()
+        button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+
+        if button_hit and self.clicked:
+            button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+            plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus_active.png").convert_alpha()
+        elif next_gift_cost != "MAX":
             if resources["humanity sprites"] >= int(next_gift_cost):
-                if hit:
+                if button_hit:
                     if player_inputs["light attack"] and not self.clicked:
                         resources["humanity sprites"] -= int(next_gift_cost)
                         player_gifts[gift] += 1
-                        player_inputs["light attack"] = False
 
                         self.clicked = True
                         self.click_time = pygame.time.get_ticks()
                     button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
                 else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
-            else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
-        else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+        
+        self.display_surface.blit(button_surf, button_rect)
+        self.display_surface.blit(plus_icon, button_rect)
 
-        button_text = button_surf.get_rect(midleft = cost_rect.midleft + pygame.math.Vector2(20, 0))
-        self.display_surface.blit(button_surf, button_text)
+        # Tooltips
+        main_hit = main_rect.collidepoint(pos)
+        if main_hit and not button_hit: self.create_tooltip(gift, pos)
 
     def check_input(self):
+        player_inputs["light attack"] = False
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             self.enable_player_control()

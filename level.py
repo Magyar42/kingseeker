@@ -99,7 +99,6 @@ class Level:
         self.kindling_sound.set_volume(0.3)
 
         self.current_bloodstain_pos = ()
-        self.message_icon = pygame.image.load("assets/graphics/ui/message_icon.png")
 
     def create_enemy_spawns(self, player, region, spawn_locations):
         # Get values
@@ -742,6 +741,7 @@ class Level:
         # debug(f"{self.player.poise} / {self.player.max_poise}")
         # debug(self.displaying_message)
         #get_attribute_num("vitality")
+        # debug(resources["humanity sprites"])
 
         #self.bonfire.bonfire_popup_update(self.player)
         self.update_player_stats()
