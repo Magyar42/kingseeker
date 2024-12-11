@@ -24,7 +24,7 @@ from weapon import Hurtboxes
 from npc import NPC
 from interactable_items import SummonSign
 from interactable_items import PerkPillar
-from popups import BoonsMenu, HumanityPowers, LevelUp
+from popups import BoonsMenu, HumanityPowers, LevelUp, WeaponsSelection
 
 class Level:
     def __init__(self, map_id):
@@ -73,12 +73,14 @@ class Level:
         self.create_map(True, self.map_id)
 
         self.ui = UI()
-        self.boons_menu = BoonsMenu(self.toggle_menu, self.enable_player_control)
-        self.humanity_menu = HumanityPowers(self.toggle_menu, self.enable_player_control)
-        self.levelup_menu = LevelUp(self.toggle_menu, self.enable_player_control)
+        self.boons_menu = BoonsMenu(self.enable_player_control)
+        self.humanity_menu = HumanityPowers(self.enable_player_control)
+        self.levelup_menu = LevelUp(self.enable_player_control)
+        self.weapons_menu = WeaponsSelection(self.enable_player_control)
         self.boons_menu_open = False
         self.humanity_menu_open = False
         self.levelup_menu_open = False
+        self.weapons_menu_open = False
         self.boon_options = None
 
         # self.upgrade = Upgrades(self.player, self.toggle_menu)
@@ -216,7 +218,7 @@ class Level:
         # Else if self.reward is a RESOURCE
         else:
             if self.reward == "great_soul":
-                interface_details["values"]["souls"] += 2000
+                player_core_info["values"]["souls"] += 2000
             else:
                 resource_index = list(chamber_rewards.keys()).index(self.reward)
                 resource_name = resources_names[resource_index]
@@ -441,7 +443,7 @@ class Level:
         self.animation_player.create_particles(particle_type, pos, [self.visible_sprites], "ambient")
 
     def add_xp(self, amount):
-        interface_details['values']['souls'] += amount
+        player_core_info['values']['souls'] += amount
 
     def toggle_menu(self):
         self.levelup_menu_active = not self.levelup_menu_active
@@ -564,6 +566,8 @@ class Level:
             self.humanity_menu_open = True
         elif type == "levels":
             self.levelup_menu_open = True
+        elif type == "weapons":
+            self.weapons_menu_open = True
         print("Perk pillar activated!")
     
     def summon_sign_effect(self, covenant):
@@ -579,6 +583,7 @@ class Level:
         self.boons_menu_open = False
         self.humanity_menu_open = False
         self.levelup_menu_open = False
+        self.weapons_menu_open = False
         self.player.any_interface_open = False
         self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
 
@@ -625,6 +630,9 @@ class Level:
             else: new_status = "active"
         elif type == "levels":
             if not self.levelup_menu_open: new_status = "idle"
+            else: new_status = "active"
+        elif type == "weapons":
+            if not self.weapons_menu_open: new_status = "idle"
             else: new_status = "active"
         else: new_status = "idle"
 
@@ -739,10 +747,9 @@ class Level:
         self.check_enemy_spawns()
 
         if self.boons_menu_open: self.boons_menu.display(self.boon_options)
-        if self.humanity_menu_open:
-            self.humanity_menu.display()
-        if self.levelup_menu_open:
-            self.levelup_menu.display()
+        if self.humanity_menu_open: self.humanity_menu.display()
+        if self.levelup_menu_open: self.levelup_menu.display()
+        if self.weapons_menu_open: self.weapons_menu.display()
         
         # Testing
         # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")

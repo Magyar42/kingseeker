@@ -16,7 +16,7 @@ class Player(Entity):
         self.toggle_screen_effect = toggle_screen_effect
         self.animation_player = AnimationPlayer()
 
-        self.popup = gameMenu(self.toggle_screen_effect)
+        self.popup = gameMenu()
         self.prompt_active = False
 
         self.display_surface = pygame.display.get_surface()
@@ -36,7 +36,7 @@ class Player(Entity):
 
         # Determines the cooldown between skill attacks
         self.using_skill = False
-        self.skill_cooldown = interface_details["skill"]["cooldown"]
+        self.skill_cooldown = player_core_info["skill"]["cooldown"]
         self.skill_use_time = None
 
         # Determines the cooldown between magic attacks
@@ -46,12 +46,12 @@ class Player(Entity):
 
         # Determines the cooldown between light attacks
         self.light_attacking = False
-        self.light_attack_cooldown = interface_details["light_attack"]["cooldown"]
+        self.light_attack_cooldown = player_core_info["light_attack"]["cooldown"]
         self.light_attack_time = None
 
         # Determines the cooldown between heavy attacks
         self.heavy_attacking = False
-        self.heavy_attack_cooldown = interface_details["heavy_attack"]["cooldown"]
+        self.heavy_attack_cooldown = player_core_info["heavy_attack"]["cooldown"]
         self.heavy_attack_time = None
 
         self.obstacle_sprites = obstacle_sprites
@@ -61,24 +61,24 @@ class Player(Entity):
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
 
-        self.weapon = interface_details["light_attack"]["name"].split("_")[0]
+        self.weapon = player_core_info["light_attack"]["name"].split("_")[0]
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.weapon_switch_cooldown = 200
 
         # magic
-        self.catalyst = interface_details["catalyst"]["name"]
+        self.catalyst = player_core_info["catalyst"]["name"]
         self.create_magic = create_magic
         self.spell_index = 0
-        self.current_spell = interface_details["spells"][self.spell_index+1]
+        self.current_spell = player_core_info["spells"][self.spell_index+1]
         self.scrolling_spells = False
         self.spell_scroll_cooldown = 200
         self.spell_scroll_time = None
 
         # stats
-        self.stamina_light_attack_cost = interface_details["light_attack"]["stamina_use"]
-        self.stamina_heavy_attack_cost = interface_details["heavy_attack"]["stamina_use"]
-        self.stamina_skill_cost = interface_details["skill"]["stamina_use"]
+        self.stamina_light_attack_cost = player_core_info["light_attack"]["stamina_use"]
+        self.stamina_heavy_attack_cost = player_core_info["heavy_attack"]["stamina_use"]
+        self.stamina_skill_cost = player_core_info["skill"]["stamina_use"]
         self.stamina_magic_mult = 4 # todo: per spell
 
         self.health = player_data['dependent_variables']['health']
@@ -98,7 +98,7 @@ class Player(Entity):
         self.transition_width_m = 0
 
         self.speed = player_data['dependent_variables']['speed']
-        self.xp = interface_details['values']['souls']
+        self.xp = player_core_info['values']['souls']
         self.stamina_recovery_speed = player_data['dependent_variables']['stamina recovery']
         self.mana_recovery_speed = player_data['dependent_variables']['mana recovery']
         self.stamina_roll = 15
@@ -115,7 +115,7 @@ class Player(Entity):
         self.level = 1
 
         self.upgrade_equation = get_upgrade_cost(self.level)
-        interface_details['values']['levelup_cost'] = round(self.upgrade_equation)
+        player_core_info['values']['levelup_cost'] = round(self.upgrade_equation)
 
         # damage timer
         self.vulnerable = True
@@ -344,12 +344,12 @@ class Player(Entity):
                         # estus input
                         if keys[pygame.K_e] and not self.drinking_estus:  
                             
-                            if interface_details["values"]["current estus"] > 0:
+                            if player_core_info["values"]["current estus"] > 0:
                                 self.drinking_estus = True
                                 self.estus_use_time = pygame.time.get_ticks()
                                 self.use_item_effect()
 
-                                interface_details["values"]["current estus"] -= 1
+                                player_core_info["values"]["current estus"] -= 1
                                 self.health_increase += 300 # todo: include estus level in amount of hp recovered AND update HP numbers
                                 if self.health_increase >= player_data['dependent_variables']['health']:
                                     self.health_increase = player_data['dependent_variables']['health']
@@ -379,8 +379,8 @@ class Player(Entity):
                             if self.stamina_target - self.stamina_magic_mult >= 0:
                                 self.stamina_target -= self.stamina_magic_mult
                                 
-                                spell_name = interface_details["spells"][self.spell_index+1]
-                                spell_power = (magic_data[spell_name]["strength"] + interface_details["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
+                                spell_name = player_core_info["spells"][self.spell_index+1]
+                                spell_power = (magic_data[spell_name]["strength"] + player_core_info["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
                                 spell_fp_cost = magic_data[spell_name]["cost"]
                                 self.create_magic(spell_name, spell_power, spell_fp_cost)
 
@@ -518,7 +518,7 @@ class Player(Entity):
         self.popup.boons = []
         self.popup.boons_names = []
         # Only load boons (not sub-boons) for the display
-        for current_boon in interface_details["boons"]["list"]:
+        for current_boon in player_core_info["boons"]["list"]:
             if not boon_data[current_boon]["is_subboon"]:
                 current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
                 self.popup.boons.append(current_boon_surf)
@@ -530,12 +530,12 @@ class Player(Entity):
         else: attack = "skill" # todo: get skill/ability damage
 
         base_damage = player_data['dependent_variables']['attack']
-        weapon_damage = interface_details[attack]["base damage"]
+        weapon_damage = player_core_info[attack]["base damage"]
 
         return base_damage + weapon_damage
     
     def get_full_magic_damage(self):
-        base_damage = interface_details["catalyst"]["base damage"]
+        base_damage = player_core_info["catalyst"]["base damage"]
         spell_damage = magic_data[self.current_spell]["strength"]
         dmg_multiplier = player_data['dependent_variables']['magic mult']
 
@@ -588,8 +588,8 @@ class Player(Entity):
             self.direction.x = 0
 
             # On death effects
-            interface_details['values']['lost souls'] = interface_details['values']['souls']
-            interface_details['values']['souls'] = 0
+            player_core_info['values']['lost souls'] = player_core_info['values']['souls']
+            player_core_info['values']['souls'] = 0
 
     def check_player_poise(self, dmg):
         poise_dmg = round(dmg // 2, 1)

@@ -22,10 +22,10 @@ npc_conversations = {
             "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper.", "I tend to the flame, and to thee.", "The fire fades, and soon only dark shall|remain.", "To this end, I am at thy side.", ""],
         },
         "002": {
-            "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels..."],
+            "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels...", ""],
         },
         "003": {
-            "name": "Fire Keeper", "priority": 99, "completed": False, "text": ["Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever."],
+            "name": "Fire Keeper", "priority": 99, "completed": False, "text": ["Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever.", ""],
         },
     },
     # "logan": [
@@ -85,8 +85,8 @@ player_unlocks = {
     "lordvessel": False,
 }
 
-# Player details for per run
-interface_details = {
+# Player details for per run # todo:set attacks to use current weapon;'s data
+player_core_info = {
     "light_attack": {
         "class": "sword", "name": "broadsword_light", "cooldown": 520, "base damage": 15, "knockback": 0, "stamina_use": 15,
     },
@@ -109,8 +109,9 @@ interface_details = {
         1: "heal", 2: "fire_surge", 3: "icecrag_burst",
     },
     "values": {
+        "current weapon": "Broadsword",
         "estus level": 1,
-        "souls": 99999,
+        "souls": 7050,
         "lost souls": 0,
         "max estus": 3,
         "current estus": 3,
@@ -129,6 +130,19 @@ player_data = {
 # Player inputs (mainly used for mouse)
 player_inputs = {
     "light attack": False, "heavy attack": False, "skill": False, "cast spell": False, "roll": False, "scroll spell": False, "scroll direction": 0,
+}
+
+# Weapon Upgrades
+weapon_upgrades = {
+    "Broadsword": {
+        "0": True, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
+    },
+    "Greataxe": {
+        "0": True, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
+    },
+    "Uchigatana": {
+        "0": False, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
+    },
 }
 
 # Enemy Spawn Types

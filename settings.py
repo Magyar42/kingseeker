@@ -75,9 +75,46 @@ MANA_COLOUR_GRADIENT = "#272A7F"
 UI_BORDER_COLOUR_ACTIVE = "#FF8208"
 INV_BORDER = "#755E30"
 
-# Weapon Data # todo: change for kingseeker
+# Weapon Data
 weapon_data = {
-    "Broadsword": {"cooldown": 100, "damage": 15, "knockback": 2, "weight": 3},
+    "test": {"cooldown": 100, "damage": 15, "knockback": 2, "weight": 3},
+    "Broadsword": {
+        "0": { "Base Damage": 25, "Knockback": 10, "Cooldown": 0, "Recovery": 0.3, "Stamina Use": 10, "Mana Use": 0, "Scales": "STR+DEX" },
+
+        "1": { "Base Damage": 35, "Knockback": 15, "Cooldown": 0, "Recovery": 0.6, "Stamina Use": 20, "Mana Use": 0, "Scales": "STR+DEX" },
+
+        "2": { "Base Damage": 40, "Knockback": 10, "Cooldown": 0, "Recovery": 0.6, "Stamina Use": 25, "Mana Use": 25, "Scales": "STR+DEX" },
+    },
+    "Greataxe": {
+        "0": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["STRENGTH"] },
+
+        "1": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["STRENGTH"] },
+        
+        "2": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["STRENGTH"] },
+    },
+    "Uchigatana": {
+        "0": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["DEXTERITY"] },
+
+        "1": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["DEXTERITY"] },
+        
+        "2": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["DEXTERITY"] },
+    },
+}
+
+# Weapon Upgrades - Cost
+# lvl 0 = humanities
+# lvl 1-3 = titanite
+# lvl 4-6 = demon titanite
+weapon_upgrades_cost = {
+    "Broadsword": {
+        "0": 0, "1": 3, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+    },
+    "Greataxe": {
+        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+    },
+    "Uchigatana": {
+        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+    },
 }
 
 # Boons Data
@@ -472,11 +509,11 @@ resource_details = {
     "titanite shards": ["Upgrade Material", "Most common titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +3."],
     "large titanite shards": ["Upgrade Material", "Larger and rarer titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +6."],
     
-    "titanite chunks": ["Upgrade Material", "", ">Found in various locations.|>Can be bought from various vendors.|>Can be used to permanently upgrade|standard weapons.", "Titanite is the heirloom of a nameless blacksmith|deity. All that remains are fragments and shards."],
+    "titanite chunks": ["Upgrade Material", "", ">Found in various locations.|>Can be bought from various vendors.|>Can be used for basic permanent weapon|upgrades.", "Titanite is the heirloom of a nameless blacksmith|deity. All that remains are fragments and shards."],
 
     "titanite slabs": ["Upgrade Material", "Legendary titanite material of a nameless blacksmith deity. Etched into weapons for reinforcement.", ">Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen standard weapons|to +10 and demon/twinkling weapons to +5."],
 
-    "demon titanite": ["Upgrade Material", "", ">Dropped by Titanite Demons.|>Can be bought from various vendors.|>Can be used to permanently upgrade|infernal weapons.", "Great beasts arose from slabs of Titanite after the|blacksmith deity's death."],
+    "demon titanite": ["Upgrade Material", "", ">Dropped by Titanite Demons.|>Can be bought from various vendors.|>Can be used for advanced permanent weapon|upgrades.", "Great beasts arose from slabs of Titanite after the|blacksmith deity's death."],
 
     "twinkling titanite": ["Upgrade Material", "Titanite imbued with a particularly powerful energy of unknown origin.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen twinkling weapons|to +4."],
 }
@@ -492,6 +529,7 @@ ui_data = {
 lore_misc = {
     "gifts_of_humanity": '"Once, the Lord of Light banished Dark, and all that stemmed|from humanity. And men assumed a fleeting form."',
     "level_up": '"Souls are the source of all life, and whether Undead, or even|Hollow, one continues to seek them."',
+    "weapons": '"In battle, y’ weapons are yer only friends. Forge them well,|and they won’t let y’ down."',
 }
 
 LEVELUP_MULT = 200

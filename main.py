@@ -92,28 +92,28 @@ class Game:
             pygame.display.update()
             self.clock.tick(FPS)
     
-    def play_intro(self):
-        while True:
-            key = None
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    opening.close()
-                    pygame.quit()
-                    exit()
+    # def play_intro(self):
+    #     while True:
+    #         key = None
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 opening.close()
+    #                 pygame.quit()
+    #                 exit()
 
-                if event.type == pygame.KEYDOWN:
-                    key = pygame.key.name(event.key)
+    #             if event.type == pygame.KEYDOWN:
+    #                 key = pygame.key.name(event.key)
             
-            if opening.get_pos() >= 219 or opening.get_pos() >= 0.1 and key == "escape": # Skip
-                opening.close()
-                pygame.mixer.music.load("assets/audio/MainTheme.mp3")
-                pygame.mixer.music.set_volume(0.1)
-                pygame.mixer.music.play(loops = -1)
-                game.run_game()
+    #         if opening.get_pos() >= 219 or opening.get_pos() >= 0.1 and key == "escape": # Skip
+    #             opening.close()
+    #             pygame.mixer.music.load("assets/audio/MainTheme.mp3")
+    #             pygame.mixer.music.set_volume(0.1)
+    #             pygame.mixer.music.play(loops = -1)
+    #             game.run_game()
             
-            if opening.draw(pygame.display.get_surface(), (0, 0), force_draw=False):
-                pygame.display.update()
-            self.clock.tick(FPS)
+    #         if opening.draw(pygame.display.get_surface(), (0, 0), force_draw=False):
+    #             pygame.display.update()
+    #         self.clock.tick(FPS)
 
     def main_menu(self):
         mainmenu_title = pygame.transform.scale(pygame.image.load("assets/graphics/title3.png"), (949, 125))

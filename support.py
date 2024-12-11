@@ -135,3 +135,14 @@ def createUI(surface, width, height, pos, type="", padding = 20):
     surface.blit(bg_border_right, (pos[0] + (2 * corner_width) + border_width - 10 - 2 + padding, pos[1] + corner_height - padding))
 
     surface.blit(bg_body_resized, (pos[0] - 8, pos[1] - 8))
+
+def getBoxStatus(active_cond, locked_cond, hover_cond):
+    if active_cond: icon = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+    
+    elif locked_cond: icon = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+    
+    elif hover_cond: icon = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+    
+    else: icon = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+
+    return icon
