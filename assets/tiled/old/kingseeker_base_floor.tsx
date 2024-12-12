@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="kingseeker_base_floor" tilewidth="64" tileheight="64" tilecount="550" columns="22">
- <image source="../../Dropbox/Kingseeker/assets/graphics/tilemap/Floor.png" width="1408" height="1600"/>
+<tileset version="1.10" tiledversion="1.11.0" name="kingseeker_base_floor" tilewidth="64" tileheight="64" tilecount="550" columns="22">
+ <image source="../../graphics/tilemap/Floor.png" width="1408" height="1600"/>
  <tile id="244" probability="0.5"/>
  <tile id="245" probability="0.5"/>
  <tile id="252" probability="0.15"/>

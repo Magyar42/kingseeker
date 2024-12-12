@@ -7,7 +7,7 @@ from debug import debug
 from random import choice
 
 class NPC(pygame.sprite.Sprite):
-    def __init__(self, npc_id, pos, groups, chamber_cleared, blit_reward_icon, map_id, effect = None, reward = "None", unique_id = None, rotate_val = 0):
+    def __init__(self, npc_id, pos, groups, chamber_cleared, blit_reward_icon, lock_player, unlock_player, map_id, effect = None, reward = "None", unique_id = None, rotate_val = 0):
         super().__init__(groups)
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
@@ -48,6 +48,8 @@ class NPC(pygame.sprite.Sprite):
         self.effect = effect  
         self.reward = reward
         self.blit_reward_icon = blit_reward_icon
+        self.lock_player = lock_player
+        self.unlock_player = unlock_player
         self.icon_blitted = False
 
         # self.chest_sound = pygame.mixer.Sound("assets/audio/sfx/OpenChest.wav")
@@ -114,8 +116,7 @@ class NPC(pygame.sprite.Sprite):
             if not self.interacting_npc:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_f]:
-                    player.direction.y = 0
-                    player.direction.x = 0
+                    self.lock_player()
                     if self.npc_id != "transition_prompt":
                         self.interacting_npc = True
                         self.initiate_npc(player)
@@ -161,6 +162,7 @@ class NPC(pygame.sprite.Sprite):
                     self.current_line_index = 0
 
                     self.convo["completed"] = True # Marks last convo as done
+                    self.unlock_player() # Reenable player control
                 else:
                     self.player_input(player)
                     self.click_cooldown()

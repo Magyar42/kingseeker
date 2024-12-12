@@ -52,8 +52,8 @@ class UI:
         self.input_underlay = pygame.image.load(f"assets/graphics/ui/interface/input_underlay.png")
         self.estus_counter = pygame.image.load(f"assets/graphics/ui/interface/counter_box.png")
 
-        self.esc_inactive_img = pygame.image.load("assets/graphics/ui/key_icons/esc_inactive.png")
-        self.esc_active_img = pygame.image.load("assets/graphics/ui/key_icons/esc_active.png")
+        self.tab_inactive_img = pygame.image.load("assets/graphics/ui/key_icons/tab_inactive.png")
+        self.tab_active_img = pygame.image.load("assets/graphics/ui/key_icons/tab_active.png")
 
     def update_bars(self):
         self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
@@ -223,10 +223,10 @@ class UI:
         self.display_surface.blit(self.input_underlay, (165, 535))
     
     def show_details_toggle(self, trigger):
-        esc_rect = self.esc_inactive_img.get_rect(topleft = (5, 679))
+        tab_rect = self.tab_inactive_img.get_rect(topleft = (5, 679))
 
-        if trigger: self.display_surface.blit(self.esc_active_img, esc_rect)
-        else: self.display_surface.blit(self.esc_inactive_img, esc_rect)
+        if trigger: self.display_surface.blit(self.tab_active_img, tab_rect)
+        else: self.display_surface.blit(self.tab_inactive_img, tab_rect)
     
     def combat_display(self, player):
         self.update_bars()

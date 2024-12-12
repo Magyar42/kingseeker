@@ -46,13 +46,7 @@ npc_conversations = {
 resources = {
     "soul remnants": 30,
     "humanity sprites": 11,
-
-    # "souvenirs of reprisal": 2,
-    # "sunlight medals": 3,
-
-    # "titanite shards": 4,
     "titanite chunks": 3,
-    # "titanite slabs": 0,
     "demon titanite": 1,
 }
 
@@ -64,52 +58,31 @@ covenant_ranks = {
     "chaos servants": 0,
 }
 
-# "Remains of a powerful soul belonging to a great warrior.", "Gained after death, amount scaling with the|number of level-ups in a run."
-# Rare black sprite found on corpses, distinct from the soul that resides within all creatures.
-
-# Resource Info
-resource_details = {
-    "soul remnants": ["Level-up Resource", "", ">Gained after death.|>Spending Souls on levelling up increases|the amount of Soul Remnants gained.|>Can be spent on permanent level-ups.", "Souls are present in all living things, and a|powerful soul requires many to have be defeated."],
-
-    "humanity sprites": ["Level-up Resource | Covenant Offering", "", ">Dropped by some enemies.|>Found in various locations.|>Can be spent on permanent unique bonuses|in several ways.", "Rare black sprite found on human remains. Thought|to be somehow distinct from the soul."],
-
-    "souvenirs of reprisal": ["Covenant Offering", "Blood-drained, shrunken ear. Souvenir taken from subduing the guilty.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Blades of the Darkmoon|to increase Covenant rank."],
-    "sunlight medals": ["Covenant Offering", "Warm medal, engraved with the symbol of the Sun. Represents Lord Gwyn's firstborn, who lost the status of deity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Warriors of Sunlight to|increase Covenant rank."],
-    "eyes of death": ["Covenant Offering", "Eyes taken from those afflicted by curses of petrification. Known to be used to spread death.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Gravelord Servants to|increase Covenant rank."],
-    "dragon scales": ["Covenant Offering", "Scales peeled from an ancient dragon. Highly sought after for its rarity.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be offered to the Path of the Dragon to|increase Covenant rank."],
-    "titanite shards": ["Upgrade Material", "Most common titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +3."],
-    "large titanite shards": ["Upgrade Material", "Larger and rarer titanite material. Etched into weapons for reinforcement.", "Can be found in chambers.|Can be purchased from some vendors.", "Can be used to strengthen standard weapons|to +6."],
-    
-    "titanite chunks": ["Upgrade Material", "", ">Found in various locations.|>Can be bought from various vendors.|>Can be used to permanently upgrade|standard weapons.", "Titanite is the heirloom of a nameless blacksmith|deity. All that remains are fragments and shards."],
-
-    "titanite slabs": ["Upgrade Material", "Legendary titanite material of a nameless blacksmith deity. Etched into weapons for reinforcement.", ">Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen standard weapons|to +10 and demon/twinkling weapons to +5."],
-
-    "demon titanite": ["Upgrade Material", "", ">Dropped by Titanite Demons.|>Can be bought from various vendors.|>Can be used to permanently upgrade|infernal weapons.", "Great beasts arose from slabs of Titanite after the|blacksmith deity's death."],
-
-    "twinkling titanite": ["Upgrade Material", "Titanite imbued with a particularly powerful energy of unknown origin.", "Can be found in chambers.|Can be gained from defeating strong enemies.", "Can be used to strengthen twinkling weapons|to +4."],
-}
-
 # Base attributes
 player_attributes = {
-    "Vigour": 1,
-    "Endurance": 1,,
-    "Strength": 1,
-    "Dexterity": 1,
-    "Intelligence": 1,
-    "Faith": 1,
+    "VITALITY": 1,
+    "ENDURANCE": 1,
+    "STRENGTH": 1,
+    "DEXTERITY": 1,
+    "INTELLIGENCE": 1,
+    "FAITH": 1,
+}
+
+# Gifts of Humanity
+player_gifts = {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
 }
 
 # Permanent Unlocks
 player_unlocks = {
-    "rite of kindling": False,
     "1st bell of awakening": False,
     "2nd bell of awakening": False,
     "lordvessel": False,
-    "soul of the gravelord": False,
-    "soul of the paledrake": False,
-    "soul of the chaos witch": False,
-    "soul of the four kings": False,
-    "kiln of the first flame": False,
 }
 
 # Player details for per run
@@ -157,43 +130,6 @@ player_data = {
 # Player inputs (mainly used for mouse)
 player_inputs = {
     "light attack": False, "heavy attack": False, "skill": False, "cast spell": False, "roll": False, "scroll spell": False, "scroll direction": 0,
-}
-
-# Bonfire Data
-bonfire_data = {
-    0: {'kindle_level': 1, 'warp_target': True, 'warp_node': True, 'can_warp': False, 'active': False},
-}
-
-# Bonfire Menu Options
-bonfire_menu_options = {
-    "Leave": True, "Level Up": True, "Attune Magic": True, "Warp": False, "Kindle": True, "Use Humanity": True,
-}
-
-# UI Info
-ui_data = {
-    "HEALTH_BAR_WIDTH": player_data['dependent_variables']['health'] * 0.5,
-    "STAMINA_BAR_WIDTH": player_data['dependent_variables']['stamina'] * 2,
-    "MANA_BAR_WIDTH": player_data['dependent_variables']['mana'] * 1,
-}
-
-# Item Pickups
-ground_item_list = [
-    [0, "Humanity", 2],
-    [0, "Estus Flask", 1],
-    [0, "Darkmoon Seance Ring", 1],
-    [0, "Titanite Shard", 2, "Green Titanite Shard", 1],
-]
-
-# Chests
-chest_list = [0,0,0,0,0]
-
-# Levers
-# maybe add the effects?
-lever_list = [0,0,0,0]
-
-# Messages
-message_list = {
-    1: ["Be wary of beast. In,", "short, time for running."]
 }
 
 # Enemy Spawn Types

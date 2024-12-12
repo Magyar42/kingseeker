@@ -1,10 +1,15 @@
-import pygame, sys, platform
+import pygame, sys
 from settings import *
 from debug import debug
 from level import Level
 from support import *
 from button import Button
-from particles import AnimationPlayer
+import json
+import gameinfo
+import uuid
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+import os
 
 icon_image = pygame.image.load("assets/graphics/ico.png")
 
@@ -12,10 +17,6 @@ icon_image = pygame.image.load("assets/graphics/ico.png")
 def mm_newgame():
     print("Starting Game.")
 
-    pygame.mixer.music.stop()
-    pygame.mixer.music.load("assets/audio/MainTheme.mp3")
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(loops = -1)
     game.run_game()
 
 def mm_exit():
@@ -33,10 +34,21 @@ def mm_system():
 
     game.settings()
 
+def mm_load_save():
+    print("Loading Save.")
+
+    game.load_save()
+
 def display_cursor(img, screen):
     cursor_pos = pygame.mouse.get_pos()
     cursor_rect = img.get_rect(topleft = (cursor_pos[0] - 5, cursor_pos[1] - 2))
     screen.blit(img, cursor_rect)
+
+def change_music():
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load("assets/audio/MainTheme.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(loops = -1)
 
 # Button Sprites
 mainmenuFont = pygame.font.Font(UI_FONT, MAIN_MENU_FONT_SIZE)
@@ -46,9 +58,10 @@ subTitleFont = pygame.font.Font(UI_FONT, SMALL_FONT_SIZE)
 mainMenuSprites = pygame.sprite.Group()
 mainMenuSprites.add(
     Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1], 200, 25), mm_newgame, 'NEW GAME'),
-    Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1] + 40, 200, 25), mm_system, 'SETTINGS'),
-    Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1] + 80, 200, 25), mm_credits, 'CREDITS'),
-    Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1] + 120, 200, 25), mm_exit, 'QUIT'),
+    Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1] + 40, 200, 25), mm_load_save, 'LOAD GAME'),
+    Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1] + 80, 200, 25), mm_system, 'SETTINGS'),
+    Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1] + 120, 200, 25), mm_credits, 'CREDITS'),
+    Button(mainmenuFont, pygame.Color(MM_COLOUR), TEXT_COLOUR, HOVER_COLOUR, pygame.Rect(centreImageNum(200, 20)[0] + 110, centreImageNum(200, 20)[1] + 160, 200, 25), mm_exit, 'QUIT'),
 )
 
 class Game:
@@ -67,10 +80,43 @@ class Game:
         self.frame_index = 0
         self.image = self.frames_list[self.frame_index]
 
+        self.save_data = None
+        # self.save_game()
+
+    def save_game(self):
+        # Find the directory in the user's Documents folder
+        documents_dir = os.path.expanduser("~/Documents")
+        saved_games_dir = os.path.join(documents_dir, "Saved Games", "Kingseeker")
+
+        # Ensure the directory exists
+        os.makedirs(saved_games_dir, exist_ok=True)
+
+        # Generate a unique file name using UUID
+        unique_id = uuid.uuid4().hex[:8]
+        file_name = f"savedata_{unique_id}.json"
+        file_path = os.path.join(saved_games_dir, file_name)
+
+        # Collect all dictionaries from gameinfo.py
+        self.save_data = {
+            name: obj
+            for name, obj in vars(gameinfo).items()
+            if isinstance(obj, dict) and not name.startswith("__")  # Exclude dunder (double underscore) attributes
+        }
+
+        # Save the dictionaries to a JSON file
+        with open(file_path, 'w') as file:
+            json.dump(self.save_data, file, indent=4)
+
     def run_game(self):
+        change_music()
+
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    
+                    # Save the game
+                    self.save_game()
+
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -91,29 +137,64 @@ class Game:
             display_cursor(self.cursor_img, self.screen)
             pygame.display.update()
             self.clock.tick(FPS)
-    
-    def play_intro(self):
-        while True:
-            key = None
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    opening.close()
-                    pygame.quit()
-                    exit()
 
-                if event.type == pygame.KEYDOWN:
-                    key = pygame.key.name(event.key)
+    def load_save(self):
+        # Open file dialog
+        Tk().withdraw()  # Prevent Tkinter window from appearing
+        file_path = askopenfilename(
+            title="Select a save file",
+            filetypes=[("JSON files", "*.json")]
+        )
+
+        if not file_path:
+            print("No file selected.")
+            return
+    
+        try:
+            # Load the JSON data from the save file
+            with open(file_path, 'r') as file:
+                saved_data = json.load(file)
             
-            if opening.get_pos() >= 219 or opening.get_pos() >= 0.1 and key == "escape": # Skip
-                opening.close()
-                pygame.mixer.music.load("assets/audio/MainTheme.mp3")
-                pygame.mixer.music.set_volume(0.1)
-                pygame.mixer.music.play(loops = -1)
-                game.run_game()
+            # Update dictionaries in gameinfo with the loaded data
+            for name, save_data in saved_data.items():
+                if hasattr(gameinfo, name):  # Check if the attribute exists in gameinfo
+                    gameinfo_dict = getattr(gameinfo, name)
+                    if isinstance(gameinfo_dict, dict):  # Ensure it's a dictionary before updating
+                        # print(gameinfo_dict)
+                        # print(save_data)
+                        gameinfo_dict.update(save_data)  # Update the dictionary in place
+                        print(f"Updated {name} in gameinfo.")
+        
+        # If file cannot be loaded (due to corruption, fake file etc)
+        except:
+            print("Cannot load save file. Creating new save instead.")
+        
+        # Run game
+        self.run_game()
+
+    
+    # def play_intro(self):
+    #     while True:
+    #         key = None
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 opening.close()
+    #                 pygame.quit()
+    #                 exit()
+
+    #             if event.type == pygame.KEYDOWN:
+    #                 key = pygame.key.name(event.key)
             
-            if opening.draw(pygame.display.get_surface(), (0, 0), force_draw=False):
-                pygame.display.update()
-            self.clock.tick(FPS)
+    #         if opening.get_pos() >= 219 or opening.get_pos() >= 0.1 and key == "escape": # Skip
+    #             opening.close()
+    #             pygame.mixer.music.load("assets/audio/MainTheme.mp3")
+    #             pygame.mixer.music.set_volume(0.1)
+    #             pygame.mixer.music.play(loops = -1)
+    #             game.run_game()
+            
+    #         if opening.draw(pygame.display.get_surface(), (0, 0), force_draw=False):
+    #             pygame.display.update()
+    #         self.clock.tick(FPS)
 
     def main_menu(self):
         mainmenu_title = pygame.transform.scale(pygame.image.load("assets/graphics/title3.png"), (949, 125))

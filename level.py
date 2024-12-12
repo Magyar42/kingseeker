@@ -23,6 +23,7 @@ from bloodstain import Bloodstain
 from weapon import Hurtboxes
 from npc import NPC
 from interactable_items import SummonSign
+from interactable_items import PerkPillar
 from popups import BoonsMenu
 
 class Level:
@@ -72,7 +73,7 @@ class Level:
         self.create_map(True, self.map_id)
 
         self.ui = UI()
-        self.boons_menu = BoonsMenu(self.toggle_menu, self.enable_player_control)
+        self.boons_menu = BoonsMenu(self.toggle_menu, self.boons_postmenu)
         self.boons_menu_open = False
         self.boon_options = None
 
@@ -310,7 +311,14 @@ class Level:
 
                                     unique_id = transition_ids[0]
                                     transition_ids.pop(0)
-                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_cleared, self.blit_reward_icon, self.map_id, effect, reward, unique_id, rotate_val)
+                                NPC(npc_id, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.chamber_cleared, self.blit_reward_icon, self.lock_player, self.enable_player_control, self.map_id, effect, reward, unique_id, rotate_val)
+                            elif column in pillar_list:
+                                if column == "386": pillar_type = "perks"
+                                elif column == "364": pillar_type = "levels"
+                                elif column == "342": pillar_type = "bonfire"
+                                elif column == "320": pillar_type = "weapons"
+                                elif column == "298": pillar_type = "anvil"
+                                PerkPillar(pillar_type, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.trigger_pillar_effect)
                             elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
                                 self.reward_pos = (x, y)
@@ -544,22 +552,35 @@ class Level:
     # def activated_lever_effect(self, id, pos):
     #     # todo: do an effect depending on the lever id
     #     print("Lever pulled!")
+
+    def trigger_pillar_effect(self, type): # todo
+        self.lock_player()
+        print("Perk pillar activated!")
     
     def summon_sign_effect(self, covenant):
-        self.player.resting = True
+        self.lock_player()
         self.boons_menu_open = True
-        self.player.any_interface_open = True
         self.boon_options = self.boons_menu.generate_boons(covenant)
         print(f"{covenant} summon sign activated!")
+    
+    # Prevents player movement and prevents TAB menu toggle
+    def lock_player(self):
+        self.player.any_interface_open = True
+        self.player.resting = True
+        self.player.direction.y = 0
+        self.player.direction.x = 0
 
     # Enables player movement, removing any screen-effects
     def enable_player_control(self):
         self.player.resting = False
-        self.boons_menu_open = False
         self.player.any_interface_open = False
+    
+    def boons_postmenu(self):
+        self.boons_menu_open = False
         self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
 
         self.player.trigger_boons_update = True
+        self.enable_player_control()
     
     def activated_message_effect(self, id, pos):
         if not self.displaying_message:
@@ -691,6 +712,7 @@ class Level:
         self.visible_sprites.npc_update(self.player, self.chamber_cleared)
         self.visible_sprites.bonfire_update(self.player)
         self.visible_sprites.sign_update(self.player)
+        self.visible_sprites.pillar_update(self.player)
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
@@ -795,6 +817,11 @@ class YSortCameraGroup(pygame.sprite.Group):
         sign_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "summon_sign"]
         for sign in sign_sprites:
             sign.sign_update(player)
+    
+    def pillar_update(self, player):
+        pillar_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "pillar"]
+        for pillar in pillar_sprites:
+            pillar.pillar_update(player)
 
 class ScreenCameraGroup(pygame.sprite.Group):
     def __init__(self, map_id, region):
