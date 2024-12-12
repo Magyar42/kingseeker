@@ -1025,9 +1025,6 @@ class WeaponsSelection:
         # Current weapon - upgrades
         self.weapon_upgrades_bg()
 
-        # if self.tooltip != None:
-        #     self.create_tooltip()
-
         pos = pygame.mouse.get_pos()
         for num, rect in enumerate(self.button_rect_list):
             hit = rect.collidepoint(pos)
@@ -1084,7 +1081,6 @@ class WeaponsSelection:
             text_rect = text_surf.get_rect(topleft = tt_rect.topleft + pygame.math.Vector2(0, 0 + (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
         
-
     def weapon_upgrades_boxes(self, num, rect):
         current_weapon = player_core_info['values']['current weapon']
         pos = pygame.mouse.get_pos()
@@ -1100,8 +1096,9 @@ class WeaponsSelection:
         hit = button_rect.collidepoint(pos)
         if num != "0": self.button_rect_list[int(num) - 1] = button_rect
 
-        icon = getBoxStatus(weapon_upgrades[current_weapon][num], resources["titanite chunks"] < cost, hit, num, "upgrades")
+        icon, num_icon = getBoxStatus(weapon_upgrades[current_weapon][num], resources["titanite chunks"] < cost, hit, num, "upgrades", True)
         self.display_surface.blit(icon, button_rect)
+        self.display_surface.blit(num_icon, button_rect)
 
         # Tooltips
         if hit: self.tooltip = num
@@ -1186,7 +1183,7 @@ class WeaponsSelection:
         else:
             if hit: # If hovering over rect...
                 if player_inputs["light attack"]: # ... and clicking on it
-                    createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green_dark")
+                    createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green")
                     self.weapon_index = num
                     player_core_info["values"]["current weapon"] = weapon
                     print(player_core_info["values"]["current weapon"])

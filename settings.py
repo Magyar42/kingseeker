@@ -86,18 +86,18 @@ weapon_data = {
         "2": { "Base Damage": 40, "Knockback": 10, "Cooldown": 0, "Recovery": 0.6, "Stamina Use": 25, "Mana Use": 25, "Scales": "STR+DEX" },
     },
     "Greataxe": {
-        "0": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["STRENGTH"] },
+        "0": { "Base Damage": 40, "Knockback": 5, "Cooldown": 0, "Recovery": 0.8, "Stamina Use": 20, "Mana Use": 0, "Scales": "STR" },
 
-        "1": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["STRENGTH"] },
-        
-        "2": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["STRENGTH"] },
+        "1": { "Base Damage": 35, "Knockback": 10, "Cooldown": 0, "Recovery": 0.7, "Stamina Use": 30, "Mana Use": 0, "Scales": "STR" },
+
+        "2": { "Base Damage": 0, "Knockback": 10, "Cooldown": 0, "Recovery": 0.5, "Stamina Use": 40, "Mana Use": 15, "Scales": "STR" },
     },
-    "Uchigatana": {
-        "0": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["DEXTERITY"] },
+    "Dagger": {
+        "0": { "Base Damage": 20, "Knockback": 10, "Cooldown": 0, "Recovery": 0.2, "Stamina Use": 10, "Mana Use": 0, "Scales": "DEX" },
 
-        "1": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["DEXTERITY"] },
-        
-        "2": { "damage": 1, "knockback": 1, "cooldown": 1, "recovery_time": 1, "stamina_use": 1, "mana_use": 1, "scales_with": ["DEXTERITY"] },
+        "1": { "Base Damage": 20, "Knockback": 15, "Cooldown": 0, "Recovery": 0.2, "Stamina Use": 10, "Mana Use": 0, "Scales": "DEX" },
+
+        "2": { "Base Damage": 0, "Knockback": 10, "Cooldown": 0, "Recovery": 0.1, "Stamina Use": 15, "Mana Use": 5, "Scales": "DEX" },
     },
 }
 
@@ -110,10 +110,10 @@ weapon_upgrades_cost = {
         "0": 0, "1": 3, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
     },
     "Greataxe": {
-        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+        "0": 10, "1": 3, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
     },
-    "Uchigatana": {
-        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+    "Dagger": {
+        "0": 10, "1": 3, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
     },
 }
 
@@ -123,10 +123,10 @@ weapon_upgrades_req = {
         "0": None, "1": None, "2": ["1"], "3": ["2"], "4": ["1"], "5": ["4"], "6": ["4", "5"], 
     },
     "Greataxe": {
-        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+        "0": None, "1": None, "2": ["1"], "3": ["2"], "4": ["1"], "5": ["4"], "6": ["4", "5"], 
     },
-    "Uchigatana": {
-        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+    "Dagger": {
+        "0": None, "1": None, "2": ["1"], "3": ["2"], "4": ["1"], "5": ["4"], "6": ["4", "5"], 
     },
 }
 

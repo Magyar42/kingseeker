@@ -136,8 +136,10 @@ def createUI(surface, width, height, pos, type="", padding = 20):
 
     surface.blit(bg_body_resized, (pos[0] - 8, pos[1] - 8))
 
-def getBoxStatus(active_cond, locked_cond, hover_cond, id, usage):
+def getBoxStatus(active_cond, locked_cond, hover_cond, id, usage, num=False):
+    num_icon = None
     locked = False
+
     if usage == "upgrades":
         current_weapon = player_core_info['values']['current weapon']
         required_upgrades = weapon_upgrades_req[current_weapon][str(id)]
@@ -147,12 +149,17 @@ def getBoxStatus(active_cond, locked_cond, hover_cond, id, usage):
                 if not weapon_upgrades[current_weapon][req]: locked = True
 
     
-    if active_cond: icon = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+    if active_cond:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}_active.png").convert_alpha()
     
-    elif locked_cond or locked: icon = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+    elif locked_cond or locked:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}.png").convert_alpha()
     
     elif hover_cond:
         icon = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}.png").convert_alpha()
 
         if player_inputs["light attack"]:
             if usage == "upgrades":
@@ -163,6 +170,8 @@ def getBoxStatus(active_cond, locked_cond, hover_cond, id, usage):
                 resources["titanite chunks"] -= cost
                 player_inputs["light attack"] = False
     
-    else: icon = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+    else:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}.png").convert_alpha()
 
-    return icon
+    return icon, num_icon

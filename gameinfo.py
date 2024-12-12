@@ -140,8 +140,8 @@ weapon_upgrades = {
     "Greataxe": {
         "0": True, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
     },
-    "Uchigatana": {
-        "0": False, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
+    "Dagger": {
+        "0": True, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
     },
 }
 
