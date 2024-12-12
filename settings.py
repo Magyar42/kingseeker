@@ -117,6 +117,19 @@ weapon_upgrades_cost = {
     },
 }
 
+# Weapon Upgrades - Requirements
+weapon_upgrades_req = {
+    "Broadsword": {
+        "0": None, "1": None, "2": ["1"], "3": ["2"], "4": ["1"], "5": ["4"], "6": ["4", "5"], 
+    },
+    "Greataxe": {
+        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+    },
+    "Uchigatana": {
+        "0": 10, "2": 5, "3": 7, "4": 2, "5": 4, "6": 6, 
+    },
+}
+
 # Boons Data
 boon_data = {
     ## Warriors of Sunlight
@@ -494,6 +507,16 @@ player_attributes_text = {
     "DEXTERITY": ">Increases damage for attacks|scaling with DEX",
     "INTELLIGENCE": ">Increases base mana|>Increases damage for attacks|scaling with INT",
     "FAITH": ">Increases base mana|>Increases damage for attacks|scaling with FAI",
+}
+
+# Weapon upgrades - Text
+upgrades_text = {
+    "1": 'All Attacks:|>Stamina Cost: -10%',
+    "2": "Primary & Secondary:|>Recovery Time: -20%",
+    "3": "Ability:|>Mana Cost: -20%",
+    "4": "Primary & Secondary:|>Base Damage: +15%",
+    "5": "Ability:|>Recovery Time: -15%",
+    "6": "All Attacks:|>Scaling: +50%",
 }
 
 # Resource Info

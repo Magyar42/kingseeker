@@ -136,12 +136,32 @@ def createUI(surface, width, height, pos, type="", padding = 20):
 
     surface.blit(bg_body_resized, (pos[0] - 8, pos[1] - 8))
 
-def getBoxStatus(active_cond, locked_cond, hover_cond):
+def getBoxStatus(active_cond, locked_cond, hover_cond, id, usage):
+    locked = False
+    if usage == "upgrades":
+        current_weapon = player_core_info['values']['current weapon']
+        required_upgrades = weapon_upgrades_req[current_weapon][str(id)]
+
+        if required_upgrades != None:
+            for req in required_upgrades:
+                if not weapon_upgrades[current_weapon][req]: locked = True
+
+    
     if active_cond: icon = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
     
-    elif locked_cond: icon = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+    elif locked_cond or locked: icon = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
     
-    elif hover_cond: icon = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+    elif hover_cond:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+
+        if player_inputs["light attack"]:
+            if usage == "upgrades":
+                current_weapon = player_core_info['values']['current weapon']
+                cost = weapon_upgrades_cost[current_weapon][str(id)]
+
+                weapon_upgrades[current_weapon][str(id)] = 1
+                resources["titanite chunks"] -= cost
+                player_inputs["light attack"] = False
     
     else: icon = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
 

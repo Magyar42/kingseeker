@@ -1002,11 +1002,14 @@ class WeaponsSelection:
         self.click_cooldown = 100
         self.click_time = None
 
+        self.arrows = pygame.image.load("assets/graphics/ui/interface/upgrades_arrows.png").convert_alpha() 
         self.titanite_icon = pygame.image.load("assets/graphics/ui/resources/10_titanite chunks.png").convert_alpha()
         self.demontitanite_icon = pygame.image.load("assets/graphics/ui/resources/12_demon titanite.png").convert_alpha()
         self.box_icon = self.demontitanite_icon = pygame.image.load("assets/graphics/ui/interface/input_box_selected.png").convert_alpha()
-
+        
         self.weapon_index = 0
+        self.tooltip = None
+        self.button_rect_list = ["", "", "", "", "", ""]
     
     def display(self):
         self.draw_bg()
@@ -1021,6 +1024,15 @@ class WeaponsSelection:
 
         # Current weapon - upgrades
         self.weapon_upgrades_bg()
+
+        # if self.tooltip != None:
+        #     self.create_tooltip()
+
+        pos = pygame.mouse.get_pos()
+        for num, rect in enumerate(self.button_rect_list):
+            hit = rect.collidepoint(pos)
+            if hit:
+                self.create_tooltip(num+1)
         
         self.check_input()
         self.cooldowns()
@@ -1054,15 +1066,16 @@ class WeaponsSelection:
         title_rect = title_surface.get_rect(topleft = main_rect.topleft + pygame.math.Vector2(115, 115))
         self.display_surface.blit(title_surface, title_rect)
 
-    def create_tooltip(self, id, pos):
+    def create_tooltip(self, id):
+        pos = pygame.mouse.get_pos()
         
-        tt_size = (350, 40)
+        tt_size = (220, 40)
         tt_pos = (pos[0] + 20, pos[1] - tt_size[1] - 20)
         tt_rect = pygame.Rect(tt_pos[0], tt_pos[1], tt_size[0], tt_size[1])
 
         createUI(self.display_surface, tt_rect.width, tt_rect.height, tt_pos, "basic")
 
-        used_text = player_attributes_text[id]
+        used_text = upgrades_text[str(id)]
         split_current_line = used_text.split("|")
         while len(split_current_line) < 4:
             split_current_line.append("")
@@ -1070,6 +1083,7 @@ class WeaponsSelection:
             text_surf = self.font11.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = tt_rect.topleft + pygame.math.Vector2(0, 0 + (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
+        
 
     def weapon_upgrades_boxes(self, num, rect):
         current_weapon = player_core_info['values']['current weapon']
@@ -1084,9 +1098,13 @@ class WeaponsSelection:
             case "5": button_rect = pygame.Rect(rect.left + 410, rect.centery - 16 + 32, 32, 32)
             case "6": button_rect = pygame.Rect(rect.left + 610, rect.centery - 16, 32, 32)
         hit = button_rect.collidepoint(pos)
+        if num != "0": self.button_rect_list[int(num) - 1] = button_rect
 
-        icon = getBoxStatus(weapon_upgrades[current_weapon][num], resources["titanite chunks"] < cost, hit)
+        icon = getBoxStatus(weapon_upgrades[current_weapon][num], resources["titanite chunks"] < cost, hit, num, "upgrades")
         self.display_surface.blit(icon, button_rect)
+
+        # Tooltips
+        if hit: self.tooltip = num
 
     def weapon_upgrades_bg(self):
         # Upgrades
@@ -1099,10 +1117,13 @@ class WeaponsSelection:
         
         for upgrade in range(1, 7):
             self.weapon_upgrades_boxes(str(upgrade), upgrade_rect)
+        
+        self.display_surface.blit(self.arrows, (upgrade_rect[0] - 8, upgrade_rect[1] - 8))
 
     def weapon_details(self, attack, num):
         # Individual Item
-        item_rect_size = (190, 210)
+        item_rect_size = (190, 220)
+        current_weapon = player_core_info['values']['current weapon']
 
         x = (self.display_surface.get_size()[0] // 2) - (700 // 2) + 110 + (num * 230)
         y = (self.display_surface.get_size()[1] // 2) - 200 + 30 + 30
@@ -1110,10 +1131,19 @@ class WeaponsSelection:
         main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])  
         createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "basic")
 
+        # Name
+        match str(num):
+            case "0": name_text = "Primary"
+            case "1": name_text = "Secondary"
+            case "2": name_text = "Ability" 
+
+        title_surface = self.font14.render(f"| {name_text.upper()}", True, UI_BG_COLOUR)
+        title_rect = title_surface.get_rect(topleft = main_rect.topleft + pygame.math.Vector2(0, 5))
+        self.display_surface.blit(title_surface, title_rect)
+
         # Icon
-        current_weapon = player_core_info['values']['current weapon']
         attack_icon = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_weapon}_{num}.png").convert_alpha()
-        icon_rect = attack_icon.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 10))
+        icon_rect = attack_icon.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 35))
 
         self.display_surface.blit(self.box_icon, icon_rect)
         self.display_surface.blit(attack_icon, icon_rect)
@@ -1128,7 +1158,7 @@ class WeaponsSelection:
 
         for line in range(len(text_list)):
             text_surf = self.font11.render(f">{text_list[line]}: {num_list[line]}", True, UI_BG_COLOUR)
-            text_rect = text_surf.get_rect(topleft = main_rect.topleft + pygame.math.Vector2(num, 105 + (line * 15)))
+            text_rect = text_surf.get_rect(topleft = main_rect.topleft + pygame.math.Vector2(num, 130 + (line * 15)))
             self.display_surface.blit(text_surf, text_rect)
     
     def weapon_list(self, weapon, num):
