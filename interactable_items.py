@@ -4,6 +4,7 @@ from support import *
 from gameinfo import *
 from popups import Prompt, ItemPopup
 from debug import debug
+from random import randrange
 
 # class FloorItem(pygame.sprite.Sprite):
 #     def __init__(self, id, pos, groups, crop = False):    #check_item_retrieval
@@ -649,9 +650,8 @@ class PerkPillar(pygame.sprite.Sprite):
         self.player_interact(player)
 
 class ResourceItem(pygame.sprite.Sprite):
-    def __init__(self, resource, pos, groups, interact_effect):
+    def __init__(self, resource, pos, groups):
         super().__init__(groups)
-        self.interact_effect = interact_effect
         self.display_surface = pygame.display.get_surface()
         self.frame_index = 0
         self.animation_speed = 0.09
@@ -670,12 +670,12 @@ class ResourceItem(pygame.sprite.Sprite):
         self.prompt = Prompt()
         self.item_popup = ItemPopup()
 
-        self.opening_sign = False
-        self.open_cooldown = 500
-        self.open_time = None
+        self.interacting = False
+        self.interact_cooldown = 500
+        self.interact_time = None
 
-        self.sign_sound = pygame.mixer.Sound("assets/audio/sfx/ghost.wav")
-        self.sign_sound.set_volume(0.25)
+        self.interact_sound = pygame.mixer.Sound("assets/audio/sfx/PickUpItem.wav")
+        self.interact_sound.set_volume(0.25)
     
     def import_graphics(self, name):
         self.animations = {
@@ -705,31 +705,43 @@ class ResourceItem(pygame.sprite.Sprite):
 
         return distance
     
-    def summon_sign_ui_effect(self):
-        self.interact_effect(self.covenant)
+    def give_resource_effect(self):
+        # self.interact_effect(self.resource)
+        match self.resource:
+            case "humanity": resource_name = "humanity sprites"
+            case "titanite_chunk": resource_name = "titanite chunks"
+            case "demon_titanite": resource_name = "demon titanite"
+            case "great_soul": resource_name = "soul remnants"
+        
+        resource_min = chamber_rewards[self.resource]["min"]
+        resource_max = chamber_rewards[self.resource]["max"]
+        added_num = randrange(resource_min, resource_max+1)
+        resources[resource_name] += added_num
+        if self.resource == "great_soul": player_core_info["values"]["souls"] += added_num
 
     def player_interact(self, player):
         player_distance = self.get_player_dist(player)
-        if player_distance <= self.use_radius and self.status == "idle":
-            self.prompt.createPrompt("Summon Sign", "F", "Activate Summon Sign")
+        if player_distance <= self.use_radius:
+            self.prompt.createPrompt("Resource", "F", f"Pick Up {self.resource.upper()}")
 
-            if not self.opening_sign:
+            if not self.interacting:
                 keys = pygame.key.get_pressed()
 
                 if keys[pygame.K_f]:
-                    self.sign_sound.play()
-                    self.status = "activating"
+                    self.give_resource_effect()
+                    self.interact_sound.play()
+                    self.kill()
 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
 
-        if self.opening_sign:
-            if current_time - self.open_time >= self.open_cooldown:
-                self.opening_sign = False
+        if self.interacting:
+            if current_time - self.interact_time >= self.interact_cooldown:
+                self.interacting = False
     
     def update(self):
         self.animate()
         self.cooldowns()
     
-    def sign_update(self, player):
+    def resource_items_update(self, player):
         self.player_interact(player)

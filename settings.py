@@ -134,11 +134,11 @@ weapon_upgrades_req = {
 boon_data = {
     ## Warriors of Sunlight
     # Core Boons
-    "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+    # "boon_1": {"name": "Thunderous Roll", "category": "Warriors of Sunlight", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
     "boon_2": {"name": "Lightning Strike", "category": "Warriors of Sunlight", "desc1": "Primary/secondary attack emits|chain-lightning when damaging a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
-    "boon_3": {"name": "Electrifying Skill", "category": "Warriors of Sunlight", "desc1": "Ability emits chain-lightning when damaging|a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+    "boon_3": {"name": "Electrifying Skill", "category": "Warriors of Sunlight", "desc1": "Skill emits chain-lightning when damaging|a foe.", "desc2": "Skews damage scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
     "boon_4": {"name": "Sunlight Catalyst", "category": "Warriors of Sunlight", "desc1": "Gain the Sunlight Talisman capable of|casting Miracles.", "desc2": "Skews catalyst scaling towards FAITH.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
 
@@ -147,7 +147,7 @@ boon_data = {
 
     "boon_6": {"name": "King of the Storm", "category": "Warriors of Sunlight", "desc1": "Chain-lighting effects bounce 2 more times.", "desc2": "", "subboons": ["boon_11", "boon_12"], "is_subboon": False, "cat": "Boon", "parent": None},
 
-    "boon_7": {"name": "Protection of the Sun", "category": "Warriors of Sunlight", "desc1": "Ability is replaced by Soothing Sunlight,|fully restoring health when used.", "desc2": "", "subboons": ["boon_13", "boon_14"], "is_subboon": False, "cat": "Boon", "parent": None},
+    "boon_7": {"name": "Protection of the Sun", "category": "Warriors of Sunlight", "desc1": "Skill is replaced by Soothing Sunlight,|fully restoring health when used.", "desc2": "", "subboons": ["boon_13", "boon_14"], "is_subboon": False, "cat": "Boon", "parent": None},
 
     "boon_8": {"name": "Unrelenting Drive", "category": "Warriors of Sunlight", "desc1": "Killing an enemy while health is at 100%|boosts damage by 2% for 4s.", "desc2": "This effect can stack up to 5 times.", "subboons": ["boon_15", "boon_16"], "is_subboon": False, "cat": "Boon", "parent": None},
 
@@ -167,12 +167,129 @@ boon_data = {
     "boon_15": {"name": "Benevolence", "category": "Warriors of Sunlight", "desc1": "Health threshold reduced to 75%.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_8"},
 
     "boon_16": {"name": "Stormclouds", "category": "Warriors of Sunlight", "desc1": "Effect also extends stunned duration by 0.5s.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_8"},
+
+    ## Chaos Servants
+    # Core Boons
+    # "boon_17": {"name": "Thunderous Roll", "category": "Chaos Servants", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_18": {"name": "Flame Strike", "category": "Chaos Servants", "desc1": "Primary/secondary attack inflicts the Burned status effect.", "desc2": "Does not affect damage scaling.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_19": {"name": "Pyro Skill", "category": "Chaos Servants", "desc1": "Skill inflicts the Burned status effect.", "desc2": "Does not affect damage scaling.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_20": {"name": "Chaos Catalyst", "category": "Chaos Servants", "desc1": "Gain the Pyromancy Flame capable of|casting Miracles.", "desc2": "Catalyst scaling is affected by all attributes, but overall impact is lesser.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    # General Boons
+    "boon_21": {"name": "Blazing Flare", "category": "Chaos Servants", "desc1": "Enemies with the Burned status effect have their speed reduced by 15%.", "desc2": "", "subboons": ["boon_25", "boon_26"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_22": {"name": "Chaos Storm", "category": "Chaos Servants", "desc1": "Skill creates eruptions around you, remaining for 2s.", "desc2": "This effect has a cooldown of 10s.", "subboons": ["boon_27", "boon_28"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_23": {"name": "Forbidden Fire", "category": "Chaos Servants", "desc1": "Skill is replaced by Power Within,|temporarily increasing attack but draining health.", "desc2": "", "subboons": ["boon_29", "boon_30"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_24": {"name": "Fuelled Vigour", "category": "Chaos Servants", "desc1": "The Burned status effect can be applied up to 3 times on a single enemy.", "desc2": "", "subboons": ["boon_31", "boon_32"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    # Sub Boons
+    "boon_25": {"name": "Debilitating Fire", "category": "Chaos Servants", "desc1": "Enemies with the Burned status effect also have their defense reduced by 8%.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_21"},
+    
+    "boon_26": {"name": "Wildfire", "category": "Chaos Servants", "desc1": "Enemies with the Burned status effect have a chance of spreading the effect to nearby enemies.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_21"},
+
+    "boon_27": {"name": "Embrace of Chaos", "category": "Chaos Servants", "desc1": "Chaos Storm is also triggered by primary and secondary attacks.", "desc2": "Effect cooldown reduced by 3s.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_22"},
+    
+    "boon_28": {"name": "Seething Chaos", "category": "Chaos Servants", "desc1": "Eruptions have a 50% chance of inflicting the Burned status effect.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_22"},
+
+    "boon_29": {"name": "Deepened Devotion", "category": "Chaos Servants", "desc1": "Power Within also boosts stamina recovery speed.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_23"},
+    
+    "boon_30": {"name": "Substitute for Strength", "category": "Chaos Servants", "desc1": "Increases effects of Power Within by 50%, but health is drained faster.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_23"},
+
+    "boon_31": {"name": "Chance to Strike", "category": "Chaos Servants", "desc1": "Increase attack speed by 25% for 3s after inflicting the Burned status effect on a previously-unaffected enemy.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_24"},
+
+    "boon_32": {"name": "Flame Burrow", "category": "Chaos Servants", "desc1": "Enemies take 25% more damage from the Burned status effect.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_24"},
+
+    ## Darkwraiths
+    # Core Boons
+    # "boon_33": {"name": "Thunderous Roll", "category": "Darkwraiths", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_34": {"name": "Strike of Death", "category": "Darkwraiths", "desc1": "Primary/secondary attack siphons health|from enemies.", "desc2": "Does not affect damage scaling.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_35": {"name": "Dark Skill", "category": "Darkwraiths", "desc1": "Skill siphons health from enemies.", "desc2": "Does not affect damage scaling.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_36": {"name": "Occult Catalyst", "category": "Darkwraiths", "desc1": "Gain the Dark Hand capable of|casting Hexes.", "desc2": "Catalyst scaling is affected by all|attributes, but overall impact is lesser.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    # General Boons
+    "boon_37": {"name": "Writhing Humanity", "category": "Darkwraiths", "desc1": "Taking damage releases 3 sprites around you, dealing damage.", "desc2": "", "subboons": ["boon_41", "boon_42"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_38": {"name": "Strength of the Dark Soul", "category": "Darkwraiths", "desc1": "When siphoning health, there is a 15% chance of inflicting the Hollowed status effect.", "desc2": "", "subboons": ["boon_43", "boon_44"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_39": {"name": "Black Inferno", "category": "Darkwraiths", "desc1": "Skill is replaced by Darkstorm,|creating a vortex around the player for 5s.", "desc2": "", "subboons": ["boon_45", "boon_46"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_40": {"name": "Empowered Soul", "category": "Darkwraiths", "desc1": "Each Humanity gained in a run increases poise and attack by 2%.", "desc2": "", "subboons": ["boon_47", "boon_48"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    # Sub Boons
+    "boon_41": {"name": "Collective Strength", "category": "Darkwraiths", "desc1": "Writhing Humanity releases 2 more sprites.", "desc2": "Sprites are 25% larger.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_37"},
+    
+    "boon_42": {"name": "Agony", "category": "Darkwraiths", "desc1": "Sprites inflict the Hollowed status effect.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_37"},
+
+    "boon_43": {"name": "Embrace of the Abyss", "category": "Darkwraiths", "desc1": "Health siphoning is 15% more effective.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_38"},
+    
+    "boon_44": {"name": "Want for Power", "category": "Darkwraiths", "desc1": "Speed and attack speed are increased by 8% for 3s after siphoning health.", "desc2": "Effect can stack up to 4 times.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_38"},
+
+    "boon_45": {"name": "Deepened Devotion", "category": "Darkwraiths", "desc1": "Darkstorm increases defense and attack speed by 15% for 6s after use.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_39"},
+    
+    "boon_46": {"name": "Imbued Humanity", "category": "Darkwraiths", "desc1": "Darkstorm also releases 5 sprites around the player.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_39"},
+
+    "boon_47": {"name": "Human Ingenuity", "category": "Darkwraiths", "desc1": "Slightly increases number of items gained from picking up resources.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_40"},
+
+    "boon_48": {"name": "Shared Power", "category": "Darkwraiths", "desc1": "Each Humanity gained in a run also increases the damage dealt by enemies with the Hollowed status effect by 5%.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_40"},
+
+    ## Blades of the Darkmoon
+    # Core Boons
+    # "boon_49": {"name": "Thunderous Roll", "category": "Blades of the Darkmoon", "desc1": "Chain-lightning is emitted when rolling.", "desc2": "", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_50": {"name": "Enchanted Strike", "category": "Blades of the Darkmoon", "desc1": "Primary/secondary attack emits|a soul arrow.", "desc2": "Skews damage scaling towards INTELLIGENCE.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_51": {"name": "Magical Skill", "category": "Blades of the Darkmoon", "desc1": "Skill emits a soul arrow.", "desc2": "Skews damage scaling towards INTELLIGENCE.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    "boon_52": {"name": "Moonlight Catalyst", "category": "Blades of the Darkmoon", "desc1": "Gain the Sorcerer's Staff capable of|casting Sorceries.", "desc2": "Skews catalyst scaling towards INTELLIGENCE.", "subboons": None, "is_subboon": False, "cat": "Core Boon", "parent": None},
+
+    # General Boons
+    "boon_53": {"name": "[1]", "category": "Blades of the Darkmoon", "desc1": "Estus Flask also refills 50% of max mana.", "desc2": "", "subboons": ["boon_57", "boon_58"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_54": {"name": "[2]", "category": "Blades of the Darkmoon", "desc1": "Soul arrow effects release 2 additional arrows.", "desc2": "", "subboons": ["boon_59", "boon_60"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_55": {"name": "[3", "category": "Blades of the Darkmoon", "desc1": "Skill is replaced by Snap Freeze,|creating a mist that damages enemies and has a chance of inflicting the Frozen status effect.", "desc2": "", "subboons": ["boon_61", "boon_62"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    "boon_56": {"name": "[4]", "category": "Blades of the Darkmoon", "desc1": "Gain 2 mana when inflicting the Frozen status effect.", "desc2": "", "subboons": ["boon_63", "boon_64"], "is_subboon": False, "cat": "Boon", "parent": None},
+
+    # Sub Boons
+    "boon_57": {"name": "A", "category": "Blades of the Darkmoon", "desc1": "Soul arrows deal 25% more damage and travel 30% faster.", "desc2": "Soul arrows now consume mana.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_53"},
+    
+    "boon_58": {"name": "B", "category": "Blades of the Darkmoon", "desc1": "Estus Flask also boosts casting speed by 30% for 6s after use.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_53"},
+
+    "boon_59": {"name": "C", "category": "Blades of the Darkmoon", "desc1": "Soul arrow effects now slightly home in on enemies.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_54"},
+    
+    "boon_60": {"name": "D", "category": "Blades of the Darkmoon", "desc1": "Soul arrow effects have a 25% chance of inflicting the Frozen status effect.", "desc2": "Soul arrow effects have a 15% larger range.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_54"},
+
+    "boon_61": {"name": "Deepened Devotion", "category": "Blades of the Darkmoon", "desc1": "Snap Freeze has a 50% higher chance of inflicting the Frozen status effect.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_55"},
+    
+    "boon_62": {"name": "F", "category": "Blades of the Darkmoon", "desc1": "Soul arrow effects deal 5% more damage for 6s for each enemy hit by Snap Freeze.", "desc2": "Snap Freeze has a 25% larger radius.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_55"},
+
+    "boon_63": {"name": "G", "category": "Blades of the Darkmoon", "desc1": "Gain 2 additional mana upon inflicting the Frozen status effect.", "desc2": "", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_56"},
+
+    "boon_64": {"name": "H", "category": "Blades of the Darkmoon", "desc1": "Inflicting the Frozen status effect increases attack speed by 2% for 6s.", "desc2": "Extends Frozen duration by 25%.", "subboons": None, "is_subboon": True, "cat": "Sub-Boon", "parent": "boon_56"},
 }
 
 # Boon Categories
 boons_core = {
     "warriors_of_sunlight": {
-        "list": ["boon_1", "boon_2", "boon_3", "boon_4"]
+        "list": ["boon_2", "boon_3", "boon_4"]
+    },
+    "chaos_servants": {
+        "list": ["boon_18", "boon_19", "boon_20"]
+    },
+    "darkwraiths": {
+        "list": ["boon_34", "boon_35", "boon_36"]
+    },
+    "blades_of_the_darkmoon": {
+        "list": ["boon_50", "boon_51", "boon_52"]
     },
 }
 
@@ -458,16 +575,16 @@ reward_first_rooms = [
 # X99 is the END room for each region
 
 # Chamber Rewards
-chamber_rewards = { # todo: make sure of the chance section
-    # "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
+chamber_rewards = { # todo: make use of the chance section
+    "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
     "humanity": { "chance": 1, "min": 2, "max": 4 },
-    # "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
-    # "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
+    "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
+    "demon_titanite": { "chance": 0.75, "min": 1, "max": 2 },
 
-    # "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
 
     # "vendor": { "chance": 0.5, "min": 1, "max": 1 },

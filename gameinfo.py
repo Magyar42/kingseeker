@@ -127,7 +127,7 @@ player_core_info = {
     "values": {
         "current weapon": "Broadsword",
         "estus level": 1,
-        "souls": 7050,
+        "souls": 1000,
         "lost souls": 0,
         "max estus": 3,
         "current estus": 3,
@@ -138,7 +138,7 @@ player_core_info = {
 
 # Hidden numbers which can be affected by boons
 player_data = {
-    "dependent_variables": {"health": 200, "mana": 50, "stamina": 50, "speed": 5, "defense": 0.25, "poise": 40, "attack": 5, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0},
+    "dependent_variables": {"health": 300, "mana": 50, "stamina": 50, "speed": 5, "defense": 0.25, "poise": 40, "attack": 5, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0},
 
     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
 }

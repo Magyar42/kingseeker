@@ -369,7 +369,7 @@ class Player(Entity):
                                 self.skill_use_time = pygame.time.get_ticks()
 
                                 self.create_attack("player_spin")
-                                self.create_attack(f"{player_core_info["values"]["current weapon"].lower()}_2")
+                                self.create_attack(f'{player_core_info["values"]["current weapon"].lower()}_2')
                                 self.status = "invisible"
                                 self.weapon_attack_sound.play()
 
@@ -403,7 +403,7 @@ class Player(Entity):
                                 self.light_attacking = True
                                 self.light_attack_time = pygame.time.get_ticks()
 
-                                self.create_attack(f"{player_core_info["values"]["current weapon"].lower()}_0")
+                                self.create_attack(f'{player_core_info["values"]["current weapon"].lower()}_0')
                                 self.weapon_attack_sound.play()
                                 player_inputs["light attack"] = False
 
@@ -418,7 +418,7 @@ class Player(Entity):
                                 self.heavy_attacking = True
                                 self.heavy_attack_time = pygame.time.get_ticks()
 
-                                self.create_attack(f"{player_core_info["values"]["current weapon"].lower()}_1")
+                                self.create_attack(f'{player_core_info["values"]["current weapon"].lower()}_1')
                                 self.weapon_attack_sound.play()
                                 player_inputs["heavy attack"] = False
 

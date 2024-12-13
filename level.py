@@ -4,7 +4,7 @@ from tile import Tile
 from player import Player
 from support import *
 from gameinfo import *
-from random import choice, randint, randrange
+from random import choice, randint
 from weapon import *
 from debug import debug
 from ui import UI
@@ -22,8 +22,7 @@ from bloodstain import Bloodstain
 # from boss import HurtBoxes
 from weapon import Hurtboxes
 from npc import NPC
-from interactable_items import SummonSign
-from interactable_items import PerkPillar
+from interactable_items import SummonSign, ResourceItem, PerkPillar
 from popups import BoonsMenu, HumanityPowers, LevelUp, WeaponsSelection
 
 class Level:
@@ -217,21 +216,7 @@ class Level:
 
         # Else if self.reward is a RESOURCE
         else:
-            match self.reward:
-                case "humanity":
-                    resource_name = "humanity sprites"
-                    resource_min = chamber_rewards[self.reward]["min"]
-                    resource_max = chamber_rewards[self.reward]["max"]
-            
-            added_num = randrange(resource_min, resource_max+1)
-            resources[resource_name] += added_num
-
-            # if self.reward == "great_soul":
-            #     player_core_info["values"]["souls"] += 2000
-            # elif self.:
-            #     resource_index = list(chamber_rewards.keys()).index(self.reward)
-            #     resource_name = resources_names[resource_index]
-            #     resources[resource_name] += 10
+            ResourceItem(self.reward, (self.reward_pos), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites])
 
     
     def spawn_enemies(self):
@@ -320,7 +305,7 @@ class Level:
 
                                     if map_id == "000": # todo: change back
                                         # reward = choice(boon_summons)
-                                        reward = "sunlight_summon"
+                                        reward = "darkwraith_summon"
                                     else: reward = choice(list(chamber_rewards.keys()))
 
                                     unique_id = transition_ids[0]
@@ -745,6 +730,7 @@ class Level:
         self.visible_sprites.bonfire_update(self.player)
         self.visible_sprites.sign_update(self.player)
         self.visible_sprites.pillar_update(self.player)
+        self.visible_sprites.resource_items_update(self.player)
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
@@ -858,6 +844,11 @@ class YSortCameraGroup(pygame.sprite.Group):
         pillar_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "pillar"]
         for pillar in pillar_sprites:
             pillar.pillar_update(player)
+
+    def resource_items_update(self, player):
+        resource_items_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "resource"]
+        for item in resource_items_sprites:
+            item.resource_items_update(player)
 
 class ScreenCameraGroup(pygame.sprite.Group):
     def __init__(self, map_id, region):
