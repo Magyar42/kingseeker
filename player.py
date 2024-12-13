@@ -31,7 +31,7 @@ class Player(Entity):
 
         # Determines how long the player "freezes" when performing an attack
         self.attacking = False
-        self.attack_cooldown = 650  # todo: dynamically update!!
+        self.attack_cooldown = 100 # Set to a default value; updates
         self.attack_time = None
 
         # Determines the cooldown between skill attacks
@@ -362,13 +362,14 @@ class Player(Entity):
                                 self.direction.x = 0
                                 self.direction.y = 0
 
+                                self.attack_cooldown = player_core_info["skill"]["cooldown"]
                                 self.attacking = True
                                 self.attack_time = pygame.time.get_ticks()
                                 self.using_skill = True
                                 self.skill_use_time = pygame.time.get_ticks()
 
                                 self.create_attack("player_spin")
-                                self.create_attack("sword_skill")
+                                self.create_attack(f"{player_core_info["values"]["current weapon"].lower()}_2")
                                 self.status = "invisible"
                                 self.weapon_attack_sound.play()
 
@@ -396,12 +397,13 @@ class Player(Entity):
                             if self.stamina_target - self.stamina_light_attack_cost >= 0:
                                 self.stamina_target -= self.stamina_light_attack_cost # Effect on stamina
 
+                                self.attack_cooldown = player_core_info["light_attack"]["cooldown"]
                                 self.attacking = True
                                 self.attack_time = pygame.time.get_ticks()
                                 self.light_attacking = True
                                 self.light_attack_time = pygame.time.get_ticks()
 
-                                self.create_attack("sword_1")
+                                self.create_attack(f"{player_core_info["values"]["current weapon"].lower()}_0")
                                 self.weapon_attack_sound.play()
                                 player_inputs["light attack"] = False
 
@@ -410,12 +412,13 @@ class Player(Entity):
                             if self.stamina_target - self.stamina_heavy_attack_cost >= 0:
                                 self.stamina_target -= self.stamina_heavy_attack_cost # Effect on stamina
 
+                                self.attack_cooldown = player_core_info["heavy_attack"]["cooldown"]
                                 self.attacking = True
                                 self.attack_time = pygame.time.get_ticks()
                                 self.heavy_attacking = True
                                 self.heavy_attack_time = pygame.time.get_ticks()
 
-                                self.create_attack("sword_2")
+                                self.create_attack(f"{player_core_info["values"]["current weapon"].lower()}_1")
                                 self.weapon_attack_sound.play()
                                 player_inputs["heavy attack"] = False
 

@@ -4,7 +4,7 @@ from tile import Tile
 from player import Player
 from support import *
 from gameinfo import *
-from random import choice, randint
+from random import choice, randint, randrange
 from weapon import *
 from debug import debug
 from ui import UI
@@ -217,12 +217,21 @@ class Level:
 
         # Else if self.reward is a RESOURCE
         else:
-            if self.reward == "great_soul":
-                player_core_info["values"]["souls"] += 2000
-            else:
-                resource_index = list(chamber_rewards.keys()).index(self.reward)
-                resource_name = resources_names[resource_index]
-                resources[resource_name] += 10
+            match self.reward:
+                case "humanity":
+                    resource_name = "humanity sprites"
+                    resource_min = chamber_rewards[self.reward]["min"]
+                    resource_max = chamber_rewards[self.reward]["max"]
+            
+            added_num = randrange(resource_min, resource_max+1)
+            resources[resource_name] += added_num
+
+            # if self.reward == "great_soul":
+            #     player_core_info["values"]["souls"] += 2000
+            # elif self.:
+            #     resource_index = list(chamber_rewards.keys()).index(self.reward)
+            #     resource_name = resources_names[resource_index]
+            #     resources[resource_name] += 10
 
     
     def spawn_enemies(self):
@@ -697,6 +706,8 @@ class Level:
             self.available_chambers = chambers_per_region[self.region]
             trigger_region_title = True
             self.reward = reward
+
+            self.ui.update_input_icons()
 
         # todo add check for region minus end room AND the room before
         # this is because ideally that room will have 1 exit, and will also not have any reward set

@@ -79,11 +79,11 @@ INV_BORDER = "#755E30"
 weapon_data = {
     "test": {"cooldown": 100, "damage": 15, "knockback": 2, "weight": 3},
     "Broadsword": {
-        "0": { "Base Damage": 25, "Knockback": 10, "Cooldown": 0, "Recovery": 0.3, "Stamina Use": 10, "Mana Use": 0, "Scales": "STR+DEX" },
+        "0": { "Base Damage": 25, "Knockback": 10, "Cooldown": 0, "Recovery": 0.4, "Stamina Use": 10, "Mana Use": 0, "Scales": "STR+DEX" },
 
-        "1": { "Base Damage": 35, "Knockback": 15, "Cooldown": 0, "Recovery": 0.6, "Stamina Use": 20, "Mana Use": 0, "Scales": "STR+DEX" },
+        "1": { "Base Damage": 35, "Knockback": 15, "Cooldown": 0, "Recovery": 0.5, "Stamina Use": 20, "Mana Use": 0, "Scales": "STR+DEX" },
 
-        "2": { "Base Damage": 40, "Knockback": 10, "Cooldown": 0, "Recovery": 0.6, "Stamina Use": 25, "Mana Use": 25, "Scales": "STR+DEX" },
+        "2": { "Base Damage": 40, "Knockback": 10, "Cooldown": 0, "Recovery": 0.7, "Stamina Use": 25, "Mana Use": 25, "Scales": "STR+DEX" },
     },
     "Greataxe": {
         "0": { "Base Damage": 40, "Knockback": 5, "Cooldown": 0, "Recovery": 0.8, "Stamina Use": 20, "Mana Use": 0, "Scales": "STR" },
@@ -223,8 +223,9 @@ attack_hurtbox_data = {
             6: [],
             7: [],
             8: [],
+            9: [],
         },
-        "sword_1": {
+        "broadsword_0": {
             0: [[64, 0, 64, 64]],
             1: [[-64, 0, 64, 64], [-32, 64, 128, 64]],
             2: [],
@@ -232,7 +233,7 @@ attack_hurtbox_data = {
             4: [],
             5: [],
         },
-        "sword_2": {
+        "broadsword_1": {
             0: [],
             1: [[16, 64, 32, 64], [16, 128, 32, 64]],
             2: [],
@@ -241,7 +242,7 @@ attack_hurtbox_data = {
             5: [],
             6: [],
         },
-        "sword_skill": {
+        "broadsword_2": {
             0: [],
             1: [[64, 0, 64, 64]],
             2: [[-64, 0, 64, 64], [-32, 64, 128, 64]],
@@ -264,8 +265,9 @@ attack_hurtbox_data = {
             6: [],
             7: [],
             8: [],
+            9: [],
         },
-        "sword_1": {
+        "broadsword_0": {
             0: [[-64, 0, 64, 64]],
             1: [[64, 0, 64, 64], [-32, -64, 128, 64]],
             2: [],
@@ -273,7 +275,7 @@ attack_hurtbox_data = {
             4: [],
             5: [],
         },
-        "sword_2": {
+        "broadsword_1": {
             0: [],
             1: [[16, -64, 32, 64], [16, -128, 32, 64]],
             2: [],
@@ -282,7 +284,7 @@ attack_hurtbox_data = {
             5: [],
             6: [],
         },
-        "sword_skill": {
+        "broadsword_2": {
             0: [],
             1: [[-64, 0, 64, 64]],
             2: [[64, 0, 64, 64], [-32, -64, 128, 64]],
@@ -305,8 +307,9 @@ attack_hurtbox_data = {
             6: [],
             7: [],
             8: [],
+            9: [],
         },
-        "sword_1": {
+        "broadsword_0": {
             0: [[0, 64, 64, 64]],
             1: [[0, -64, 64, 64], [-64, -32, 64, 128]],
             2: [],
@@ -314,7 +317,7 @@ attack_hurtbox_data = {
             4: [],
             5: [],
         },
-        "sword_2": {
+        "broadsword_1": {
             0: [],
             1: [[-64, 16, 64, 32], [-128, 16, 64, 32]],
             2: [],
@@ -323,7 +326,7 @@ attack_hurtbox_data = {
             5: [],
             6: [],
         },
-        "sword_skill": {
+        "broadsword_2": {
             0: [],
             1: [[0, 64, 64, 64]],
             2: [[0, -64, 64, 64], [-64, -32, 64, 128]],
@@ -346,8 +349,9 @@ attack_hurtbox_data = {
             6: [],
             7: [],
             8: [],
+            9: [],
         },
-        "sword_1": {
+        "broadsword_0": {
             0: [[0, -64, 64, 64]],
             1: [[0, 64, 64, 64], [64, -32, 64, 128]],
             2: [],
@@ -355,7 +359,7 @@ attack_hurtbox_data = {
             4: [],
             5: [],
         },
-        "sword_2": {
+        "broadsword_1": {
             0: [],
             1: [[64, 16, 64, 32], [128, 16, 64, 32]],
             2: [],
@@ -364,7 +368,7 @@ attack_hurtbox_data = {
             5: [],
             6: [],
         },
-        "sword_skill": {
+        "broadsword_2": {
             0: [],
             1: [[0, -64, 64, 64]],
             2: [[0, 64, 64, 64], [64, -32, 64, 128]],
@@ -456,11 +460,11 @@ reward_first_rooms = [
 # Chamber Rewards
 chamber_rewards = { # todo: make sure of the chance section
     # "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
-    # "humanity": { "chance": 1, "min": 2, "max": 5 },
+    "humanity": { "chance": 1, "min": 2, "max": 4 },
     # "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
     # "demon_titanite": { "chance": 0.75, "min": 2, "max": 4 },
 
-    "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },

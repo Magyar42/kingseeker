@@ -11,6 +11,22 @@ global_settings = {
     "Visuals": {"Brightness": 0.8, "Subtitles": "On"},
 }
 
+# Game Flags - indicate whether certain things have happened (used mainly for dialogue)
+flags = {
+    "completed_1st_run": False,
+    "completed_2nd_run": False,
+    "completed_3rd_run": False,
+
+    "died_undead_burg": False,
+    "died_undead_parish": False,
+    "died_the_depths": False,
+
+    "obtained_titanite": False,
+    "obtained_humanity": False,
+
+    "encountered_covenant": False,
+}
+
 # NPC Stuff
 # Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {
@@ -97,7 +113,7 @@ player_core_info = {
         "class": "pyromancy", "name": "pyromancy_flame", "cooldown": 5000, "base damage": 5,
     },
     "skill": {
-        "name": "skill_1", "cooldown": 400, "base damage": 10, "stamina_use": 25,
+        "name": "broadsword_2", "cooldown": 400, "base damage": 10, "knockback": 0, "stamina_use": 25, "mana_use": 20,
     },
     # "rings": {
     #     "ring 1": None, "ring 2": None,

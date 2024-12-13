@@ -1186,7 +1186,8 @@ class WeaponsSelection:
                     createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green")
                     self.weapon_index = num
                     player_core_info["values"]["current weapon"] = weapon
-                    print(player_core_info["values"]["current weapon"])
+                    set_player_weapon_details(weapon)
+                    print(weapon)
                 elif num == self.weapon_index: # ... and have it selected
                     createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green")
                 else: # ... and do NOT have it selected and is NOT clicking on it

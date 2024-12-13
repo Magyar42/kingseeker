@@ -55,6 +55,13 @@ class UI:
         self.esc_inactive_img = pygame.image.load("assets/graphics/ui/key_icons/esc_inactive.png")
         self.esc_active_img = pygame.image.load("assets/graphics/ui/key_icons/esc_active.png")
 
+    def update_input_icons(self):
+        self.input_types = []
+        for input_type in ["light_attack", "heavy_attack", "skill", "catalyst"]:
+            current_tool = player_core_info[f"{input_type}"]["name"]
+            current_tool_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
+            self.input_types.append(current_tool_surf)
+
     def update_bars(self):
         self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
         self.mana_bar_rect = pygame.Rect(27, 34, ui_data['MANA_BAR_WIDTH'], BAR_HEIGHT)
