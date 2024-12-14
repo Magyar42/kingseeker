@@ -677,3 +677,27 @@ class BoonsMenu:
         interface_details["boons"]["list"].append(boon)
         self.enable_player_control()
         player_inputs["light attack"] = False
+
+# Pause Menu
+class pauseMenu:
+    def __init__(self):
+        self.display_surface = pygame.display.get_surface()
+        self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
+
+        self.details_toggle_time = None
+        self.details_can_toggle = True
+
+    def selection_cooldown(self):
+        if not self.details_can_toggle:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.details_toggle_time >= 200:
+                self.details_can_toggle = True
+    
+    # Esc Menu - Shows items + boons
+    def displayMenu(self, player):
+        pass
+        # todo: esc menu
+        #   - Resume
+        #   - Settings
+        #   - Controls
+        #   - Exit

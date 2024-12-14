@@ -9,7 +9,7 @@ from particles import AnimationPlayer
 from popups import *
 
 class Player(Entity):
-    def __init__(self, pos, groups, obstacle_sprites, attackable_sprites, create_attack, destroy_attack, create_magic, trigger_death_particles, check_player_death, use_item_effect, toggle_screen_effect, prevent_player_input):
+    def __init__(self, pos, groups, obstacle_sprites, attackable_sprites, create_attack, destroy_attack, create_magic, trigger_death_particles, check_player_death, use_item_effect, toggle_screen_effect, prevent_player_input, lock_player, enable_player_control) :
         super().__init__(groups)
         self.animation_speed = 0.15
 
@@ -28,6 +28,8 @@ class Player(Entity):
         self.import_player_assets()
         self.status = "down"
         self.prevent_player_input = prevent_player_input
+        self.lock_player = lock_player
+        self.unlock_player = enable_player_control
 
         # Determines how long the player "freezes" when performing an attack
         self.attacking = False
@@ -167,6 +169,10 @@ class Player(Entity):
         self.menu_toggle_cooldown = 200
         self.reset_display = False
 
+        self.can_toggle_esc = True
+        self.esc_toggle_time = None
+        self.esc_toggle_cooldown = 200
+
         self.stunned = False
         self.poise_broken = False
         self.broken_poise_time = None
@@ -277,6 +283,20 @@ class Player(Entity):
     def input(self):
         if not self.any_interface_open:
             keys = pygame.key.get_pressed()
+
+            if self.can_toggle_esc and not self.submenu_open:
+                if keys[pygame.K_ESCAPE] and not self.esc_open:
+                    self.esc_open = True
+                    self.can_toggle_esc = False
+                    self.esc_toggle_time = pygame.time.get_ticks()
+
+                    self.lock_player()
+                elif keys[pygame.K_ESCAPE] and self.esc_open:
+                    self.esc_open = False
+                    self.can_toggle_esc = False
+                    self.esc_toggle_time = pygame.time.get_ticks()
+                    
+                    self.unlock_player()
 
             if self.can_toggle_menu and not self.submenu_open:
                 if keys[pygame.K_TAB] and not self.menu_open:
@@ -637,5 +657,6 @@ class Player(Entity):
         #self.check_player_poise()
 
         if self.menu_open: self.main_menu()
+        if self.esc_open: self.esc_menu()
         if self.trigger_boons_update: self.update_boons()
         if self.any_interface_open: self.display_overlay()
