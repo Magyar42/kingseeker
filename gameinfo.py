@@ -1,16 +1,6 @@
 # Data and information that is updated and changed as gameplay progresses #
 # Information is saved to and loaded from here #
 
-# System Settings
-local_settings = {
-    "gameplay": {"hard_mode": False, "soles_mode": False, "HUD": "Default"},
-    "cosmetics": {"armour": 1,}
-}
-global_settings = {
-    "Audio": {"Music": 1, "SFX": 1, "Player": 1},
-    "Visuals": {"Brightness": 0.8, "Subtitles": "On"},
-}
-
 # NPC Stuff
 # Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {

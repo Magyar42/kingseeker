@@ -10,6 +10,7 @@ import uuid
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import os
+from globalinfo import *
 
 icon_image = pygame.image.load("assets/graphics/ico.png")
 
@@ -144,8 +145,6 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    
-                    # Save the game
                     self.save_game()
 
                     pygame.quit()
@@ -161,6 +160,14 @@ class Game:
                 elif event.type == pygame.MOUSEWHEEL:
                     player_inputs["scroll spell"] = True
                     player_inputs["scroll direction"] = event.y
+                # todo : add assigning of new controls
+                # elif event.type == pygame.KEYDOWN:
+                #     keys = pygame.key.get_pressed()
+                #     for key in keys:
+                #         print(keys.index(key))
+                #         if key and self.level.player.menu.assigning_key != None:
+                #             controls_data[self.level.player.menu.assigning_key] = keys.index(key)
+                #             print(controls_data)
 
             self.screen.fill(MM_COLOUR)
             self.level.run()

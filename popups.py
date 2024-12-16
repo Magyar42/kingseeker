@@ -3,6 +3,7 @@ from settings import *
 from debug import debug
 from support import *
 from random import choice
+from globalinfo import *
 
 # Prompts to press a button
 class Prompt:
@@ -697,6 +698,9 @@ class pauseMenu:
         self.difficulty_submenu = False
         self.controls_submenu = False
         self.settings_submenu = False
+        self.any_submenu_open = False
+
+        self.assigning_key = None
 
     def selection_cooldown(self):
         if not self.can_click:
@@ -712,13 +716,18 @@ class pauseMenu:
 
         self.update()
     
-    def draw_bg(self):
-        bg_rect_size = (240, 300) 
+    def draw_bg(self, width = 240, height = 300, title = ""):
+        bg_rect_size = (width, height) 
         bg_x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[0] // 2)
         bg_y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2)
  
-        # main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1]) 
+        main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1]) 
         createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (bg_x, bg_y), "dark")
+
+        if title != "":
+            title_surface = self.font18.render(f"| {title.upper()}", True, TEXT_TITLE_COLOUR)
+            title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(10, 20))
+            self.display_surface.blit(title_surface, title_rect)
 
         return bg_rect_size
 
@@ -738,7 +747,7 @@ class pauseMenu:
         if hit: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "green") 
         else: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos) 
 
-        if hit and player_inputs["light attack"]:
+        if hit and player_inputs["light attack"] and not self.any_submenu_open:
             match num:
                 case 0: self.close_menu(player)
                 case 1: self.difficulty_submenu = True
@@ -755,6 +764,69 @@ class pauseMenu:
         name_rect = name_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(0, 0))
         self.display_surface.blit(name_surface, name_rect)
     
+    def controlsMenu(self):
+        self.any_submenu_open = True
+        bg_rect_size = self.draw_bg(720, 400, "controls")
+
+        for num, option in enumerate(controls_data):
+            self.controls_details(option, num, bg_rect_size)
+
+    def controls_details(self, option, num, bg):
+        # Individual Controls
+        item_rect_size = (220, 10) 
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2) - 240 + 20
+        y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + (num * 60) + 30 + 40
+
+        if num >= 6:
+            x += 240 + 20 + 100
+            y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + ((num-6) * 60) + 30 + 40
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1]) 
+        text_rect_pos = main_rect.topleft
+        text_rect_size = (item_rect_size[0], item_rect_size[1]) 
+
+        createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "basic") 
+
+        # Name 
+        name_surface = self.font14.render(f"{option.upper()}", True, UI_BG_COLOUR) 
+        name_rect = name_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(0, 0))
+        self.display_surface.blit(name_surface, name_rect)
+
+        self.control_input(option, num, item_rect_size, bg)
+    
+    def control_input(self, option, num, item_rect_size, bg):
+        # Control Inputs
+        input_rect_size = (30, 10) 
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2) - 240 + 20 + 240
+        y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + (num * 60) + 30 + 40
+
+        if num >= 6:
+            x += 240 + 20 + 100 # + 240
+            y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + ((num-6) * 60) + 30 + 40
+
+        main_rect_input = pygame.Rect(x, y, input_rect_size[0], input_rect_size[1]) 
+        collide_rect = pygame.Rect(x + 5, y - 20, input_rect_size[0] + 40, input_rect_size[1] + 40) 
+        text_rect_input_pos = main_rect_input.topleft + pygame.math.Vector2(25, 0)
+        text_rect_input_size = (input_rect_size[0], input_rect_size[1]) 
+
+        pos = pygame.mouse.get_pos() 
+        hit = collide_rect.collidepoint(pos) 
+        # if hit: createUI(self.display_surface, text_rect_input_size[0], text_rect_input_size[1], text_rect_input_pos, "green") 
+        # else: createUI(self.display_surface, text_rect_input_size[0], text_rect_input_size[1], text_rect_input_pos)
+        if hit and player_inputs["light attack"]:
+            createUI(self.display_surface, text_rect_input_size[0], text_rect_input_size[1], text_rect_input_pos, "green_dark") 
+            self.assigning_key = option
+            player_inputs["light attack"] = False
+        elif hit: 
+            createUI(self.display_surface, text_rect_input_size[0], text_rect_input_size[1], text_rect_input_pos, "green") 
+        else:
+            createUI(self.display_surface, text_rect_input_size[0], text_rect_input_size[1], text_rect_input_pos) 
+
+        # Name 
+        name_surface = self.font14.render(f"{controls_data[option].upper()}", True, UI_BG_COLOUR) 
+        name_rect = name_surface.get_rect(midleft = main_rect_input.midleft + pygame.math.Vector2(20, 0))
+        self.display_surface.blit(name_surface, name_rect)
+    
     def close_menu(self, player):
         player.esc_open = False
         player.any_interface_open = False
@@ -765,5 +837,17 @@ class pauseMenu:
         print("Saving and returning to main menu.")
         self.exit_effect()
 
+    def check_return(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            self.difficulty_submenu = False
+            self.controls_submenu = False
+            self.settings_submenu = False
+            self.any_submenu_open = False
+
+
     def update(self):
         self.selection_cooldown()
+
+        if self.controls_submenu: self.controlsMenu()
+        if self.any_submenu_open: self.check_return()
