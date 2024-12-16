@@ -9,14 +9,16 @@ from particles import AnimationPlayer
 from popups import *
 
 class Player(Entity):
-    def __init__(self, pos, groups, obstacle_sprites, attackable_sprites, create_attack, destroy_attack, create_magic, trigger_death_particles, check_player_death, use_item_effect, toggle_screen_effect, prevent_player_input, lock_player, enable_player_control) :
+    def __init__(self, pos, groups, obstacle_sprites, attackable_sprites, create_attack, destroy_attack, create_magic, trigger_death_particles, check_player_death, use_item_effect, toggle_screen_effect, prevent_player_input, lock_player, enable_player_control, exit_effect) :
         super().__init__(groups)
         self.animation_speed = 0.15
+        self.exit_effect = exit_effect
 
         self.toggle_screen_effect = toggle_screen_effect
         self.animation_player = AnimationPlayer()
 
         self.popup = gameMenu(self.toggle_screen_effect)
+        self.menu = pauseMenu(self.exit_effect)
         self.prompt_active = False
 
         self.display_surface = pygame.display.get_surface()
@@ -72,7 +74,7 @@ class Player(Entity):
         self.catalyst = interface_details["catalyst"]["name"]
         self.create_magic = create_magic
         self.spell_index = 0
-        self.current_spell = interface_details["spells"][self.spell_index+1]
+        self.current_spell = interface_details["spells"][str(self.spell_index+1)]
         self.scrolling_spells = False
         self.spell_scroll_cooldown = 200
         self.spell_scroll_time = None
@@ -163,6 +165,7 @@ class Player(Entity):
         
         self.menu_open = False
         self.submenu_open = False
+        self.esc_open = False
 
         self.can_toggle_menu = True
         self.menu_toggle_time = None
@@ -279,6 +282,10 @@ class Player(Entity):
     def main_menu(self):
         if self.menu_open:
             self.popup.displayMenu(self)
+    
+    def esc_menu(self):
+        if self.esc_open:
+            self.menu.pauseMenu(self)
 
     def input(self):
         if not self.any_interface_open:
@@ -399,7 +406,7 @@ class Player(Entity):
                             if self.stamina_target - self.stamina_magic_mult >= 0:
                                 self.stamina_target -= self.stamina_magic_mult
                                 
-                                spell_name = interface_details["spells"][self.spell_index+1]
+                                spell_name = interface_details["spells"][str(self.spell_index+1)]
                                 spell_power = (magic_data[spell_name]["strength"] + interface_details["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
                                 spell_fp_cost = magic_data[spell_name]["cost"]
                                 self.create_magic(spell_name, spell_power, spell_fp_cost)
@@ -480,6 +487,10 @@ class Player(Entity):
         if not self.can_toggle_menu:
             if current_time - self.menu_toggle_time >= self.menu_toggle_cooldown:
                 self.can_toggle_menu = True
+        
+        if not self.can_toggle_esc:
+            if current_time - self.esc_toggle_time >= self.esc_toggle_cooldown:
+                self.can_toggle_esc = True
 
         if not self.can_switch_weapon:
             if current_time - self.weapon_switch_time >= self.weapon_switch_cooldown:
@@ -656,7 +667,7 @@ class Player(Entity):
         self.check_death()
         #self.check_player_poise()
 
-        if self.menu_open: self.main_menu()
-        if self.esc_open: self.esc_menu()
         if self.trigger_boons_update: self.update_boons()
         if self.any_interface_open: self.display_overlay()
+        if self.menu_open: self.main_menu()
+        if self.esc_open: self.esc_menu()

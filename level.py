@@ -27,7 +27,7 @@ from interactable_items import PerkPillar
 from popups import BoonsMenu
 
 class Level:
-    def __init__(self, map_id):
+    def __init__(self, map_id, exit):
         self.display_surface = pygame.display.get_surface()
         self.map_id = map_id
         self.levelup_menu_active = False
@@ -35,6 +35,7 @@ class Level:
         self.displaying_message = False
         self.current_message_id = 0
         self.font = pygame.font.Font(UI_FONT, MEDIUM_FONT_SIZE)
+        self.exit_effect = exit
 
         self.region = "firelink_shrine"
         self.reward = None
@@ -271,7 +272,7 @@ class Level:
                         if style == "entities":
                             if column == "394":
                                 if player_reset:
-                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect, prevent_player_input, self.lock_player, self.enable_player_control)
+                                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.attackable_sprites, self.create_attack, self.destroy_attack, self.create_magic, self.trigger_death_particles, self.check_player_death, self.use_item_effect, self.toggle_screen_effect, prevent_player_input, self.lock_player, self.enable_player_control, self.exit_effect)
                             elif column == "388":
                                 self.bonfire = Bonfire(0, (x, y), [self.visible_sprites, self.obstacle_sprites, self.interactable_sprites], self.restart_world, self.check_humanity_restored, self.check_bonfire_lit, self.check_bonfire_rest, self.toggle_menu, self.toggle_screen_effect, self.kindle_bonfire_visuals)
                             elif column == "277": # Potential enemy spawns

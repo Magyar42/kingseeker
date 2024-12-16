@@ -1,0 +1,270 @@
+{
+    "local_settings": {
+        "gameplay": {
+            "hard_mode": false,
+            "soles_mode": false,
+            "HUD": "Default"
+        },
+        "cosmetics": {
+            "armour": 1
+        }
+    },
+    "global_settings": {
+        "Audio": {
+            "Music": 1,
+            "SFX": 1,
+            "Player": 1
+        },
+        "Visuals": {
+            "Brightness": 0.8,
+            "Subtitles": "On"
+        }
+    },
+    "npc_conversations": {
+        "firekeeper": {
+            "000": {
+                "name": "???",
+                "priority": 0,
+                "completed": false,
+                "text": [
+                    ""
+                ]
+            },
+            "001": {
+                "name": "Fire Keeper",
+                "priority": 100,
+                "completed": false,
+                "text": [
+                    "Welcome to the bonfire, Undead.",
+                    "I am the Fire Keeper.",
+                    "I tend to the flame, and to thee.",
+                    "The fire fades, and soon only dark shall|remain.",
+                    "To this end, I am at thy side.",
+                    ""
+                ]
+            },
+            "002": {
+                "name": "Fire Keeper",
+                "priority": 1,
+                "completed": false,
+                "text": [
+                    "Undead, to be human is to be a vessel|for souls.",
+                    "Sovereignless souls will become thy|strength.",
+                    "I will show thee how.",
+                    "Undead, bring me souls, plucked from|their vessels..."
+                ]
+            },
+            "003": {
+                "name": "Fire Keeper",
+                "priority": 99,
+                "completed": false,
+                "text": [
+                    "Undead, thou hast rung the First Bell of|Awakening.",
+                    "Wonderful work.",
+                    "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.",
+                    "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever."
+                ]
+            }
+        }
+    },
+    "resources": {
+        "soul remnants": 30,
+        "humanity sprites": 11,
+        "titanite chunks": 3,
+        "demon titanite": 1
+    },
+    "covenant_ranks": {
+        "warriors of sunlight": 0,
+        "blades of the darkmoon": 0,
+        "darkwraiths": 0,
+        "chaos servants": 0
+    },
+    "player_attributes": {
+        "VITALITY": 1,
+        "ENDURANCE": 1,
+        "STRENGTH": 1,
+        "DEXTERITY": 1,
+        "INTELLIGENCE": 1,
+        "FAITH": 1
+    },
+    "player_gifts": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+    },
+    "player_unlocks": {
+        "1st bell of awakening": false,
+        "2nd bell of awakening": false,
+        "lordvessel": false
+    },
+    "interface_details": {
+        "light_attack": {
+            "class": "sword",
+            "name": "broadsword_light",
+            "cooldown": 520,
+            "base damage": 15,
+            "knockback": 0,
+            "stamina_use": 15
+        },
+        "heavy_attack": {
+            "class": "sword",
+            "name": "broadsword_heavy",
+            "cooldown": 750,
+            "base damage": 30,
+            "knockback": 1,
+            "stamina_use": 25
+        },
+        "catalyst": {
+            "class": "pyromancy",
+            "name": "pyromancy_flame",
+            "cooldown": 5000,
+            "base damage": 5
+        },
+        "skill": {
+            "name": "skill_1",
+            "cooldown": 400,
+            "base damage": 10,
+            "stamina_use": 25
+        },
+        "boons": {
+            "list": [
+            ]
+        },
+        "spells": {
+            "1": "heal",
+            "2": "fire_surge",
+            "3": "icecrag_burst"
+        },
+        "values": {
+            "estus level": 1,
+            "souls": 0,
+            "lost souls": 0,
+            "max estus": 3,
+            "current estus": 3,
+            "levelup cost": 1,
+            "levelup_cost": -786
+        }
+    },
+    "player_data": {
+        "dependent_variables": {
+            "health": 400,
+            "mana": 100,
+            "stamina": 60,
+            "speed": 5,
+            "poise": 42.1,
+            "attack": 5,
+            "magic mult": 1,
+            "stamina recovery": 0.2,
+            "mana recovery": 0.005
+        },
+        "stamina_costs": {
+            "weapon_usage": 5,
+            "magic_usage": 4,
+            "rolling": 15
+        },
+        "defense": {
+            "physical def.": 128,
+            "magic def.": 139,
+            "fire def.": 125,
+            "lightning def.": 132
+        }
+    },
+    "player_inputs": {
+        "light attack": false,
+        "heavy attack": false,
+        "skill": false,
+        "cast spell": false,
+        "roll": false,
+        "scroll spell": false,
+        "scroll direction": 0
+    },
+    "enemy_spawn_template": {
+        "undead_burg": {
+            "01": {
+                "type": "waves",
+                "min_enemies": 4,
+                "max_enemies": 5,
+                "min_waves": 2,
+                "max_waves": 2,
+                "whitelisted_enemies": [
+                    "undead_warrior"
+                ],
+                "scaling": 0.5,
+                "drop_mult": 1,
+                "selection_mult": 1
+            }
+        },
+        "undead_parish": {
+            "01": {
+                "type": "waves",
+                "min_enemies": 4,
+                "max_enemies": 5,
+                "min_waves": 2,
+                "max_waves": 2,
+                "whitelisted_enemies": [
+                    "bamboo",
+                    "spirit"
+                ],
+                "scaling": 0.5,
+                "drop_mult": 1,
+                "selection_mult": 1
+            },
+            "02": {
+                "type": "constant",
+                "min_enemies": 5,
+                "max_enemies": 6,
+                "min_waves": 0,
+                "max_waves": 0,
+                "whitelisted_enemies": [
+                    "squid",
+                    "spirit"
+                ],
+                "scaling": 0.5,
+                "drop_mult": 1,
+                "selection_mult": 0.75
+            }
+        },
+        "the_depths": {
+            "01": {
+                "type": "waves",
+                "min_enemies": 4,
+                "max_enemies": 5,
+                "min_waves": 2,
+                "max_waves": 2,
+                "whitelisted_enemies": [
+                    "bamboo",
+                    "spirit"
+                ],
+                "scaling": 0.5,
+                "drop_mult": 1,
+                "selection_mult": 1
+            },
+            "02": {
+                "type": "constant",
+                "min_enemies": 6,
+                "max_enemies": 6,
+                "min_waves": 0,
+                "max_waves": 0,
+                "whitelisted_enemies": [
+                    "squid",
+                    "spirit"
+                ],
+                "scaling": 0.5,
+                "drop_mult": 1,
+                "selection_mult": 0.75
+            }
+        }
+    },
+    "chamber_enemy_info": {
+        "type": "",
+        "total_enemies": "",
+        "enemy_list": [],
+        "num_waves": "",
+        "enemies_per_wave": "",
+        "remainder_enemies": "",
+        "initial_num": ""
+    }
+}

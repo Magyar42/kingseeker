@@ -106,7 +106,7 @@ interface_details = {
         "list": ["boon_5", "boon_6", "boon_9", "boon_11"],
     },
     "spells": {
-        1: "heal", 2: "fire_surge", 3: "icecrag_burst",
+        "1": "heal", "2": "fire_surge", "3": "icecrag_burst",
     },
     "values": {
         "estus level": 1,

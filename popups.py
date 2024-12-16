@@ -680,24 +680,90 @@ class BoonsMenu:
 
 # Pause Menu
 class pauseMenu:
-    def __init__(self):
+    def __init__(self, exit_effect):
         self.display_surface = pygame.display.get_surface()
-        self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
+        self.font18 = pygame.font.Font(UI_FONT, 18) 
+        self.font16 = pygame.font.Font(UI_FONT, 16) 
+        self.font14 = pygame.font.Font(UI_FONT, 14) 
+        self.font12 = pygame.font.Font(UI_FONT, 12) 
+        self.font11 = pygame.font.Font(UI_FONT, 11) 
 
-        self.details_toggle_time = None
-        self.details_can_toggle = True
+        self.exit_effect = exit_effect
+
+        self.click_time = None
+        self.can_click = True
+
+        self.options_list = ["resume game", "difficulty", "controls", "settings", "exit game"]
+        self.difficulty_submenu = False
+        self.controls_submenu = False
+        self.settings_submenu = False
 
     def selection_cooldown(self):
-        if not self.details_can_toggle:
+        if not self.can_click:
             current_time = pygame.time.get_ticks()
-            if current_time - self.details_toggle_time >= 200:
-                self.details_can_toggle = True
+            if current_time - self.click_time >= 200:
+                self.can_click = True
     
-    # Esc Menu - Shows items + boons
-    def displayMenu(self, player):
-        pass
-        # todo: esc menu
-        #   - Resume
-        #   - Settings
-        #   - Controls
-        #   - Exit
+    def pauseMenu(self, player):
+        bg_rect_size = self.draw_bg()
+
+        for num, option in enumerate(self.options_list):
+            self.menu_details(option, num, bg_rect_size, player)
+
+        self.update()
+    
+    def draw_bg(self):
+        bg_rect_size = (240, 300) 
+        bg_x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[0] // 2)
+        bg_y = (self.display_surface.get_size()[1] // 2) - (bg_rect_size[1] // 2)
+ 
+        # main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1]) 
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (bg_x, bg_y), "dark")
+
+        return bg_rect_size
+
+    def menu_details(self, option, num, bg, player):
+        item_rect_size = (220, 10) 
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2)
+        y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + (num * 60) + 30
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1]) 
+        collide_rect = pygame.Rect(x - 20, y - 20, item_rect_size[0] + 40, item_rect_size[1] + 40) 
+        text_rect_pos = main_rect.topleft
+        text_rect_size = (item_rect_size[0], item_rect_size[1]) 
+
+        # Rect updates
+        pos = pygame.mouse.get_pos() 
+        hit = collide_rect.collidepoint(pos) 
+        if hit: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "green") 
+        else: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos) 
+
+        if hit and player_inputs["light attack"]:
+            match num:
+                case 0: self.close_menu(player)
+                case 1: self.difficulty_submenu = True
+                case 2: self.controls_submenu = True
+                case 3: self.settings_submenu = True
+                case 4: self.exit_game(player)
+
+            self.clicked = True 
+            self.click_time = pygame.time.get_ticks()
+            player_inputs["light attack"] = False
+
+        # Name 
+        name_surface = self.font16.render(f"| {option.upper()}", True, UI_BG_COLOUR) 
+        name_rect = name_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(0, 0))
+        self.display_surface.blit(name_surface, name_rect)
+    
+    def close_menu(self, player):
+        player.esc_open = False
+        player.any_interface_open = False
+        player.resting = False
+    
+    def exit_game(self, player):
+        self.close_menu(player)
+        print("Saving and returning to main menu.")
+        self.exit_effect()
+
+    def update(self):
+        self.selection_cooldown()

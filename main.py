@@ -72,7 +72,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level("000")
+        self.level = Level("000", self.save_and_exit)
         self.cursor_img = pygame.image.load('assets/graphics/cursor.png').convert_alpha()
 
         self.frames_list = import_folder('assets/graphics/menu_animations/mainmenu_bonfire')
@@ -81,7 +81,38 @@ class Game:
         self.image = self.frames_list[self.frame_index]
 
         self.save_data = None
-        # self.save_game()
+
+    def save_and_exit(self):
+        # Save to file
+        self.save_game()
+
+        # Reset values - ensures data is fresh for new games
+        self.level.player.resting = False
+        self.level.player.at_bonfire = False
+        self.level.player.npc_chatting = False
+        self.level.player.engaged_npc = None
+        self.level.player.ongoing_run = False
+        self.level.player.selected_spell_index = 0
+        self.level.player.trigger_boons_update = False
+        self.level.player.any_interface_open = False
+
+        self.level.region = "firelink_shrine"
+        self.level.reward = None
+        self.level.region_chambers_done = 0
+        self.level.enemy_spawn_coords = []
+        self.level.chamber_wave_active = False
+        self.level.chamber_active_enemies = 0
+        self.level.enemies_list_empty = False
+        self.level.chamber_cleared = False
+
+        self.level = Level("000", self.save_and_exit)
+
+        # Reset gameinfo.py
+        self.load_default_state()
+        self.level.player.trigger_boons_update = True
+
+        # Return to main menu
+        self.main_menu()
 
     def save_game(self):
         # Find the directory in the user's Documents folder
@@ -172,29 +203,17 @@ class Game:
         # Run game
         self.run_game()
 
-    
-    # def play_intro(self):
-    #     while True:
-    #         key = None
-    #         for event in pygame.event.get():
-    #             if event.type == pygame.QUIT:
-    #                 opening.close()
-    #                 pygame.quit()
-    #                 exit()
-
-    #             if event.type == pygame.KEYDOWN:
-    #                 key = pygame.key.name(event.key)
+    def load_default_state(self):
+        with open("default_state.json", 'r') as file:
+            saved_data = json.load(file)
             
-    #         if opening.get_pos() >= 219 or opening.get_pos() >= 0.1 and key == "escape": # Skip
-    #             opening.close()
-    #             pygame.mixer.music.load("assets/audio/MainTheme.mp3")
-    #             pygame.mixer.music.set_volume(0.1)
-    #             pygame.mixer.music.play(loops = -1)
-    #             game.run_game()
-            
-    #         if opening.draw(pygame.display.get_surface(), (0, 0), force_draw=False):
-    #             pygame.display.update()
-    #         self.clock.tick(FPS)
+        # Update dictionaries in gameinfo with the loaded data
+        for name, save_data in saved_data.items():
+            if hasattr(gameinfo, name): 
+                gameinfo_dict = getattr(gameinfo, name)
+                if isinstance(gameinfo_dict, dict):
+                    gameinfo_dict.update(save_data)
+                    print(f"Updated {name} in gameinfo.")
 
     def main_menu(self):
         mainmenu_title = pygame.transform.scale(pygame.image.load("assets/graphics/title3.png"), (949, 125))
@@ -292,7 +311,6 @@ class Game:
             display_cursor(self.cursor_img, self.screen)
             pygame.display.update()
             self.clock.tick(FPS)
-
 
 pygame.mixer.music.load("assets/audio/Soles of Fire.mp3")
 pygame.mixer.music.set_volume(0.1)

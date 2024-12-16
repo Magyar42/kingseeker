@@ -38,7 +38,7 @@ class UI:
         
         self.spells = []
         for spell_num in range(1, 4):
-            current_spell = interface_details["spells"][spell_num]
+            current_spell = interface_details["spells"][str(spell_num)]
             current_spell_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/spells/{current_spell}.png")
             self.spells.append(current_spell_surf)
 
