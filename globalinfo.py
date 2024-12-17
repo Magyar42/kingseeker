@@ -1,8 +1,6 @@
 # Data and information that is set by the player #
 # Information is saved between saves #
 
-import pygame
-
 controls_data = {
     "move up": "W",
     "move down": "S",
@@ -19,25 +17,19 @@ controls_data = {
     "interact": "F",
 }
 
-controls_keys = {
-
-}
-
 difficulty_data = {
-    "enemy data":{
-        "base health": 1,
-        "base attack": 1,
-        "base speed": 1,
-    },
-    "player data":{
-        "base health": 1,
-        "base attack": 1,
-        "base speed": 1,
-    },
-    "costs data": {
-        "cost multiplier": 1,
-        "reward multiplier": 1,
-    }
+    "enemy health": 1.00,
+    "enemy attack": 1.00,
+    "enemy defense": 1.00,
+    "enemy speed": 1.00,
+
+    "player health": 1.00,
+    "player attack": 1.00,
+    "player defense": 1.00,
+    "player speed": 1.00,
+
+    "cost mult": 1.00,
+    "reward mult": 1.00,
 }
 
 global_settings = {

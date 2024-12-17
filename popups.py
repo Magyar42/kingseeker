@@ -692,7 +692,7 @@ class pauseMenu:
         self.exit_effect = exit_effect
 
         self.click_time = None
-        self.can_click = True
+        self.clicked = False
 
         self.options_list = ["resume game", "difficulty", "controls", "settings", "exit game"]
         self.difficulty_submenu = False
@@ -703,11 +703,12 @@ class pauseMenu:
         self.assigning_key = None
 
     def selection_cooldown(self):
-        if not self.can_click:
+        if self.clicked:
             current_time = pygame.time.get_ticks()
-            if current_time - self.click_time >= 200:
-                self.can_click = True
+            if current_time - self.click_time >= 100:
+                self.clicked = False
     
+    # PAUSE MENU
     def pauseMenu(self, player):
         bg_rect_size = self.draw_bg()
 
@@ -764,6 +765,7 @@ class pauseMenu:
         name_rect = name_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(0, 0))
         self.display_surface.blit(name_surface, name_rect)
     
+    ## CONTROLS SUBMENU
     def controlsMenu(self):
         self.any_submenu_open = True
         bg_rect_size = self.draw_bg(720, 400, "controls")
@@ -826,7 +828,113 @@ class pauseMenu:
         name_surface = self.font14.render(f"{controls_data[option].upper()}", True, UI_BG_COLOUR) 
         name_rect = name_surface.get_rect(midleft = main_rect_input.midleft + pygame.math.Vector2(20, 0))
         self.display_surface.blit(name_surface, name_rect)
+
+    ## DIFFICULLTY SUBMENU
+    def difficultyMenu(self):
+        self.any_submenu_open = True
+        bg_rect_size = self.draw_bg(848, 400, "difficulty")
+
+        for num, option in enumerate(difficulty_data):
+            self.difficulty_details(option, num, bg_rect_size)
     
+    def difficulty_details(self, option, num, bg):
+        # Individual Diff. Settings
+        item_rect_size = (200, 10) 
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2) - 240 + 20 - 64
+        y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + (num * 60) + 30 + 40
+
+        if num >= 6:
+            x += 240 + 20 + 100 + 64
+            y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + ((num-6) * 60) + 30 + 40
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1]) 
+        text_rect_pos = main_rect.topleft
+        text_rect_size = (item_rect_size[0], item_rect_size[1]) 
+
+        createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "basic") 
+
+        # Name 
+        name_surface = self.font14.render(f"{option.upper()}", True, UI_BG_COLOUR) 
+        name_rect = name_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(0, 0))
+        self.display_surface.blit(name_surface, name_rect)
+
+        self.difficulty_display(option, num, item_rect_size, bg)
+    
+    def difficulty_display(self, option, num, item_rect_size, bg):
+        # Diff. values display
+        input_rect_size = (50, 10) 
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2) - 240 + 20 + 220 - 32
+        y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + (num * 60) + 30 + 40
+
+        if num >= 6:
+            x += 240 + 20 + 100 + 32 + 32
+            y = (self.display_surface.get_size()[1] // 2) - (item_rect_size[1] // 2) - (bg[1] // 2) + ((num-6) * 60) + 30 + 40
+
+        main_rect_input = pygame.Rect(x, y, input_rect_size[0], input_rect_size[1]) 
+        collide_rect = pygame.Rect(x + 5, y - 20, input_rect_size[0] + 40, input_rect_size[1] + 40) 
+        text_rect_input_pos = main_rect_input.topleft + pygame.math.Vector2(25, 0)
+        text_rect_input_size = (input_rect_size[0], input_rect_size[1]) 
+
+        createUI(self.display_surface, text_rect_input_size[0], text_rect_input_size[1], text_rect_input_pos, "basic") 
+
+        # todo: clean up both buttons
+    
+        # Button [add]
+        button_rect = pygame.Rect(main_rect_input.right + 50, main_rect_input.top - 8, 32, 32) 
+        pos = pygame.mouse.get_pos() 
+        button_hit = button_rect.collidepoint(pos) 
+
+        right_icon = pygame.image.load("assets/graphics/ui/button_icons/right.png").convert_alpha() 
+        button_surf = pygame.image.load("assets/graphics/ui/interface/tall_box.png").convert_alpha()
+        if button_hit and self.clicked: 
+            button_surf = pygame.image.load("assets/graphics/ui/interface/tall_box_active.png").convert_alpha() 
+            right_icon = pygame.image.load("assets/graphics/ui/button_icons/right_active.png").convert_alpha() 
+        elif button_hit: 
+            if player_inputs["light attack"] and not self.clicked and difficulty_data[option] < 2: 
+                difficulty_data[option] = round(difficulty_data[option] + 0.1, 1) 
+ 
+                self.clicked = True 
+                self.click_time = pygame.time.get_ticks() 
+                player_inputs["light attack"] = False
+            else: player_inputs["light attack"] = False
+            button_surf = pygame.image.load("assets/graphics/ui/interface/tall_box_selected.png").convert_alpha() 
+ 
+        button_rect = button_surf.get_rect(midleft = main_rect_input.midright + pygame.math.Vector2(50, 0)) 
+        icon_rect = button_surf.get_rect(midleft = main_rect_input.midright + pygame.math.Vector2(50, 9)) 
+        self.display_surface.blit(button_surf, button_rect) 
+        self.display_surface.blit(right_icon, icon_rect)
+
+        # Button [subtract]
+        button_rect = pygame.Rect(main_rect_input.left - 30, main_rect_input.top - 8, 32, 32) 
+        pos = pygame.mouse.get_pos() 
+        button_hit = button_rect.collidepoint(pos) 
+
+        left_icon = pygame.image.load("assets/graphics/ui/button_icons/left.png").convert_alpha() 
+        button_surf = pygame.image.load("assets/graphics/ui/interface/tall_box.png").convert_alpha()
+        if button_hit and self.clicked: 
+            button_surf = pygame.image.load("assets/graphics/ui/interface/tall_box_active.png").convert_alpha() 
+            left_icon = pygame.image.load("assets/graphics/ui/button_icons/right_active.png").convert_alpha() 
+        elif button_hit: 
+            if player_inputs["light attack"] and not self.clicked and difficulty_data[option] > 0.1: 
+                difficulty_data[option] = round(difficulty_data[option] - 0.1, 1) 
+ 
+                self.clicked = True 
+                self.click_time = pygame.time.get_ticks() 
+                player_inputs["light attack"] = False
+            else: player_inputs["light attack"] = False
+            button_surf = pygame.image.load("assets/graphics/ui/interface/tall_box_selected.png").convert_alpha() 
+ 
+        button_rect = button_surf.get_rect(midleft = main_rect_input.midleft + pygame.math.Vector2(-30, 0)) 
+        icon_rect = button_surf.get_rect(midleft = main_rect_input.midleft + pygame.math.Vector2(-30, 9)) 
+        self.display_surface.blit(button_surf, button_rect) 
+        self.display_surface.blit(left_icon, icon_rect) 
+
+        # Name 
+        name_surface = self.font14.render(f"x{difficulty_data[option]}", True, UI_BG_COLOUR) 
+        name_rect = name_surface.get_rect(midleft = main_rect_input.midleft + pygame.math.Vector2(20, 0))
+        self.display_surface.blit(name_surface, name_rect)
+
+    ## OTHER
     def close_menu(self, player):
         player.esc_open = False
         player.any_interface_open = False
@@ -848,6 +956,6 @@ class pauseMenu:
 
     def update(self):
         self.selection_cooldown()
-
         if self.controls_submenu: self.controlsMenu()
+        if self.difficulty_submenu: self.difficultyMenu()
         if self.any_submenu_open: self.check_return()

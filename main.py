@@ -10,7 +10,7 @@ import uuid
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import os
-from globalinfo import *
+import globalinfo
 
 icon_image = pygame.image.load("assets/graphics/ico.png")
 
@@ -82,10 +82,14 @@ class Game:
         self.image = self.frames_list[self.frame_index]
 
         self.save_data = None
+        self.settings_data = None
+
+        self.load_settings()
 
     def save_and_exit(self):
         # Save to file
         self.save_game()
+        self.save_settings()
 
         # Reset values - ensures data is fresh for new games
         self.level.player.resting = False
@@ -118,7 +122,7 @@ class Game:
     def save_game(self):
         # Find the directory in the user's Documents folder
         documents_dir = os.path.expanduser("~/Documents")
-        saved_games_dir = os.path.join(documents_dir, "Saved Games", "Kingseeker")
+        saved_games_dir = os.path.join(documents_dir, "Saved Games", "Kingseeker/saves")
 
         # Ensure the directory exists
         os.makedirs(saved_games_dir, exist_ok=True)
@@ -138,6 +142,24 @@ class Game:
         # Save the dictionaries to a JSON file
         with open(file_path, 'w') as file:
             json.dump(self.save_data, file, indent=4)
+    
+    def save_settings(self):
+        documents_dir = os.path.expanduser("~/Documents")
+        settings_dir = os.path.join(documents_dir, "Saved Games", "Kingseeker")
+
+        os.makedirs(settings_dir, exist_ok=True)
+        file_name = f"game_settings.json"
+        file_path = os.path.join(settings_dir, file_name)
+
+        # Collect all dictionaries from globalinfo.py
+        self.settings_data = {
+            name: obj
+            for name, obj in vars(globalinfo).items()
+            if isinstance(obj, dict) and not name.startswith("__")
+        }
+
+        with open(file_path, 'w') as file:
+            json.dump(self.settings_data, file, indent=4)
 
     def run_game(self):
         change_music()
@@ -146,6 +168,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.save_game()
+                    self.save_settings()
 
                     pygame.quit()
                     sys.exit()
@@ -221,6 +244,26 @@ class Game:
                 if isinstance(gameinfo_dict, dict):
                     gameinfo_dict.update(save_data)
                     print(f"Updated {name} in gameinfo.")
+    
+    def load_settings(self):
+        try: 
+            documents_dir = os.path.expanduser("~/Documents")
+            settings_dir = os.path.join(documents_dir, "Saved Games", "Kingseeker/game_settings.json")
+
+            with open(settings_dir, 'r') as file:
+                saved_settings = json.load(file)
+                
+            # Update dictionaries in globalinfo with the loaded data
+            for name, settings_data in saved_settings.items():
+                if hasattr(globalinfo, name): 
+                    globalinfo_dict = getattr(gameinfo, name)
+                    if isinstance(globalinfo_dict, dict):
+                        globalinfo_dict.update(settings_data)
+                        print(f"Updated {name} in globalinfo.")
+        
+        # If file cannot be loaded (due to corruption, fake file etc)
+        except:
+            print("Cannot load settings file. Perhaps it is renamed/deleted?")
 
     def main_menu(self):
         mainmenu_title = pygame.transform.scale(pygame.image.load("assets/graphics/title3.png"), (949, 125))
