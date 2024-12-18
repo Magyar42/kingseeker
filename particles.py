@@ -25,9 +25,9 @@ class AnimationPlayer():
             'sparkle': import_folder('assets/graphics/particles/sparkle'),
 
             'player_spin': import_folder('assets/graphics/particles/player_attack/player_spin'),
-            'sword_1': import_folder('assets/graphics/particles/player_attack/sword_1'),
-            'sword_2': import_folder('assets/graphics/particles/player_attack/sword_2'),
-            'sword_skill': import_folder('assets/graphics/particles/player_attack/sword_skill'),
+            'broadsword_0': import_folder('assets/graphics/particles/player_attack/broadsword_0'),
+            'broadsword_1': import_folder('assets/graphics/particles/player_attack/broadsword_1'),
+            'broadsword_2': import_folder('assets/graphics/particles/player_attack/broadsword_2'),
  
             # deaths
             'squid': import_folder('assets/graphics/particles/smoke'),

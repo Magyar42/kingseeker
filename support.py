@@ -135,3 +135,70 @@ def createUI(surface, width, height, pos, type="", padding = 20):
     surface.blit(bg_border_right, (pos[0] + (2 * corner_width) + border_width - 10 - 2 + padding, pos[1] + corner_height - padding))
 
     surface.blit(bg_body_resized, (pos[0] - 8, pos[1] - 8))
+
+def getBoxStatus(active_cond, locked_cond, hover_cond, id, usage, num=False):
+    num_icon = None
+    locked = False
+
+    if usage == "upgrades":
+        current_weapon = player_core_info['values']['current weapon']
+        required_upgrades = weapon_upgrades_req[current_weapon][str(id)]
+
+        if required_upgrades != None:
+            for req in required_upgrades:
+                if not weapon_upgrades[current_weapon][req]: locked = True
+
+    
+    if active_cond:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}_active.png").convert_alpha()
+    
+    elif locked_cond or locked:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}.png").convert_alpha()
+    
+    elif hover_cond:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}.png").convert_alpha()
+
+        if player_inputs["light attack"]:
+            if usage == "upgrades":
+                current_weapon = player_core_info['values']['current weapon']
+                cost = weapon_upgrades_cost[current_weapon][str(id)]
+
+                weapon_upgrades[current_weapon][str(id)] = 1
+                resources["titanite chunks"] -= cost
+                player_inputs["light attack"] = False
+    
+    else:
+        icon = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+        if num: num_icon = pygame.image.load(f"assets/graphics/ui/button_icons/{id}.png").convert_alpha()
+
+    return icon, num_icon
+
+# Called when weapon changes - copies weapon info to player info so that details can be dynamically
+# updated in a run
+def set_player_weapon_details(weapon):
+    # todo: clean up by using a loop
+
+    # Primary Attack
+    player_core_info["light_attack"]["name"] = f"{weapon.lower()}_light"
+    player_core_info["light_attack"]["cooldown"] = weapon_data[weapon]["0"]["Recovery"] * 1000 # in ms
+    player_core_info["light_attack"]["base damage"] = weapon_data[weapon]["0"]["Base Damage"]
+    player_core_info["light_attack"]["knockback"] = weapon_data[weapon]["0"]["Knockback"]
+    player_core_info["light_attack"]["stamina_use"] = weapon_data[weapon]["0"]["Stamina Use"]
+
+    # Secondary Attack
+    player_core_info["heavy_attack"]["name"] = f"{weapon.lower()}_heavy"
+    player_core_info["heavy_attack"]["cooldown"] = weapon_data[weapon]["1"]["Recovery"] * 1000 # in ms
+    player_core_info["heavy_attack"]["base damage"] = weapon_data[weapon]["1"]["Base Damage"]
+    player_core_info["heavy_attack"]["knockback"] = weapon_data[weapon]["1"]["Knockback"]
+    player_core_info["heavy_attack"]["stamina_use"] = weapon_data[weapon]["1"]["Stamina Use"]
+
+    # Ability
+    player_core_info["skill"]["name"] = f"{weapon.lower()}_skill"
+    player_core_info["skill"]["cooldown"] = weapon_data[weapon]["2"]["Recovery"] * 1000 # in ms
+    player_core_info["skill"]["base damage"] = weapon_data[weapon]["2"]["Base Damage"]
+    player_core_info["skill"]["knockback"] = weapon_data[weapon]["2"]["Knockback"]
+    player_core_info["skill"]["stamina_use"] = weapon_data[weapon]["2"]["Stamina Use"]
+    player_core_info["skill"]["mana_use"] = weapon_data[weapon]["2"]["Mana Use"]

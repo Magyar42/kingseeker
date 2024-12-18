@@ -1,6 +1,22 @@
 # Data and information that is updated and changed as gameplay progresses #
 # Information is saved to and loaded from here #
 
+# Game Flags - indicate whether certain things have happened (used mainly for dialogue)
+flags = {
+    "completed_1st_run": False,
+    "completed_2nd_run": False,
+    "completed_3rd_run": False,
+
+    "died_undead_burg": False,
+    "died_undead_parish": False,
+    "died_the_depths": False,
+
+    "obtained_titanite": False,
+    "obtained_humanity": False,
+
+    "encountered_covenant": False,
+}
+
 # NPC Stuff
 # Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {
@@ -12,10 +28,10 @@ npc_conversations = {
             "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper.", "I tend to the flame, and to thee.", "The fire fades, and soon only dark shall|remain.", "To this end, I am at thy side.", ""],
         },
         "002": {
-            "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels..."],
+            "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels...", ""],
         },
         "003": {
-            "name": "Fire Keeper", "priority": 99, "completed": False, "text": ["Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever."],
+            "name": "Fire Keeper", "priority": 99, "completed": False, "text": ["Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever.", ""],
         },
     },
     # "logan": [
@@ -35,9 +51,9 @@ npc_conversations = {
 # Meta-Progression Resources
 resources = {
     "soul remnants": 30,
-    "humanity sprites": 11,
-    "titanite chunks": 3,
-    "demon titanite": 1,
+    "humanity sprites": 72,
+    "titanite chunks": 9,
+    "demon titanite": 4,
 }
 
 # Covenant Ranks
@@ -75,8 +91,8 @@ player_unlocks = {
     "lordvessel": False,
 }
 
-# Player details for per run
-interface_details = {
+# Player details for per run # todo:set attacks to use current weapon;'s data
+player_core_info = {
     "light_attack": {
         "class": "sword", "name": "broadsword_light", "cooldown": 520, "base damage": 15, "knockback": 0, "stamina_use": 15,
     },
@@ -87,7 +103,7 @@ interface_details = {
         "class": "pyromancy", "name": "pyromancy_flame", "cooldown": 5000, "base damage": 5,
     },
     "skill": {
-        "name": "skill_1", "cooldown": 400, "base damage": 10, "stamina_use": 25,
+        "name": "broadsword_2", "cooldown": 400, "base damage": 10, "knockback": 0, "stamina_use": 25, "mana_use": 20,
     },
     # "rings": {
     #     "ring 1": None, "ring 2": None,
@@ -99,27 +115,40 @@ interface_details = {
         "1": "heal", "2": "fire_surge", "3": "icecrag_burst",
     },
     "values": {
+        "current weapon": "Broadsword",
         "estus level": 1,
-        "souls": 0,
+        "souls": 1000,
         "lost souls": 0,
         "max estus": 3,
         "current estus": 3,
         "levelup cost": 1,
+        "level": 1,
     }
 }
 
 # Hidden numbers which can be affected by boons
 player_data = {
-    "dependent_variables": {"health": 400, "mana": 100, "stamina": 60, "speed": 5, "poise": 42.1, "attack": 5, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0.005},
+    "dependent_variables": {"health": 300, "mana": 50, "stamina": 50, "speed": 5, "defense": 0.25, "poise": 40, "attack": 5, "magic mult": 1, "stamina recovery": 0.2, "mana recovery": 0},
 
     "stamina_costs": {"weapon_usage": 5, "magic_usage": 4, "rolling": 15},
-
-    "defense": {"physical def.": 128, "magic def.": 139, "fire def.": 125, "lightning def.": 132},
 }
 
 # Player inputs (mainly used for mouse)
 player_inputs = {
     "light attack": False, "heavy attack": False, "skill": False, "cast spell": False, "roll": False, "scroll spell": False, "scroll direction": 0,
+}
+
+# Weapon Upgrades
+weapon_upgrades = {
+    "Broadsword": {
+        "0": True, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
+    },
+    "Greataxe": {
+        "0": True, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
+    },
+    "Dagger": {
+        "0": True, "1": False, "2": False, "3": False, "4": False, "5": False, "6": False, 
+    },
 }
 
 # Enemy Spawn Types

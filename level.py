@@ -22,9 +22,8 @@ from bloodstain import Bloodstain
 # from boss import HurtBoxes
 from weapon import Hurtboxes
 from npc import NPC
-from interactable_items import SummonSign
-from interactable_items import PerkPillar
-from popups import BoonsMenu
+from interactable_items import SummonSign, ResourceItem, PerkPillar
+from popups import BoonsMenu, HumanityPowers, LevelUp, WeaponsSelection
 
 class Level:
     def __init__(self, map_id, exit):
@@ -74,8 +73,14 @@ class Level:
         self.create_map(True, self.map_id)
 
         self.ui = UI()
-        self.boons_menu = BoonsMenu(self.toggle_menu, self.boons_postmenu)
+        self.boons_menu = BoonsMenu(self.enable_player_control)
+        self.humanity_menu = HumanityPowers(self.enable_player_control)
+        self.levelup_menu = LevelUp(self.enable_player_control)
+        self.weapons_menu = WeaponsSelection(self.enable_player_control)
         self.boons_menu_open = False
+        self.humanity_menu_open = False
+        self.levelup_menu_open = False
+        self.weapons_menu_open = False
         self.boon_options = None
 
         # self.upgrade = Upgrades(self.player, self.toggle_menu)
@@ -98,7 +103,6 @@ class Level:
         self.kindling_sound.set_volume(0.3)
 
         self.current_bloodstain_pos = ()
-        self.message_icon = pygame.image.load("assets/graphics/ui/message_icon.png")
 
     def create_enemy_spawns(self, player, region, spawn_locations):
         # Get values
@@ -213,12 +217,7 @@ class Level:
 
         # Else if self.reward is a RESOURCE
         else:
-            if self.reward == "great_soul":
-                interface_details["values"]["souls"] += 2000
-            else:
-                resource_index = list(chamber_rewards.keys()).index(self.reward)
-                resource_name = resources_names[resource_index]
-                resources[resource_name] += 10
+            ResourceItem(self.reward, (self.reward_pos), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites])
 
     
     def spawn_enemies(self):
@@ -307,7 +306,7 @@ class Level:
 
                                     if map_id == "000": # todo: change back
                                         # reward = choice(boon_summons)
-                                        reward = "sunlight_summon"
+                                        reward = "darkwraith_summon"
                                     else: reward = choice(list(chamber_rewards.keys()))
 
                                     unique_id = transition_ids[0]
@@ -319,7 +318,7 @@ class Level:
                                 elif column == "342": pillar_type = "bonfire"
                                 elif column == "320": pillar_type = "weapons"
                                 elif column == "298": pillar_type = "anvil"
-                                PerkPillar(pillar_type, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.trigger_pillar_effect)
+                                PerkPillar(pillar_type, (x, y), [self.visible_sprites, self.interactable_sprites, self.obstacle_sprites], self.trigger_pillar_effect, self.check_status)
                             elif column == "387":
                                 # covenant_sign = choice(covenants) # todo: set to random
                                 self.reward_pos = (x, y)
@@ -439,7 +438,7 @@ class Level:
         self.animation_player.create_particles(particle_type, pos, [self.visible_sprites], "ambient")
 
     def add_xp(self, amount):
-        interface_details['values']['souls'] += amount
+        player_core_info['values']['souls'] += amount
 
     def toggle_menu(self):
         self.levelup_menu_active = not self.levelup_menu_active
@@ -555,7 +554,15 @@ class Level:
     #     print("Lever pulled!")
 
     def trigger_pillar_effect(self, type): # todo
-        self.lock_player()
+        self.player.resting = True
+        self.player.any_interface_open = True
+
+        if type == "perks":
+            self.humanity_menu_open = True
+        elif type == "levels":
+            self.levelup_menu_open = True
+        elif type == "weapons":
+            self.weapons_menu_open = True
         print("Perk pillar activated!")
     
     def summon_sign_effect(self, covenant):
@@ -574,6 +581,10 @@ class Level:
     # Enables player movement, removing any screen-effects
     def enable_player_control(self):
         self.player.resting = False
+        self.boons_menu_open = False
+        self.humanity_menu_open = False
+        self.levelup_menu_open = False
+        self.weapons_menu_open = False
         self.player.any_interface_open = False
     
     def boons_postmenu(self):
@@ -617,6 +628,20 @@ class Level:
         self.check_player_stats("Health")
         self.check_player_stats("Stamina")
         self.check_player_stats("Mana")
+
+    def check_status(self, type):
+        if type == "perks":
+            if not self.humanity_menu_open: new_status = "idle"
+            else: new_status = "active"
+        elif type == "levels":
+            if not self.levelup_menu_open: new_status = "idle"
+            else: new_status = "active"
+        elif type == "weapons":
+            if not self.weapons_menu_open: new_status = "idle"
+            else: new_status = "active"
+        else: new_status = "idle"
+
+        return new_status
 
     def restart_world(self, map = "000"):
         # Removes stuff
@@ -678,6 +703,8 @@ class Level:
             trigger_region_title = True
             self.reward = reward
 
+            self.ui.update_input_icons()
+
         # todo add check for region minus end room AND the room before
         # this is because ideally that room will have 1 exit, and will also not have any reward set
 
@@ -714,6 +741,7 @@ class Level:
         self.visible_sprites.bonfire_update(self.player)
         self.visible_sprites.sign_update(self.player)
         self.visible_sprites.pillar_update(self.player)
+        self.visible_sprites.resource_items_update(self.player)
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
@@ -727,6 +755,9 @@ class Level:
         self.check_enemy_spawns()
 
         if self.boons_menu_open: self.boons_menu.display(self.boon_options)
+        if self.humanity_menu_open: self.humanity_menu.display()
+        if self.levelup_menu_open: self.levelup_menu.display()
+        if self.weapons_menu_open: self.weapons_menu.display()
         
         # Testing
         # debug(f"Position: {self.player.rect.center} | Status: {self.player.status}")
@@ -735,6 +766,7 @@ class Level:
         # debug(f"{self.player.poise} / {self.player.max_poise}")
         # debug(self.displaying_message)
         #get_attribute_num("vitality")
+        # debug(resources["humanity sprites"])
 
         #self.bonfire.bonfire_popup_update(self.player)
         self.update_player_stats()
@@ -823,6 +855,11 @@ class YSortCameraGroup(pygame.sprite.Group):
         pillar_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "pillar"]
         for pillar in pillar_sprites:
             pillar.pillar_update(player)
+
+    def resource_items_update(self, player):
+        resource_items_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, "sprite_type") and sprite.sprite_type == "resource"]
+        for item in resource_items_sprites:
+            item.resource_items_update(player)
 
 class ScreenCameraGroup(pygame.sprite.Group):
     def __init__(self, map_id, region):

@@ -31,7 +31,7 @@ class UI:
         self.estus_surf = pygame.image.load("assets/graphics/ui/interface_icons/inputs/estus.png")
         self.input_types = []
         for input_type in ["light_attack", "heavy_attack", "skill", "catalyst"]:
-            current_tool = interface_details[f"{input_type}"]["name"]
+            current_tool = player_core_info[f"{input_type}"]["name"]
             current_tool_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
             self.input_types.append(current_tool_surf)
             # f"self.{input_type}_img" = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
@@ -43,7 +43,7 @@ class UI:
             self.spells.append(current_spell_surf)
 
         # self.boons = []
-        # for current_boon in interface_details["boons"]["list"]:
+        # for current_boon in player_core_info["boons"]["list"]:
         #     current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
         #     self.boons.append(current_boon_surf)
 
@@ -54,6 +54,13 @@ class UI:
 
         self.tab_inactive_img = pygame.image.load("assets/graphics/ui/key_icons/tab_inactive.png")
         self.tab_active_img = pygame.image.load("assets/graphics/ui/key_icons/tab_active.png")
+
+    def update_input_icons(self):
+        self.input_types = []
+        for input_type in ["light_attack", "heavy_attack", "skill", "catalyst"]:
+            current_tool = player_core_info[f"{input_type}"]["name"]
+            current_tool_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_tool}.png")
+            self.input_types.append(current_tool_surf)
 
     def update_bars(self):
         self.health_bar_rect = pygame.Rect(27, 10, ui_data['HEALTH_BAR_WIDTH'], BAR_HEIGHT)
@@ -208,7 +215,7 @@ class UI:
             self.display_surface.blit(spell_img, spell_rect)
 
     def enkindled_ui_overlay(self, rect):
-        if not interface_details['values']['hollow']:
+        if not player_core_info['values']['hollow']:
             outline_rect = pygame.Rect(self.humanity_counter_rect.x - 26, self.humanity_counter_rect.y - 26, self.humanity_counter_rect.w, self.humanity_counter_rect.h)
 
             self.display_surface.blit(self.human_form_overlay, outline_rect)
@@ -244,9 +251,9 @@ class UI:
         self.catalyst_display(player, player.casting_spell)
         self.primary_attack_display(player, player.light_attacking)
         self.secondary_attack_display(player, player.heavy_attacking)
-        self.estus_display(player, player.drinking_estus, interface_details["values"]["current estus"])
+        self.estus_display(player, player.drinking_estus, player_core_info["values"]["current estus"])
 
-        self.show_xp(interface_details['values']['souls'])
+        self.show_xp(player_core_info['values']['souls'])
     
     def permanent_display(self, player):
         self.show_details_toggle(player.menu_open)

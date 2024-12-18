@@ -20,7 +20,7 @@ class Prompt:
         x = self.display_surface.get_size()[0] // 2
         y = self.display_surface.get_size()[1] - (PROMPT_HEIGHT + PROMPT_GAP) - 20 # * len(current_prompts)
 
-        text_surface = self.font.render(str(f"[{button}] {text.upper()}"), False, TEXT_TITLE_COLOUR).convert_alpha()
+        text_surface = self.font.render(str(f"[{button}] {text.upper()}"), True, TEXT_TITLE_COLOUR).convert_alpha()
         text_rect = text_surface.get_rect(center = (x, y))
 
         self.displayPrompt(text_rect, text_surface)
@@ -48,8 +48,8 @@ class ItemPopup:
         x = self.display_surface.get_size()[0] // 2
         y = self.display_surface.get_size()[1] - (PROMPT_HEIGHT * 2) * pos - 50
 
-        text_surface = self.font.render(str(f"{text}"), False, TEXT_COLOUR)
-        num_surface = self.font.render(str(f"[{num}]"), False, TEXT_COLOUR)
+        text_surface = self.font.render(str(f"{text}"), True, TEXT_COLOUR)
+        num_surface = self.font.render(str(f"[{num}]"), True, TEXT_COLOUR)
         text_rect = text_surface.get_rect(center = (x, y))
 
         display_rect = pygame.Rect(text_rect.left - 40, text_rect.top, text_rect.w + 80, text_rect.h * 3)
@@ -126,7 +126,7 @@ class Decision:
             item = Item(x, y + 90 + (option_rect_size[1] + 5) * self.options_list.index(option), option_rect_size[0], option_rect_size[1], index, self.font)
             item.display(self.display_surface, self.selection_index, option)
         
-        text_body_surface = self.font.render(body, False, TEXT_COLOUR)
+        text_body_surface = self.font.render(body, True, TEXT_COLOUR)
         text_body_rect = text_body_surface.get_rect(center = main_rect.center)
         self.display_surface.blit(text_body_surface, text_body_rect)
    
@@ -176,7 +176,7 @@ class Item:
         #colour = UPGRADE_TEXT_COLOUR_SELECTED if selected else UPGRADE_TEXT_COLOUR
         colour = UPGRADE_TEXT_COLOUR
 
-        title_surface = self.font.render(name, False, colour)
+        title_surface = self.font.render(name, True, colour)
         title_rect = title_surface.get_rect(center = self.rect.center)
 
         surface.blit(title_surface, title_rect)
@@ -193,10 +193,12 @@ class Item:
 
 # Side Menu
 class gameMenu:
-    def __init__(self, toggle_screen_effect):
+    def __init__(self):
         self.display_surface = pygame.display.get_surface()
-        self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
-        self.toggle_screen_effect = toggle_screen_effect
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+        self.font11 = pygame.font.Font(UI_FONT, 11)
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
 
         self.details_index_items = None
         self.details_index_boons = None
@@ -216,21 +218,11 @@ class gameMenu:
         self.boons = []
         self.boons_names = []
         # Only load boons (not sub-boons) for the display
-        for current_boon in interface_details["boons"]["list"]:
+        for current_boon in player_core_info["boons"]["list"]:
             if not boon_data[current_boon]["is_subboon"]:
                 current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
                 self.boons.append(current_boon_surf)
                 self.boons_names.append(current_boon)
-
-    # def update_boons(self):
-    #     self.boons = []
-    #     self.boons_names = []
-    #     # Only load boons (not sub-boons) for the display
-    #     for current_boon in interface_details["boons"]["list"]:
-    #         if not boon_data[current_boon]["is_subboon"]:
-    #             current_boon_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/boons/{current_boon}.png")
-    #             self.boons.append(current_boon_surf)
-    #             self.boons_names.append(current_boon)
 
     def selection_cooldown(self):
         if not self.details_can_toggle:
@@ -240,6 +232,7 @@ class gameMenu:
     
     # Esc Menu - Shows items + boons
     def displayMenu(self, player):
+        self.resource_num_list = list(resources.values())
 
         # ITEMS Display
         bg_rect_size = (90, 140)
@@ -286,9 +279,9 @@ class gameMenu:
 
         # DETAILS toggle
         if self.details_index_items is not None:
-            self.item_details(player, self.resource_name_list[self.details_index_items], pygame.font.Font(UI_FONT, 16))
+            self.item_details(player, self.resource_name_list[self.details_index_items], self.font16)
         if self.details_index_boons is not None:
-            self.boon_details(player, self.boons_names[self.details_index_boons], pygame.font.Font(UI_FONT, 16))
+            self.boon_details(player, self.boons_names[self.details_index_boons], self.font16)
 
             self.boon_active = True
             if self.boon_active: 
@@ -336,7 +329,7 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -346,7 +339,7 @@ class gameMenu:
         while len(split_current_line) < 3:
             split_current_line.append("")
         for subline in range(3):
-            text_surf = pygame.font.Font(UI_FONT, 11).render(split_current_line[subline], False, UI_BG_LIGHT_COLOUR)
+            text_surf = self.font11.render(split_current_line[subline], True, UI_BG_LIGHT_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, text_rect_size[1] + 45 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -383,7 +376,7 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -393,12 +386,12 @@ class gameMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 40 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
 
         # SUB BOONS
-        self.subboons_display(boon, pygame.font.Font(UI_FONT, 12), boon_data[f'{boon}']['subboons'], bg_rect_size[1])
+        self.subboons_display(boon, self.font12, boon_data[f'{boon}']['subboons'], bg_rect_size[1])
     
     # todo: clean up the below
     def subboons_display(self, parent_boon, font, child_boons, parent_height):
@@ -417,7 +410,7 @@ class gameMenu:
             createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
 
             # Name
-            title_surface = pygame.font.Font(UI_FONT, 12).render("No sub-boons available for Core Boons.", True, UI_BG_COLOUR)
+            title_surface = self.font12.render("No sub-boons available for Core Boons.", True, UI_BG_COLOUR)
             title_rect = title_surface.get_rect(midleft = text_rect_pos + pygame.math.Vector2(0, 5))
             self.display_surface.blit(title_surface, title_rect)
         else:
@@ -425,7 +418,7 @@ class gameMenu:
             prev_subboon_height = 0
             for index, subboon in enumerate(child_boons):
                 # If sub-boon is active, show details
-                if subboon in interface_details["boons"]["list"]:
+                if subboon in player_core_info["boons"]["list"]:
                     if boon_data[subboon]["desc2"] != "": bg_rect_size = (700, 175)
                     else: bg_rect_size = (700, 135)
 
@@ -441,7 +434,7 @@ class gameMenu:
                     createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
 
                     # Name
-                    title_surface = pygame.font.Font(UI_FONT, 14).render(f"{boon_data[f'{subboon}']['name'].upper()}", True, UI_BG_COLOUR)
+                    title_surface = self.font14.render(f"{boon_data[f'{subboon}']['name'].upper()}", True, UI_BG_COLOUR)
                     title_rect = title_surface.get_rect(midleft = main_rect.topleft + pygame.math.Vector2(0, 40))
                     self.display_surface.blit(title_surface, title_rect)
 
@@ -451,7 +444,7 @@ class gameMenu:
                     while len(split_current_line) < 4:
                         split_current_line.append("")
                     for subline in range(4):
-                        text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+                        text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
                         text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 30 + (subline * 15)))
                         self.display_surface.blit(text_surf, text_rect)
 
@@ -461,7 +454,7 @@ class gameMenu:
                     while len(split_current_line) < 4:
                         split_current_line.append("")
                     for subline in range(4):
-                        text_surf = pygame.font.Font(UI_FONT, 12).render(split_current_line[subline], False, UI_BG_COLOUR)
+                        text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
                         text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 30 + 40 + subline * 15))
                         self.display_surface.blit(text_surf, text_rect)
                     
@@ -479,7 +472,7 @@ class gameMenu:
                     createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
 
                     # Name
-                    title_surface = pygame.font.Font(UI_FONT, 12).render("???", True, UI_BG_COLOUR)
+                    title_surface = self.font12.render("???", True, UI_BG_COLOUR)
                     title_rect = title_surface.get_rect(midleft = text_rect_pos + pygame.math.Vector2(0, 5))
                     self.display_surface.blit(title_surface, title_rect)
                 prev_subboon_height = bg_rect_size[1] - 50 # Used to dynamically change distance between subboons
@@ -487,7 +480,7 @@ class gameMenu:
 class itemMenu:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
-        self.font = self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
+        self.font = pygame.font.Font(UI_FONT, PROMPT_FONT_SIZE)
 
         self.icons_list = import_folder("assets/graphics/ui/menu/menu_options")
         self.icons_selected_list = import_folder("assets/graphics/ui/menu/menu_options_selected")
@@ -519,13 +512,12 @@ class itemMenu:
 
 # Boons Menu
 class BoonsMenu:
-    def __init__(self, toggle_screen_effect, enable_player_control):
+    def __init__(self, enable_player_control):
         self.display_surface = pygame.display.get_surface()
         self.font16 = pygame.font.Font(UI_FONT, 16)
         self.font14 = pygame.font.Font(UI_FONT, 14)
         self.font12 = pygame.font.Font(UI_FONT, 12)
 
-        self.toggle_screen_effect = toggle_screen_effect
         self.enable_player_control = enable_player_control
 
         self.boon_icons = []
@@ -533,7 +525,7 @@ class BoonsMenu:
         self.big_boon_frame_selected = pygame.image.load("assets/graphics/ui/interface/big_box_selected.png")
     
     def generate_boons(self, covenant):
-        player_boons = interface_details["boons"]["list"]
+        player_boons = player_core_info["boons"]["list"]
         core_boons = boons_core[covenant]["list"]
 
         # Set bool - if false, only core boons can be chosen from
@@ -658,7 +650,7 @@ class BoonsMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, (subline * 15)))
             self.display_surface.blit(text_surf, text_rect)
 
@@ -668,14 +660,14 @@ class BoonsMenu:
         while len(split_current_line) < 4:
             split_current_line.append("")
         for subline in range(4):
-            text_surf = self.font12.render(split_current_line[subline], False, UI_BG_COLOUR)
+            text_surf = self.font12.render(split_current_line[subline], True, UI_BG_COLOUR)
             text_rect = text_surf.get_rect(topleft = text_rect_pos + pygame.math.Vector2(0, 40 + subline * 15))
             self.display_surface.blit(text_surf, text_rect)
         
         return bg_rect_size[1] + 40
 
     def add_boon(self, boon):
-        interface_details["boons"]["list"].append(boon)
+        player_core_info["boons"]["list"].append(boon)
         self.enable_player_control()
         player_inputs["light attack"] = False
 
@@ -959,3 +951,548 @@ class pauseMenu:
         if self.controls_submenu: self.controlsMenu()
         if self.difficulty_submenu: self.difficultyMenu()
         if self.any_submenu_open: self.check_return()
+
+# Gifts of Humanity Menu
+class HumanityPowers:
+    def __init__(self, enable_player_control):
+        self.display_surface = pygame.display.get_surface()
+        self.font18 = pygame.font.Font(UI_FONT, 18)
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+        self.font11 = pygame.font.Font(UI_FONT, 11)
+
+        self.enable_player_control = enable_player_control
+
+        self.clicked = False
+        self.click_cooldown = 100
+        self.click_time = None
+
+        self.humanity_icon = pygame.image.load("assets/graphics/ui/resources/03_humanities.png").convert_alpha()
+
+        # todo: icons for each
+
+    def display(self):
+        self.draw_bg()
+        for num, gift in enumerate(humanity_gifts_text):
+            self.gift_details(gift, num)
+        self.check_input()
+        self.cooldowns()
+
+    def draw_bg(self):
+        # Surface
+        bg_rect_size = (740, 520)
+        bg_x = (self.display_surface.get_size()[0] // 2) - (700 // 2) - 20
+        bg_y = (self.display_surface.get_size()[1] // 2) - 300
+
+        main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1])
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (bg_x, bg_y), "dark")
+
+        # Title
+        title_surface = self.font18.render("| GIFTS OF HUMANITY |", True, TEXT_TITLE_COLOUR)
+        title_rect = title_surface.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 10))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Desc
+        used_text = lore_misc["gifts_of_humanity"]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 3:
+            split_current_line.append("")
+        for subline in range(3):
+            text_surf = self.font11.render(split_current_line[subline], True, TEXT_TITLE_COLOUR)
+            text_rect = text_surf.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 40 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+        # desc_surface = self.font11.render("Once, the Lord of Light banished Dark, and all that stemmed from humanity. And men assumed a fleeting form.", True, TEXT_TITLE_COLOUR)
+        # desc_rect = desc_surface.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 25))
+        # self.display_surface.blit(desc_surface, desc_rect)
+
+    def create_tooltip(self, id, pos):
+        
+        tt_size = (350, 40)
+        tt_pos = (pos[0] + 20, pos[1] - tt_size[1] - 20)
+        tt_rect = pygame.Rect(tt_pos[0], tt_pos[1], tt_size[0], tt_size[1])
+
+        createUI(self.display_surface, tt_rect.width, tt_rect.height, tt_pos, "basic")
+
+        used_text = humanity_gifts_text[id]["desc"]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 4:
+            split_current_line.append("")
+        for subline in range(4):
+            text_surf = self.font11.render(split_current_line[subline], True, UI_BG_COLOUR)
+            text_rect = text_surf.get_rect(topleft = tt_rect.topleft + pygame.math.Vector2(0, 0 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+    def gift_details(self, gift, num):
+        # Individual Item
+        item_rect_size = (700, 20)
+
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2)
+        y = (self.display_surface.get_size()[1] // 2) - 180 + (num * 70)
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])
+        text_rect_pos = main_rect.topleft + pygame.math.Vector2(0, 0)
+        text_rect_size = (item_rect_size[0], item_rect_size[1])
+
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+        if hit: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "green_light")
+        else: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
+
+        # Name
+        title_surface = self.font16.render(f"| {humanity_gifts_text[f'{gift}']['name'].upper()}", True, UI_BG_COLOUR)
+        title_rect = title_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(5, 0))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Effect
+        current_gift_level = player_gifts[gift]
+        current_gift_effect = humanity_gifts_defines[gift][current_gift_level]
+        if gift == "5" or gift == "6":
+            current_gift_effect = round((current_gift_effect-1) * 100)
+            current_gift_effect = f"{current_gift_effect}%"
+
+        effect_surface = self.font16.render(f"| +{current_gift_effect}", True, UI_BG_COLOUR)
+        effect_rect = effect_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(400, 0))
+        self.display_surface.blit(effect_surface, effect_rect)
+
+        # Cost
+        next_gift_level = current_gift_level + 1
+        next_gift_cost = humanity_gifts_costs[gift][next_gift_level]
+
+        cost_surface = self.font16.render(f"|   {next_gift_cost}", True, UI_BG_COLOUR)
+        cost_rect = cost_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(550, 0))
+        icon_rect = self.humanity_icon.get_rect(midleft = cost_rect.midright + pygame.math.Vector2(-5, 0))
+        
+        self.display_surface.blit(cost_surface, cost_rect)
+        if next_gift_cost != "MAX": self.display_surface.blit(self.humanity_icon, icon_rect)
+
+        # Button
+        button_rect = pygame.Rect(cost_rect.left + 20, cost_rect.top - 8, 32, 32)
+
+        pos = pygame.mouse.get_pos()
+        button_hit = button_rect.collidepoint(pos)
+
+        plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus.png").convert_alpha()
+        button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+
+        if button_hit and self.clicked:
+            button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+            plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus_active.png").convert_alpha()
+        elif next_gift_cost != "MAX":
+            if resources["humanity sprites"] >= int(next_gift_cost):
+                if button_hit:
+                    if player_inputs["light attack"] and not self.clicked:
+                        resources["humanity sprites"] -= int(next_gift_cost)
+                        player_gifts[gift] += 1
+
+                        self.clicked = True
+                        self.click_time = pygame.time.get_ticks()
+                    button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+                else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+        
+        self.display_surface.blit(button_surf, button_rect)
+        self.display_surface.blit(plus_icon, button_rect)
+
+        # Tooltips
+        main_hit = main_rect.collidepoint(pos)
+        if main_hit and not button_hit: self.create_tooltip(gift, pos)
+
+    def check_input(self):
+        player_inputs["light attack"] = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            self.enable_player_control()
+            player_inputs["light attack"] = False
+    
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.clicked:
+            if current_time - self.click_time >= self.click_cooldown:
+                self.clicked = False
+
+# Levelup Menu
+class LevelUp:
+    def __init__(self, enable_player_control):
+        self.display_surface = pygame.display.get_surface()
+        self.font18 = pygame.font.Font(UI_FONT, 18)
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+        self.font11 = pygame.font.Font(UI_FONT, 11)
+
+        self.enable_player_control = enable_player_control
+
+        self.clicked = False
+        self.click_cooldown = 100
+        self.click_time = None
+
+        self.souls_icon = pygame.image.load("assets/graphics/ui/resources/01_soul remnants.png").convert_alpha()
+
+        # todo: icons for each
+
+    def display(self):
+        self.draw_bg()
+        for num, stat in enumerate(player_attributes):
+            self.stat_details(stat, num)
+        self.check_input()
+        self.cooldowns()
+
+    def draw_bg(self):
+        # Surface
+        bg_rect_size = (740, 520)
+        bg_x = (self.display_surface.get_size()[0] // 2) - (700 // 2) - 20
+        bg_y = (self.display_surface.get_size()[1] // 2) - 300
+
+        main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1])
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (bg_x, bg_y), "dark")
+
+        # Title
+        title_surface = self.font18.render("| STRENGTHEN ATTRIBUTES |", True, TEXT_TITLE_COLOUR)
+        title_rect = title_surface.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 10))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Desc
+        used_text = lore_misc["level_up"]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 3:
+            split_current_line.append("")
+        for subline in range(3):
+            text_surf = self.font11.render(split_current_line[subline], True, TEXT_TITLE_COLOUR)
+            text_rect = text_surf.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 40 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+    def create_tooltip(self, id, pos):
+        
+        tt_size = (350, 40)
+        tt_pos = (pos[0] + 20, pos[1] - tt_size[1] - 20)
+        tt_rect = pygame.Rect(tt_pos[0], tt_pos[1], tt_size[0], tt_size[1])
+
+        createUI(self.display_surface, tt_rect.width, tt_rect.height, tt_pos, "basic")
+
+        used_text = player_attributes_text[id]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 4:
+            split_current_line.append("")
+        for subline in range(4):
+            text_surf = self.font11.render(split_current_line[subline], True, UI_BG_COLOUR)
+            text_rect = text_surf.get_rect(topleft = tt_rect.topleft + pygame.math.Vector2(0, 0 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+
+    def stat_details(self, stat, num):
+        # Individual Item
+        item_rect_size = (700, 20)
+
+        x = (self.display_surface.get_size()[0] // 2) - (item_rect_size[0] // 2)
+        y = (self.display_surface.get_size()[1] // 2) - 180 + (num * 70)
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])
+        text_rect_pos = main_rect.topleft + pygame.math.Vector2(0, 0)
+        text_rect_size = (item_rect_size[0], item_rect_size[1])
+
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+        if hit: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos, "green_light")
+        else: createUI(self.display_surface, text_rect_size[0], text_rect_size[1], text_rect_pos)
+
+        # Name
+        title_surface = self.font16.render(f"| {stat.upper()}", True, UI_BG_COLOUR)
+        title_rect = title_surface.get_rect(midleft = main_rect.midleft + pygame.math.Vector2(5, 0))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Level
+        current_stat_level = player_attributes[stat]
+
+        level_surface = self.font16.render(f"| LVL {current_stat_level}", True, UI_BG_COLOUR)
+        level_rect = level_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(400, 0))
+        self.display_surface.blit(level_surface, level_rect)
+
+        # Cost
+        next_level_cost = player_core_info["values"]["level"] * LEVELUP_MULT # todo
+        if player_attributes[stat] >= 25: next_level_cost = "MAX"
+
+        cost_surface = self.font16.render(f"|   {next_level_cost}", True, UI_BG_COLOUR)
+        cost_rect = cost_surface.get_rect(midleft = title_rect.midleft + pygame.math.Vector2(550, 0))
+        icon_rect = self.souls_icon.get_rect(midleft = cost_rect.midright + pygame.math.Vector2(-5, 0))
+        
+        self.display_surface.blit(cost_surface, cost_rect)
+        if current_stat_level != 25: self.display_surface.blit(self.souls_icon, icon_rect)
+
+        # Button
+        button_rect = pygame.Rect(cost_rect.left + 20, cost_rect.top - 8, 32, 32)
+
+        pos = pygame.mouse.get_pos()
+        button_hit = button_rect.collidepoint(pos)
+
+        plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus.png").convert_alpha()
+        button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_grey.png").convert_alpha()
+
+        if button_hit and self.clicked:
+            button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_active.png").convert_alpha()
+            plus_icon = pygame.image.load("assets/graphics/ui/button_icons/plus_active.png").convert_alpha()
+        elif player_attributes[stat] != 25:
+            if player_core_info["values"]["souls"] >= int(next_level_cost):
+                if button_hit:
+                    if player_inputs["light attack"] and not self.clicked:
+                        player_core_info["values"]["souls"] -= int(next_level_cost)
+                        player_attributes[stat] += 1
+                        player_core_info["values"]["level"] += 1
+
+                        self.clicked = True
+                        self.click_time = pygame.time.get_ticks()
+                    button_surf = pygame.image.load("assets/graphics/ui/interface/square_box_selected.png").convert_alpha()
+                else: button_surf = pygame.image.load("assets/graphics/ui/interface/square_box.png").convert_alpha()
+        
+        self.display_surface.blit(button_surf, button_rect)
+        self.display_surface.blit(plus_icon, button_rect)
+
+        # Tooltips
+        main_hit = main_rect.collidepoint(pos)
+        if main_hit and not button_hit: self.create_tooltip(stat, pos)
+
+    def check_input(self):
+        player_inputs["light attack"] = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            self.enable_player_control()
+            player_inputs["light attack"] = False
+    
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.clicked:
+            if current_time - self.click_time >= self.click_cooldown:
+                self.clicked = False
+
+# Weapons Menu
+class WeaponsSelection:
+    def __init__(self, enable_player_control):
+        self.display_surface = pygame.display.get_surface()
+        self.font18 = pygame.font.Font(UI_FONT, 18)
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+        self.font11 = pygame.font.Font(UI_FONT, 11)
+        self.font10 = pygame.font.Font(UI_FONT, 10)
+
+        self.enable_player_control = enable_player_control
+
+        self.clicked = False
+        self.click_cooldown = 100
+        self.click_time = None
+
+        self.arrows = pygame.image.load("assets/graphics/ui/interface/upgrades_arrows.png").convert_alpha() 
+        self.titanite_icon = pygame.image.load("assets/graphics/ui/resources/10_titanite chunks.png").convert_alpha()
+        self.demontitanite_icon = pygame.image.load("assets/graphics/ui/resources/12_demon titanite.png").convert_alpha()
+        self.box_icon = self.demontitanite_icon = pygame.image.load("assets/graphics/ui/interface/input_box_selected.png").convert_alpha()
+        
+        self.weapon_index = 0
+        self.tooltip = None
+        self.button_rect_list = ["", "", "", "", "", ""]
+    
+    def display(self):
+        self.draw_bg()
+
+        # Weapons sidebar
+        for num, weapon in enumerate(weapon_upgrades):
+            self.weapon_list(weapon, num)
+
+        # Current weapon - stats
+        for num, attack in enumerate(weapon_data[player_core_info["values"]["current weapon"]]):
+            self.weapon_details(attack, num)
+
+        # Current weapon - upgrades
+        self.weapon_upgrades_bg()
+
+        pos = pygame.mouse.get_pos()
+        for num, rect in enumerate(self.button_rect_list):
+            hit = rect.collidepoint(pos)
+            if hit:
+                self.create_tooltip(num+1)
+        
+        self.check_input()
+        self.cooldowns()
+
+    def draw_bg(self):
+        # Surface
+        bg_rect_size = (800, 560)
+        bg_x = (self.display_surface.get_size()[0] // 2) - (700 // 2) - 20
+        bg_y = (self.display_surface.get_size()[1] // 2) - 300
+
+        main_rect = pygame.Rect(bg_x, bg_y, bg_rect_size[0], bg_rect_size[1])
+        createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (bg_x, bg_y), "dark")
+
+        # Title
+        title_surface = self.font18.render("| WEAPON REINFORCEMENT |", True, TEXT_TITLE_COLOUR)
+        title_rect = title_surface.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 10))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Desc
+        used_text = lore_misc["weapons"]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 3:
+            split_current_line.append("")
+        for subline in range(3):
+            text_surf = self.font11.render(split_current_line[subline], True, TEXT_TITLE_COLOUR)
+            text_rect = text_surf.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 40 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+        
+        # Weapon Name
+        title_surface = self.font16.render(f"| {player_core_info['values']['current weapon'].upper()}", True, TEXT_TITLE_COLOUR)
+        title_rect = title_surface.get_rect(topleft = main_rect.topleft + pygame.math.Vector2(115, 115))
+        self.display_surface.blit(title_surface, title_rect)
+
+    def create_tooltip(self, id):
+        pos = pygame.mouse.get_pos()
+        
+        tt_size = (220, 40)
+        tt_pos = (pos[0] + 20, pos[1] - tt_size[1] - 20)
+        tt_rect = pygame.Rect(tt_pos[0], tt_pos[1], tt_size[0], tt_size[1])
+
+        createUI(self.display_surface, tt_rect.width, tt_rect.height, tt_pos, "basic")
+
+        used_text = upgrades_text[str(id)]
+        split_current_line = used_text.split("|")
+        while len(split_current_line) < 4:
+            split_current_line.append("")
+        for subline in range(4):
+            text_surf = self.font11.render(split_current_line[subline], True, UI_BG_COLOUR)
+            text_rect = text_surf.get_rect(topleft = tt_rect.topleft + pygame.math.Vector2(0, 0 + (subline * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+        
+    def weapon_upgrades_boxes(self, num, rect):
+        current_weapon = player_core_info['values']['current weapon']
+        pos = pygame.mouse.get_pos()
+        cost = weapon_upgrades_cost[current_weapon][num]
+
+        match num:
+            case "1": button_rect = pygame.Rect(rect.left + 10, rect.centery - 16, 32, 32)
+            case "2": button_rect = pygame.Rect(rect.left + 210, rect.centery - 16 - 32, 32, 32)
+            case "3": button_rect = pygame.Rect(rect.left + 410, rect.centery - 16 - 32, 32, 32)
+            case "4": button_rect = pygame.Rect(rect.left + 210, rect.centery - 16 + 32, 32, 32)
+            case "5": button_rect = pygame.Rect(rect.left + 410, rect.centery - 16 + 32, 32, 32)
+            case "6": button_rect = pygame.Rect(rect.left + 610, rect.centery - 16, 32, 32)
+        hit = button_rect.collidepoint(pos)
+        if num != "0": self.button_rect_list[int(num) - 1] = button_rect
+
+        icon, num_icon = getBoxStatus(weapon_upgrades[current_weapon][num], resources["titanite chunks"] < cost, hit, num, "upgrades", True)
+        self.display_surface.blit(icon, button_rect)
+        self.display_surface.blit(num_icon, button_rect)
+
+        # Tooltips
+        if hit: self.tooltip = num
+
+    def weapon_upgrades_bg(self):
+        # Upgrades
+        x = (self.display_surface.get_size()[0] // 2) - (700 // 2) + 110
+        y = (self.display_surface.get_size()[1] // 2) - 200 + 60 + 30
+
+        upgrade_rect_size = (650, 100)
+        upgrade_rect = pygame.Rect(x, y + 230, upgrade_rect_size[0], upgrade_rect_size[1])  
+        createUI(self.display_surface, upgrade_rect_size[0], upgrade_rect_size[1], (x, y + 230), "basic")
+        
+        for upgrade in range(1, 7):
+            self.weapon_upgrades_boxes(str(upgrade), upgrade_rect)
+        
+        self.display_surface.blit(self.arrows, (upgrade_rect[0] - 8, upgrade_rect[1] - 8))
+
+    def weapon_details(self, attack, num):
+        # Individual Item
+        item_rect_size = (190, 220)
+        current_weapon = player_core_info['values']['current weapon']
+
+        x = (self.display_surface.get_size()[0] // 2) - (700 // 2) + 110 + (num * 230)
+        y = (self.display_surface.get_size()[1] // 2) - 200 + 30 + 30
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])  
+        createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "basic")
+
+        # Name
+        match str(num):
+            case "0": name_text = "Primary"
+            case "1": name_text = "Secondary"
+            case "2": name_text = "Ability" 
+
+        title_surface = self.font14.render(f"| {name_text.upper()}", True, UI_BG_COLOUR)
+        title_rect = title_surface.get_rect(topleft = main_rect.topleft + pygame.math.Vector2(0, 5))
+        self.display_surface.blit(title_surface, title_rect)
+
+        # Icon
+        attack_icon = pygame.image.load(f"assets/graphics/ui/interface_icons/inputs/{current_weapon}_{num}.png").convert_alpha()
+        icon_rect = attack_icon.get_rect(midtop = main_rect.midtop + pygame.math.Vector2(0, 35))
+
+        self.display_surface.blit(self.box_icon, icon_rect)
+        self.display_surface.blit(attack_icon, icon_rect)
+
+        # Text
+        text_list = []
+        num_list = []
+        for line in weapon_data[current_weapon][f"{num}"]:
+            if weapon_data[current_weapon][f"{num}"][line] != 0:
+                text_list.append(line)
+                num_list.append(weapon_data[current_weapon][f"{num}"][line])
+
+        for line in range(len(text_list)):
+            text_surf = self.font11.render(f">{text_list[line]}: {num_list[line]}", True, UI_BG_COLOUR)
+            text_rect = text_surf.get_rect(topleft = main_rect.topleft + pygame.math.Vector2(num, 130 + (line * 15)))
+            self.display_surface.blit(text_surf, text_rect)
+    
+    def weapon_list(self, weapon, num):
+        # Individual Item
+        item_rect_size = (50, 50)
+
+        x = (self.display_surface.get_size()[0] // 2) - (700 // 2)
+        y = (self.display_surface.get_size()[1] // 2) - 200 + 30 + (num * 90) + 30
+
+        main_rect = pygame.Rect(x, y, item_rect_size[0], item_rect_size[1])
+        text_rect_pos = main_rect.topleft + pygame.math.Vector2(0, 0)
+        text_rect_size = (item_rect_size[0], item_rect_size[1])
+
+        if weapon_upgrades[weapon]["0"]: weapon_icon = pygame.image.load(f"assets/graphics/ui/weapons/{weapon}.png").convert_alpha()
+        else: weapon_icon = pygame.image.load(f"assets/graphics/ui/weapons/{weapon}_locked.png").convert_alpha()
+
+        # Icon [Updates with hover]
+        icon_rect = weapon_icon.get_rect(topleft = main_rect.topleft)
+
+        pos = pygame.mouse.get_pos()
+        hit = icon_rect.collidepoint(pos)
+
+        if not weapon_upgrades[weapon]["0"]:
+            createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "grey")
+        else:
+            if hit: # If hovering over rect...
+                if player_inputs["light attack"]: # ... and clicking on it
+                    createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green")
+                    self.weapon_index = num
+                    player_core_info["values"]["current weapon"] = weapon
+                    set_player_weapon_details(weapon)
+                    print(weapon)
+                elif num == self.weapon_index: # ... and have it selected
+                    createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green")
+                else: # ... and do NOT have it selected and is NOT clicking on it
+                    createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green_light")
+            else: # If NOT hovering over rect...
+                if num == self.weapon_index: # ... and have it selected
+                    createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y), "green")
+                else: # ... and do NOT have it selected
+                    createUI(self.display_surface, item_rect_size[0], item_rect_size[1], (x, y))
+        
+        self.display_surface.blit(weapon_icon, icon_rect)
+
+    def check_input(self):
+        player_inputs["light attack"] = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            self.enable_player_control()
+            player_inputs["light attack"] = False
+    
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.clicked:
+            if current_time - self.click_time >= self.click_cooldown:
+                self.clicked = False

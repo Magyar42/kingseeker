@@ -4,6 +4,7 @@ from support import *
 from gameinfo import *
 from popups import Prompt, ItemPopup
 from debug import debug
+from random import randrange
 
 # class FloorItem(pygame.sprite.Sprite):
 #     def __init__(self, id, pos, groups, crop = False):    #check_item_retrieval
@@ -523,7 +524,7 @@ class SummonSign(pygame.sprite.Sprite):
             if not self.opening_sign:
                 keys = pygame.key.get_pressed()
 
-                if keys[pygame.K_q]:
+                if keys[pygame.K_f]:
                     self.sign_sound.play()
                     self.status = "activating"
 
@@ -542,9 +543,10 @@ class SummonSign(pygame.sprite.Sprite):
         self.player_interact(player)
 
 class PerkPillar(pygame.sprite.Sprite):
-    def __init__(self, pillar_type, pos, groups, interact_effect):
+    def __init__(self, pillar_type, pos, groups, interact_effect, check_status):
         super().__init__(groups)
         self.interact_effect = interact_effect
+        self.check_status = check_status
         self.display_surface = pygame.display.get_surface()
         self.frame_index = 0
         self.animation_speed = 0.20
@@ -553,6 +555,7 @@ class PerkPillar(pygame.sprite.Sprite):
 
         self.import_graphics("perk_pillar")
         self.status = "idle"
+        self.new_status = "idle"
         self.image = self.animations[self.status][self.frame_index]
 
         self.pos = pos
@@ -637,6 +640,108 @@ class PerkPillar(pygame.sprite.Sprite):
     def update(self):
         self.animate()
         self.cooldowns()
+        self.new_status = self.check_status(self.type)
+
+        # Only set status when already active; otherwise, the status will be
+        # constantly set to idle, as the interface is not active
+        if self.status == "active": self.status = self.new_status
     
     def pillar_update(self, player):
+        self.player_interact(player)
+
+class ResourceItem(pygame.sprite.Sprite):
+    def __init__(self, resource, pos, groups):
+        super().__init__(groups)
+        self.display_surface = pygame.display.get_surface()
+        self.frame_index = 0
+        self.animation_speed = 0.09
+        self.sprite_type = "resource"
+        self.resource = resource
+
+        self.import_graphics(self.resource)
+        self.status = "idle"
+        self.image = self.animations[self.status][self.frame_index]
+
+        self.pos = pos
+        self.rect = self.image.get_rect(topleft = pos)
+        self.hitbox = self.rect.inflate(-30, -40)
+        self.use_radius = 100
+
+        self.prompt = Prompt()
+        self.item_popup = ItemPopup()
+
+        self.interacting = False
+        self.interact_cooldown = 500
+        self.interact_time = None
+
+        self.interact_sound = pygame.mixer.Sound("assets/audio/sfx/PickUpItem.wav")
+        self.interact_sound.set_volume(0.25)
+    
+    def import_graphics(self, name):
+        self.animations = {
+            "idle": [],
+        }
+        main_path = f"assets/graphics/interactable_entities/resources/{name}/"
+        for animation in self.animations.keys():
+            full_path = main_path + animation
+            self.animations[animation] = import_folder(full_path, True, (80, 80))
+
+    def animate(self):
+        animation = self.animations[self.status]
+        
+        self.frame_index += self.animation_speed
+        if self.frame_index  >= len(animation):
+            self.frame_index = 0
+        else:
+            self.display_surface.blit(self.image, self.rect)
+
+        self.image = animation[int(self.frame_index)]
+
+    def get_player_dist(self, player):
+        floor_item_vector = pygame.math.Vector2(self.rect.center)
+        player_vector = pygame.math.Vector2(player.rect.center)
+
+        distance = (player_vector - floor_item_vector).magnitude()
+
+        return distance
+    
+    def give_resource_effect(self):
+        # self.interact_effect(self.resource)
+        match self.resource:
+            case "humanity": resource_name = "humanity sprites"
+            case "titanite_chunk": resource_name = "titanite chunks"
+            case "demon_titanite": resource_name = "demon titanite"
+            case "great_soul": resource_name = "soul remnants"
+        
+        resource_min = chamber_rewards[self.resource]["min"]
+        resource_max = chamber_rewards[self.resource]["max"]
+        added_num = randrange(resource_min, resource_max+1)
+        resources[resource_name] += added_num
+        if self.resource == "great_soul": player_core_info["values"]["souls"] += added_num
+
+    def player_interact(self, player):
+        player_distance = self.get_player_dist(player)
+        if player_distance <= self.use_radius:
+            self.prompt.createPrompt("Resource", "F", f"Pick Up {self.resource.upper()}")
+
+            if not self.interacting:
+                keys = pygame.key.get_pressed()
+
+                if keys[pygame.K_f]:
+                    self.give_resource_effect()
+                    self.interact_sound.play()
+                    self.kill()
+
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.interacting:
+            if current_time - self.interact_time >= self.interact_cooldown:
+                self.interacting = False
+    
+    def update(self):
+        self.animate()
+        self.cooldowns()
+    
+    def resource_items_update(self, player):
         self.player_interact(player)
