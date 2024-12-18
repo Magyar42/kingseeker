@@ -48,8 +48,8 @@
             "scale": 0.75,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1941.9999999999998,
-                "y": 1424
+                "x": 1526.6666666666665,
+                "y": 2015.9999999999998
             }
         },
         "old/kingseeker_base_floor.tsx": {
@@ -62,6 +62,14 @@
             "scaleInDock": 0.5,
             "scaleInEditor": 1
         },
+        "old/transition_area.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 1532,
+                "y": 1102
+            }
+        },
         "undead_burg/map_001.tmx": {
             "scale": 0.37294921875,
             "selectedLayer": 2,
@@ -71,7 +79,7 @@
             }
         }
     },
-    "last.exportedFilePath": "C:/Users/krist/Documents/repos/kingseeker/assets/map/firelink_shrine/000",
+    "last.exportedFilePath": "C:/Users/chkon/Documents/Nexus/github/kingseeker/assets/map/the_asylum/903",
     "last.imagePath": "C:/Users/krist/Documents/repos/kingseeker/assets/graphics/objects",
     "map.fixedSize": true,
     "map.height": 100,

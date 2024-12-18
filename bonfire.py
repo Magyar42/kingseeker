@@ -20,10 +20,11 @@ class Bonfire(pygame.sprite.Sprite):
 
         self.import_graphics("bonfire")
         self.id = id
-        if bonfire_data[self.id]['active']:
-            self.status = "idle"
-        else:
-            self.status = "unlit"
+        # if bonfire_data[self.id]['active']:
+        #     self.status = "idle"
+        # else:
+        #     self.status = "unlit"
+        self.status = "idle"
         self.image = self.animations[self.status][self.frame_index]
 
         self.rect = self.image.get_rect(topleft = pos)

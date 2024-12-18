@@ -540,7 +540,7 @@ HITBOX_OFFSET = {
 
 # Misc
 covenants = ["warriors_of_sunlight", "chaos_servants", "darkwraiths", "blades_of_the_darkmoon", "velka"]
-npc_list = ["389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
+npc_list = ["370", "389", "367", "345", "323", "301", "279", "257", "368", "346", "324", "302", "280", "258", "369", "347", "325", "303", "281", "259", "366", "344"]
 pillar_list = ["386", "364", "342", "320", "298"]
 boon_summons = ["sunlight_summon", "chaos_summon", "darkwraith_summon", "darkmoon_summon", "velkas_tome"]
 resources_names = ["soul_remnants", "humanity sprites", "souvenirs of reprisal", "sunlight medals", "titanite shards", "titanite chunks", "titanite slabs", "demon titanite"]
@@ -558,16 +558,17 @@ region_values = {
 }
 
 # Chamber Details
-NUM_CHAMBERS_PER_REGION = 4
+NUM_CHAMBERS_PER_REGION = 7
 chambers_per_region = {
     # Chambers which can be randomly loaded [starting/ending chambers of each area are NOT included]
     "firelink_shrine": [""],
     "undead_burg": ["097", "098"],
     "undead_parish": [""],
     "the_depths": [""],
+    "the_asylum": ["901", "902", "904", "905"]
 }
 safe_rooms = [
-    "000","099", "101," "199", "201", "299"
+    "000","099", "101," "199", "201", "299", "900", "903", "999"
 ]
 reward_first_rooms = [
     "001"
@@ -582,10 +583,10 @@ chamber_rewards = { # todo: make use of the chance section
     "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
     "demon_titanite": { "chance": 0.75, "min": 1, "max": 2 },
 
-    "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
+    # "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
 
     # "vendor": { "chance": 0.5, "min": 1, "max": 1 },

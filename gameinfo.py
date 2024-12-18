@@ -3,6 +3,8 @@
 
 # Game Flags - indicate whether certain things have happened (used mainly for dialogue)
 flags = {
+    "completed_tutorial": False,
+
     "completed_1st_run": False,
     "completed_2nd_run": False,
     "completed_3rd_run": False,
@@ -20,12 +22,26 @@ flags = {
 # NPC Stuff
 # Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {
+    "oscar_tutorial": {
+        "000": {
+            "name": "???", "priority": 0, "completed": False, "text": [""],
+        },
+        "001": {
+            "name": "Oscar, Knight of Astora", "priority": 100, "completed": True, "text": ["Oh, you... You're no Hollow, eh? Thank goodness.", "I am Oscar of Astora. I was captured by the fiends|that run this Asylum, much like you I presume.", "I've had a look around, and it seems you and I are|the only sane ones left here. That makes us|kindred spirits I think, hah.", "Have you heard of the Undead Prophecy? 'Thou who|art Undead, art chosen. In thine exodus, maketh|pilgrimage to the land of Ancient Lords...", "When thou ringeth the Bell of Awakening, the fate|of the Undead thou shalt know.'", "We must find our way out of here. You go on ahead,|I'll be right behind you.", ""],
+        },
+        "002": {
+            "name": "Oscar, Knight of Astora", "priority": 99, "completed": True, "text": ["Hmm? Oh, good timing. I forgot to give you|something important.", "This is my broadsword. I want you to have it.|You'll require a weapon to have a chance of escape.", "Do you have any fighting experience? Hmm... I|shall give you a quick rundown.", "Press LMB to perform a fast attack. RMB will|perform a slower but stronger attack. Be careful|you do not exhaust your stamina while fighting,|otherwise you'll be in a tricky situation.", "Oh, and one more thing. Press SHIFT to roll. It's|the fastest way of getting away from enemies.", "Good luck my friend. May the Gods favour you.", ""],
+        },
+        "003": {
+            "name": "Oscar, Knight of Astora", "priority": 98, "completed": False, "text": ["Ah, you've made it! Good work.", "These bonfires are truly replenishing. Their|flames are able to reinvigorate any Undead.", "Here, take this. An Estus Flask, an Undead|favourite...,", "Drinking an Estus Flask will heal your wounds. You|can refill them at any bonfire.", "Here's one last bit of help. That sword is imbued|with a special power. Press Q to perform a|spinning attack.", "It's quite effective from my experience. However,|this skill uses mana. Your mana is limited, but|replenishes between fights, so be mindful of that.", "Your mana is also able to be used for casting|spells. Unfortunately, I know of none. I've always|preferred close-range battles, eh?", "You're doing well. Let's keep going, I'll see you|on the other side.", ""],
+        },
+    },
     "firekeeper": {
         "000": {
             "name": "???", "priority": 0, "completed": False, "text": [""],
         },
         "001": {
-            "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper. I tend to the flame, and to|thee.", "The fire fades, and soon only dark shall remain.|To this end, I am at thy side.", "The curse of the Darksign... a wicked thing it may|be, but its presence is a consequence of the|fading of the flames.", "Despite this, the Darksign means that you are|unable to perish. You must use this strength to|venture onwards.", "As long as you remain determined, you will keep|your sanity. Don't you go Hollow.", ""],
+            "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper. I tend to the flame, and to|thee.", "The fire fades, and soon only dark shall remain.|To this end, I am at thy side.", "The curse of the Darksign... a wicked thing it may|be, but its presence is a consequence of the|fading of the flames.", "Despite this, the Darksign means that you are|unable to perish. You must use this strength to|venture onwards.", "As long as you remain determined, you will keep|your sanity. Don't you go Hollow. I shall remain|here for your continued aid.", ""],
         },
         "002": {
             "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels...", ""],
@@ -47,7 +63,7 @@ npc_conversations = {
             "name": "???", "priority": 0, "completed": False, "text": [""],
         },
         "001": {
-            "name": "Oscar, Knight of Astora", "priority": 100, "completed": False, "text": ["Oh! It's you. Good to see you again, friend.", "I assume you must've had a look around this place.|The Shrine can be rather quiet at times, but I|find it rather peaceful.", "Anyway, to the south is the path towards the old|Undead Burg. It was once a popular town for Humans,|now overrun by Hollows.", "To reach the First Bell of Awakening, we must|travel through these hostile lands. Much to my|annoyance, I've suffered rather severe injuries|from my time in the Asylum.", "Nevertheless, our immortality is a gift as well as|a curse. Use it as a way of getting stronger and|more skilled with your blade.", "Oh, and one more thing. This land is home to many|Covenants who are willing to bestow their boons if|you meet them. Make full use of the power bestowed|to you!", "Good luck! I'm sure we will meet here again. Don't|you dare go Hollow.", ""],
+            "name": "Oscar, Knight of Astora", "priority": 100, "completed": False, "text": ["Oh! It's you. Good to see you again, friend.", "I assume you must've had a look around this place.|The Shrine can be rather quiet at times, but I|find it rather peaceful.", "Anyway, to the south is the path towards the old|Undead Burg. It was once a popular town for Humans,|now overrun by Hollows.", "To reach the First Bell of Awakening, we must|travel through these hostile lands. Much to my|annoyance, I've suffered rather severe injuries|from my time in the Asylum.", "Nevertheless, our immortality is a gift as well as|a curse. Use it as a way of getting stronger and|more skilled with your blade.", "Oh, and one more thing. This land is home to many|Covenants who are willing to bestow their boons if|you meet them. Make full use of the power bestowed|to you.", "Good luck! I'm sure we will meet here again. Don't|you dare go Hollow.", ""],
         },
     },
     "andre": {
@@ -177,6 +193,9 @@ weapon_upgrades = {
 
 # Enemy Spawn Types
 enemy_spawn_template = {
+    "the_asylum": {
+        "01": { "type": "waves", "min_enemies": 2, "max_enemies": 3, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["undead_warrior"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
+    },
     "undead_burg": {
         "01": { "type": "waves", "min_enemies": 4, "max_enemies": 5, "min_waves": 2, "max_waves": 2, "whitelisted_enemies": ["undead_warrior"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 1 },
         # "02": { "type": "constant", "min_enemies": 6, "max_enemies": 6, "min_waves": 0, "max_waves": 0, "whitelisted_enemies": ["squid", "spirit"], "scaling": 0.5, "drop_mult": 1, "selection_mult": 0.75 },

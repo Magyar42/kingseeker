@@ -73,9 +73,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level("000", self.save_and_exit)
         self.cursor_img = pygame.image.load('assets/graphics/cursor.png').convert_alpha()
-
         self.frames_list = import_folder('assets/graphics/menu_animations/mainmenu_bonfire')
         self.frame_speed = 0.12
         self.frame_index = 0
@@ -101,7 +99,8 @@ class Game:
         self.level.player.trigger_boons_update = False
         self.level.player.any_interface_open = False
 
-        self.level.region = "firelink_shrine"
+        if flags["completed_tutorial"]: self.level.region = "firelink_shrine"
+        else: self.level.region = "the_asylum"
         self.level.reward = None
         self.level.region_chambers_done = 0
         self.level.enemy_spawn_coords = []
@@ -110,7 +109,9 @@ class Game:
         self.level.enemies_list_empty = False
         self.level.chamber_cleared = False
 
-        self.level = Level("000", self.save_and_exit)
+        if flags["completed_tutorial"]: map_id = "000"
+        else: map_id = "900"
+        self.level = Level(map_id, self.save_and_exit)
 
         # Reset gameinfo.py
         self.load_default_state()
@@ -163,6 +164,9 @@ class Game:
 
     def run_game(self):
         change_music()
+        if flags["completed_tutorial"]: map_id = "000"
+        else: map_id = "900"
+        self.level = Level(map_id, self.save_and_exit)
 
         while True:
             for event in pygame.event.get():
@@ -256,7 +260,7 @@ class Game:
             # Update dictionaries in globalinfo with the loaded data
             for name, settings_data in saved_settings.items():
                 if hasattr(globalinfo, name): 
-                    globalinfo_dict = getattr(gameinfo, name)
+                    globalinfo_dict = getattr(globalinfo, name)
                     if isinstance(globalinfo_dict, dict):
                         globalinfo_dict.update(settings_data)
                         print(f"Updated {name} in globalinfo.")

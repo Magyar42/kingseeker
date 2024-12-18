@@ -75,6 +75,7 @@ class NPC(pygame.sprite.Sprite):
             "domhnall": [],
             "knightess": [],
             "oscar": [],
+            "oscar_tutorial": [],
             "quelana": [],
             "transition_prompt": [],
         }

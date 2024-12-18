@@ -124,7 +124,7 @@
             "base damage": 5
         },
         "skill": {
-            "name": "skill_1",
+            "name": "broadsword_skill",
             "cooldown": 400,
             "base damage": 10,
             "stamina_use": 25

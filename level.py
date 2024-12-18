@@ -36,7 +36,9 @@ class Level:
         self.font = pygame.font.Font(UI_FONT, MEDIUM_FONT_SIZE)
         self.exit_effect = exit
 
-        self.region = "firelink_shrine"
+        if flags["completed_tutorial"]: self.region = "firelink_shrine"
+        else: self.region = "the_asylum"
+        
         self.reward = None
         self.region_chambers_done = 0 # Amount of chambers for THIS region completed
         self.available_chambers = chambers_per_region[self.region]
@@ -73,7 +75,7 @@ class Level:
         self.create_map(True, self.map_id)
 
         self.ui = UI()
-        self.boons_menu = BoonsMenu(self.enable_player_control)
+        self.boons_menu = BoonsMenu(self.boons_postmenu)
         self.humanity_menu = HumanityPowers(self.enable_player_control)
         self.levelup_menu = LevelUp(self.enable_player_control)
         self.weapons_menu = WeaponsSelection(self.enable_player_control)
@@ -236,7 +238,7 @@ class Level:
         if map_id not in safe_rooms: self.chamber_cleared = False
         else: self.chamber_cleared = True
 
-        if self.region == "firelink_shrine": prevent_player_input = True
+        if self.region == "firelink_shrine" or map_id == "900": prevent_player_input = True
         else: prevent_player_input = False
 
         layouts = {
@@ -299,6 +301,7 @@ class Level:
                                 elif column == "303": npc_id = "knightess"
                                 elif column == "281": npc_id = "oscar"
                                 elif column == "259": npc_id = "quelana"
+                                elif column == "370": npc_id = "oscar_tutorial"
                                 elif column == "366" or column == "344":
                                     if column == "344": rotate_val = 90
                                     npc_id = "transition_prompt"
@@ -588,7 +591,6 @@ class Level:
         self.player.any_interface_open = False
     
     def boons_postmenu(self):
-        self.boons_menu_open = False
         self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
 
         self.player.trigger_boons_update = True
@@ -644,6 +646,8 @@ class Level:
         return new_status
 
     def restart_world(self, map = "000"):
+        if not flags["completed_tutorial"]: map = "900"
+
         # Removes stuff
         for sprite_group in self.sprite_groups_list:
             for sprite in sprite_group:
@@ -658,7 +662,8 @@ class Level:
 
         # Loads stuff
         self.map_id = map
-        self.region = "firelink_shrine"
+        if flags["completed_tutorial"]: self.region = "firelink_shrine"
+        else: self.region = "the_asylum"
         self.chamber_wave_active = False
         self.chamber_active_enemies = 0
         self.region_chambers_done = 0
@@ -681,7 +686,12 @@ class Level:
             self.region_chambers_done = 0
 
             # todo: set dynamically
-            if self.region == "firelink_shrine":
+            if self.region == "the_asylum":
+                print("smegma")
+                chamber_id = "000"
+                self.region = "firelink_shrine"
+                flags["completed_tutorial"] = True
+            elif self.region == "firelink_shrine":
                 if id == 0:
                     chamber_id = "001"
                     self.region = "undead_burg"
@@ -716,8 +726,12 @@ class Level:
 
         else: 
             print("Loading next chamber!")
-            chamber_id = choice(self.available_chambers)
-            self.available_chambers.remove(chamber_id) # Prevents same chamber from being loaded in a run
+            # todo: add method of loading safe/npc rooms when needed
+            if self.region == "the_asylum" and self.region_chambers_done == 3:
+                chamber_id = "903"
+            else:
+                chamber_id = choice(self.available_chambers)
+                self.available_chambers.remove(chamber_id) # Prevents same chamber from being loaded in a run
             self.reward = reward
 
         print(self.reward)
@@ -746,7 +760,7 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.ui.permanent_display(self.player)
-        if self.map_id != "000": self.ui.combat_display(self.player)
+        if self.map_id not in safe_rooms: self.ui.combat_display(self.player)
         # self.boss.display(self.player)
         self.visible_sprites.update()
         self.screen_sprites.update()
