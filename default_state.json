@@ -100,7 +100,7 @@
         "2nd bell of awakening": false,
         "lordvessel": false
     },
-    "interface_details": {
+    "player_core_info": {
         "light_attack": {
             "class": "sword",
             "name": "broadsword_light",

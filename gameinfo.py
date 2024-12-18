@@ -25,13 +25,37 @@ npc_conversations = {
             "name": "???", "priority": 0, "completed": False, "text": [""],
         },
         "001": {
-            "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper.", "I tend to the flame, and to thee.", "The fire fades, and soon only dark shall|remain.", "To this end, I am at thy side.", ""],
+            "name": "Fire Keeper", "priority": 100, "completed": False, "text": ["Welcome to the bonfire, Undead.", "I am the Fire Keeper. I tend to the flame, and to|thee.", "The fire fades, and soon only dark shall remain.|To this end, I am at thy side.", "The curse of the Darksign... a wicked thing it may|be, but its presence is a consequence of the|fading of the flames.", "Despite this, the Darksign means that you are|unable to perish. You must use this strength to|venture onwards.", "As long as you remain determined, you will keep|your sanity. Don't you go Hollow.", ""],
         },
         "002": {
             "name": "Fire Keeper", "priority": 1, "completed": False, "text": ["Undead, to be human is to be a vessel|for souls.", "Sovereignless souls will become thy|strength.", "I will show thee how.", "Undead, bring me souls, plucked from|their vessels...", ""],
         },
         "003": {
             "name": "Fire Keeper", "priority": 99, "completed": False, "text": ["Undead, thou hast rung the First Bell of|Awakening.", "Wonderful work.", "To fulfill the prophecy, thou must now|travel to the depths of Lordran, through|the abandoned settlement of Blighttown.", "Stay cautious on your journey. I will|continue to remain here to aid thee as|ever.", ""],
+        },
+    },
+    "crestfallen": {
+        "000": {
+            "name": "???", "priority": 0, "completed": False, "text": [""],
+        },
+        "001": {
+            "name": "Crestfallen Warrior", "priority": 100, "completed": False, "text": ["Well, what do we have here? You must be a new|arrival.", "Let me guess. Fate of the Undead, right? Well,|you're not the first.", "Well, since you're here... Let me help you out.|There are actually two Bells of Awakening you must|ring.", "One's up above, in the Undead Church. The other is|far, far below, in the ruins at the base of|Blighttown.", "Ring them both, and your fate will be revealed...|or something along those lines. Brilliant, right?", "Not much to go on, but I have a feeling that won't|stop you.", "Hah hah hah hah...", ""],
+        },
+    },
+    "oscar": {
+        "000": {
+            "name": "???", "priority": 0, "completed": False, "text": [""],
+        },
+        "001": {
+            "name": "Oscar, Knight of Astora", "priority": 100, "completed": False, "text": ["Oh! It's you. Good to see you again, friend.", "I assume you must've had a look around this place.|The Shrine can be rather quiet at times, but I|find it rather peaceful.", "Anyway, to the south is the path towards the old|Undead Burg. It was once a popular town for Humans,|now overrun by Hollows.", "To reach the First Bell of Awakening, we must|travel through these hostile lands. Much to my|annoyance, I've suffered rather severe injuries|from my time in the Asylum.", "Nevertheless, our immortality is a gift as well as|a curse. Use it as a way of getting stronger and|more skilled with your blade.", "Oh, and one more thing. This land is home to many|Covenants who are willing to bestow their boons if|you meet them. Make full use of the power bestowed|to you!", "Good luck! I'm sure we will meet here again. Don't|you dare go Hollow.", ""],
+        },
+    },
+    "andre": {
+        "000": {
+            "name": "???", "priority": 0, "completed": False, "text": [""],
+        },
+        "001": {
+            "name": "Andre the Blacksmith", "priority": 100, "completed": False, "text": ["Well, a new arrival I see. I am Andre, I serve in this Shrine as a humble smith forging new weapons.", "You're in search of the Bells of Awakening, I trust? A toilsome journey, I wager.", "You'll require good arms. Let me smith y'weapons. I am a smith, such is my purpose.", ""],
         },
     },
     # "logan": [

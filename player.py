@@ -17,7 +17,7 @@ class Player(Entity):
         self.toggle_screen_effect = toggle_screen_effect
         self.animation_player = AnimationPlayer()
 
-        self.popup = gameMenu(self.toggle_screen_effect)
+        self.popup = gameMenu()
         self.menu = pauseMenu(self.exit_effect)
         self.prompt_active = False
 
@@ -74,7 +74,7 @@ class Player(Entity):
         self.catalyst = player_core_info["catalyst"]["name"]
         self.create_magic = create_magic
         self.spell_index = 0
-        self.current_spell = interface_details["spells"][str(self.spell_index+1)]
+        self.current_spell = player_core_info["spells"][str(self.spell_index+1)]
         self.scrolling_spells = False
         self.spell_scroll_cooldown = 200
         self.spell_scroll_time = None
@@ -407,8 +407,8 @@ class Player(Entity):
                             if self.stamina_target - self.stamina_magic_mult >= 0:
                                 self.stamina_target -= self.stamina_magic_mult
                                 
-                                spell_name = interface_details["spells"][str(self.spell_index+1)]
-                                spell_power = (magic_data[spell_name]["strength"] + interface_details["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
+                                spell_name = player_core_info["spells"][str(self.spell_index+1)]
+                                spell_power = (magic_data[spell_name]["strength"] + player_core_info["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
                                 spell_fp_cost = magic_data[spell_name]["cost"]
                                 self.create_magic(spell_name, spell_power, spell_fp_cost)
 

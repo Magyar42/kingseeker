@@ -554,6 +554,7 @@ region_values = {
     "catacombs": "4",
     "valley_of_drakes": "5",
     "new_londo_ruins": "6",
+    "the_asylum": "9",
 }
 
 # Chamber Details
