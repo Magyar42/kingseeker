@@ -74,7 +74,6 @@ class Player(Entity):
         self.catalyst = player_core_info["catalyst"]["name"]
         self.create_magic = create_magic
         self.spell_index = 0
-        self.current_spell = player_core_info["spells"][str(self.spell_index+1)]
         self.scrolling_spells = False
         self.spell_scroll_cooldown = 200
         self.spell_scroll_time = None
@@ -369,7 +368,7 @@ class Player(Entity):
 
                     if not self.prevent_player_input:
                         # estus input
-                        if keys[pygame.K_e] and not self.drinking_estus:  
+                        if keys[pygame.K_e] and not self.drinking_estus and control_flags["can_drink_estus"]:  
                             
                             if player_core_info["values"]["current estus"] > 0:
                                 self.drinking_estus = True
@@ -383,7 +382,7 @@ class Player(Entity):
                                 self.estus_sound.play()
 
                         # skill input
-                        if keys[pygame.K_q] and not self.using_skill:
+                        if keys[pygame.K_q] and not self.using_skill and control_flags["can_use_skill"]:
                             if self.stamina_target - self.stamina_skill_cost >= 0:
                                 self.stamina_target -= self.stamina_skill_cost # Effect on stamina
                                 self.direction.x = 0
@@ -402,22 +401,25 @@ class Player(Entity):
 
                         # spell cast
                         # todo: spell effect
-                        if player_inputs["cast spell"] and not self.casting_spell:
-                            # todo: check stamina/mana cost and take away as needed
-                            if self.stamina_target - self.stamina_magic_mult >= 0:
-                                self.stamina_target -= self.stamina_magic_mult
-                                
-                                spell_name = player_core_info["spells"][str(self.spell_index+1)]
-                                spell_power = (magic_data[spell_name]["strength"] + player_core_info["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
-                                spell_fp_cost = magic_data[spell_name]["cost"]
-                                self.create_magic(spell_name, spell_power, spell_fp_cost)
+                        if player_inputs["cast spell"] and not self.casting_spell and control_flags["can_cast_spells"]:
+                            if player_core_info["spells"][str(self.spell_index+1)] != None:
+                                # todo: check stamina/mana cost and take away as needed
+                                if self.stamina_target - self.stamina_magic_mult >= 0:
+                                    self.stamina_target -= self.stamina_magic_mult
+                                    
+                                    spell_name = player_core_info["spells"][str(self.spell_index+1)]
+                                    spell_power = (magic_data[spell_name]["strength"] + player_core_info["catalyst"]["base damage"]) * player_data["dependent_variables"]["magic mult"]
+                                    spell_fp_cost = magic_data[spell_name]["cost"]
+                                    self.create_magic(spell_name, spell_power, spell_fp_cost)
 
-                                self.attacking = True
-                                self.attack_time = pygame.time.get_ticks()
-                                self.casting_spell = True
-                                self.spell_use_time = pygame.time.get_ticks()
+                                    self.attacking = True
+                                    self.attack_time = pygame.time.get_ticks()
+                                    self.casting_spell = True
+                                    self.spell_use_time = pygame.time.get_ticks()
 
-                                player_inputs["cast spell"] = False
+                                    player_inputs["cast spell"] = False
+                            else: player_inputs["cast spell"] = False
+                        else: player_inputs["cast spell"] = False
 
                         # attack input - light
                         if player_inputs["light attack"] and not self.light_attacking:
@@ -569,8 +571,9 @@ class Player(Entity):
         return base_damage + weapon_damage
     
     def get_full_magic_damage(self):
+        current_spell = player_core_info["spells"][str(self.spell_index+1)]
         base_damage = player_core_info["catalyst"]["base damage"]
-        spell_damage = magic_data[self.current_spell]["strength"]
+        spell_damage = magic_data[current_spell]["strength"]
         dmg_multiplier = player_data['dependent_variables']['magic mult']
 
         return (base_damage + spell_damage) * dmg_multiplier

@@ -504,6 +504,7 @@ magic_data = {
     "fire_surge": {"strength": 12, "cost": 20, "type": "Pyromancy"},
     "heal": {"strength": 20, "cost": 20, "type": "Miracle"},
     "icecrag_burst": {"strength": 9, "cost": 24, "type": "Sorcery"},
+    None: {"strength": 0, "cost": 24, "type": "None"},
 }
 
 # Enemy Data # todo: change for kingseeker

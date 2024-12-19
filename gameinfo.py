@@ -19,6 +19,14 @@ flags = {
     "encountered_covenant": False,
 }
 
+# Control Flags
+control_flags = {
+    "can_attack": True,
+    "can_use_skill": False,
+    "can_drink_estus": False,
+    "can_cast_spells": False,
+}
+
 # NPC Stuff
 # Name | Priority | Bool: has dialogue been played | Text
 npc_conversations = {
@@ -27,10 +35,10 @@ npc_conversations = {
             "name": "???", "priority": 0, "completed": False, "text": [""],
         },
         "001": {
-            "name": "Oscar, Knight of Astora", "priority": 100, "completed": True, "text": ["Oh, you... You're no Hollow, eh? Thank goodness.", "I am Oscar of Astora. I was captured by the fiends|that run this Asylum, much like you I presume.", "I've had a look around, and it seems you and I are|the only sane ones left here. That makes us|kindred spirits I think, hah.", "Have you heard of the Undead Prophecy? 'Thou who|art Undead, art chosen. In thine exodus, maketh|pilgrimage to the land of Ancient Lords...", "When thou ringeth the Bell of Awakening, the fate|of the Undead thou shalt know.'", "We must find our way out of here. You go on ahead,|I'll be right behind you.", ""],
+            "name": "Oscar, Knight of Astora", "priority": 100, "completed": False, "text": ["Oh, you... You're no Hollow, eh? Thank goodness.", "I am Oscar of Astora. I was captured by the fiends|that run this Asylum, much like you I presume.", "I've had a look around, and it seems you and I are|the only sane ones left here. That makes us|kindred spirits I think, hah.", "Have you heard of the Undead Prophecy? 'Thou who|art Undead, art chosen. In thine exodus, maketh|pilgrimage to the land of Ancient Lords...", "When thou ringeth the Bell of Awakening, the fate|of the Undead thou shalt know.'", "We must find our way out of here. You go on ahead,|I'll be right behind you.", ""],
         },
         "002": {
-            "name": "Oscar, Knight of Astora", "priority": 99, "completed": True, "text": ["Hmm? Oh, good timing. I forgot to give you|something important.", "This is my broadsword. I want you to have it.|You'll require a weapon to have a chance of escape.", "Do you have any fighting experience? Hmm... I|shall give you a quick rundown.", "Press LMB to perform a fast attack. RMB will|perform a slower but stronger attack. Be careful|you do not exhaust your stamina while fighting,|otherwise you'll be in a tricky situation.", "Oh, and one more thing. Press SHIFT to roll. It's|the fastest way of getting away from enemies.", "Good luck my friend. May the Gods favour you.", ""],
+            "name": "Oscar, Knight of Astora", "priority": 99, "completed": False, "text": ["Hmm? Oh, good timing. I forgot to give you|something important.", "This is my broadsword. I want you to have it.|You'll require a weapon to have a chance of escape.", "Do you have any fighting experience? Hmm... I|shall give you a quick rundown.", "Press LMB to perform a fast attack. RMB will|perform a slower but stronger attack. Be careful|you do not exhaust your stamina while fighting,|otherwise you'll be in a tricky situation.", "Oh, and one more thing. Press SHIFT to roll. It's|the fastest way of getting away from enemies.", "Good luck my friend. May the Gods favour you.", ""],
         },
         "003": {
             "name": "Oscar, Knight of Astora", "priority": 98, "completed": False, "text": ["Ah, you've made it! Good work.", "These bonfires are truly replenishing. Their|flames are able to reinvigorate any Undead.", "Here, take this. An Estus Flask, an Undead|favourite...,", "Drinking an Estus Flask will heal your wounds. You|can refill them at any bonfire.", "Here's one last bit of help. That sword is imbued|with a special power. Press Q to perform a|spinning attack.", "It's quite effective from my experience. However,|this skill uses mana. Your mana is limited, but|replenishes between fights, so be mindful of that.", "Your mana is also able to be used for casting|spells. Unfortunately, I know of none. I've always|preferred close-range battles, eh?", "You're doing well. Let's keep going, I'll see you|on the other side.", ""],
@@ -152,7 +160,7 @@ player_core_info = {
         "list": ["boon_5", "boon_6", "boon_9", "boon_11"],
     },
     "spells": {
-        "1": "heal", "2": "fire_surge", "3": "icecrag_burst",
+        "1": None, "2": "fire_surge", "3": "icecrag_burst",
     },
     "values": {
         "current weapon": "Broadsword",

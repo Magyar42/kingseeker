@@ -202,3 +202,6 @@ def set_player_weapon_details(weapon):
     player_core_info["skill"]["knockback"] = weapon_data[weapon]["2"]["Knockback"]
     player_core_info["skill"]["stamina_use"] = weapon_data[weapon]["2"]["Stamina Use"]
     player_core_info["skill"]["mana_use"] = weapon_data[weapon]["2"]["Mana Use"]
+
+def update_dialogue_completion(npc, id):
+    npc_conversations[npc][id]["completed"] = True

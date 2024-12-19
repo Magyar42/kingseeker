@@ -367,7 +367,7 @@ class Level:
         
         direction = self.player.status.split("_")[0]
         pos = self.player.rect.center
-        self.animation_player.create_attack(attack_type, pos, [self.visible_sprites], "weapon", direction, self.create_attack_hurtboxes, self.destroy_attack_hurtboxes, 0.20)
+        self.animation_player.create_attack(attack_type, pos, [self.visible_sprites, self.attack_sprites], "weapon", direction, self.create_attack_hurtboxes, self.destroy_attack_hurtboxes, 0.20)
 
     def create_magic(self, name, strength, cost):
         self.current_attack = Catalyst(self.player, [self.visible_sprites])
@@ -687,7 +687,6 @@ class Level:
 
             # todo: set dynamically
             if self.region == "the_asylum":
-                print("smegma")
                 chamber_id = "000"
                 self.region = "firelink_shrine"
                 flags["completed_tutorial"] = True
@@ -720,6 +719,9 @@ class Level:
 
         elif self.region_chambers_done == NUM_CHAMBERS_PER_REGION - 1: # If this region is completed (minus end room)
             print("Loading end chamber!")
+            if self.region == "the_asylum":
+                update_dialogue_completion("oscar_tutorial", "002")
+                control_flags["can_cast_spells"] = True
             region_num = region_values[self.region]
             chamber_id = f"{region_num}99" # Load end room
             self.reward = reward
@@ -729,6 +731,9 @@ class Level:
             # todo: add method of loading safe/npc rooms when needed
             if self.region == "the_asylum" and self.region_chambers_done == 3:
                 chamber_id = "903"
+                update_dialogue_completion("oscar_tutorial", "001")
+                control_flags["can_use_skill"] = True
+                control_flags["can_drink_estus"] = True
             else:
                 chamber_id = choice(self.available_chambers)
                 self.available_chambers.remove(chamber_id) # Prevents same chamber from being loaded in a run
