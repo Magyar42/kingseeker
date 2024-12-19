@@ -55,8 +55,8 @@ def get_upgrade_cost(level):
     # upgrade_equation = self.base_upgrade_cost["VITALITY"] * self.level + randint(1, 100)
     return upgrade_equation
 
-def restore_estus(player, level):
-    print("TODO: restore estus")
+def restore_estus():
+    player_core_info["values"]["current estus"] = player_core_info["values"]["max estus"]
 
 def get_attribute_num(stat):
     stat_path = f"assets/map/stats/{stat}.txt"

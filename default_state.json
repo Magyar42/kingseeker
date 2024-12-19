@@ -134,14 +134,13 @@
             ]
         },
         "spells": {
-            "1": "heal",
-            "2": "fire_surge",
-            "3": "icecrag_burst"
+            "1": "None",
+            "2": "None",
+            "3": "None",
         },
         "values": {
             "estus level": 1,
             "souls": 0,
-            "lost souls": 0,
             "max estus": 3,
             "current estus": 3,
             "levelup cost": 1,

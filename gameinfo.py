@@ -98,10 +98,10 @@ npc_conversations = {
 
 # Meta-Progression Resources
 resources = {
-    "soul remnants": 30,
-    "humanity sprites": 72,
-    "titanite chunks": 9,
-    "demon titanite": 4,
+    "soul remnants": 0,
+    "humanity sprites": 0,
+    "titanite chunks": 0,
+    "demon titanite": 0,
 }
 
 # Covenant Ranks
@@ -153,23 +153,19 @@ player_core_info = {
     "skill": {
         "name": "broadsword_2", "cooldown": 400, "base damage": 10, "knockback": 0, "stamina_use": 25, "mana_use": 20,
     },
-    # "rings": {
-    #     "ring 1": None, "ring 2": None,
-    # },
     "boons": {
         "list": ["boon_5", "boon_6", "boon_9", "boon_11"],
     },
     "spells": {
-        "1": None, "2": "fire_surge", "3": "icecrag_burst",
+        "1": "None", "2": "None", "3": "None",
     },
     "values": {
         "current weapon": "Broadsword",
         "estus level": 1,
-        "souls": 1000,
-        "lost souls": 0,
+        "souls": 0,
         "max estus": 3,
         "current estus": 3,
-        "levelup cost": 1,
+        "levelup cost": 500,
         "level": 1,
     }
 }

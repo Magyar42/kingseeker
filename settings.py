@@ -294,36 +294,40 @@ boons_core = {
 }
 
 # Velka's Blessings # todo: finish
-velka_boons = {
-    # Modifiers 
-    "general_modifiers": {
+velka_boons_modifiers = {
+    "general": {
         "list": None
     },
-    "warriors_of_sunlight_modifiers": {
-        "list": ["wos_chain_lightning", "wos_stunned", "wos_shockwave", "wos_weapon_faith", "wos_catalyst_faith"]
+    "warriors_of_sunlight": {
+        "list": ["wos_chain_lightning", "wos_stunned", "wos_shockwave", "wos_weapon_faith", "wos_catalyst_faith"],
+        "values": [0.05, 1.00, 0.10, 1.00, 1.00]
     },
-    "chaos_servants_modifiers": {
-        "list": None
+    "chaos_servants": {
+        "list": ["cs_eruption_damage", "cs_eruption_length", "cs_burned", "cs_weapon_base", "cs_catalyst_base"],
+        "values": [0.05, 1.00, 1.00, 1.00, 1.00]
     },
-    "darkwraiths_modifiers": {
-        "list": None
+    "darkwraiths": {
+        "list": ["dw_sprites_damage", "dw_hollowed", "dw_siphon", "dw_weapon_base", "dw_catalyst_base"],
+        "values": [0.05, 1.00, 0.05, 1.00, 1.00]
     },
-    "blades_of_the_darkmoon_modifiers": {
-        "list": None
+    "blades_of_the_darkmoon": {
+        "list": ["botd_soul_arrow_damage", "botd_soul_arrow_range", "botd_frozen", "botd_weapon_inteliigence", "botd_catalyst_intelligence"],
+        "values": [0.05, 0.05, 1.00, 1.00, 1.00]
     },
-
+}
+velka_boons_spells = {
     # Spells
-    "warriors_of_sunlight_spells": {
+    "warriors_of_sunlight": {
         "list": ["bountiful_light", "wrath_of_the_gods", "lightning_spear", "white_corona", "lightning_stake"]
     },
-    "chaos_servants_spells": {
-        "list": None
+    "chaos_servants": {
+        "list": ["iron_flesh", "poison_mist", "fireball", "great_chaos_orb", "combustion"]
     },
-    "darkwraiths_spells": {
-        "list": None
+    "darkwraithss": {
+        "list": ["whisper_of_despair", "resonant_soul", "lifedrain_patch", "dark_fog", "dark_orb"]
     },
-    "blades_of_the_darkmoon_spells": {
-        "list": None
+    "blades_of_the_darkmoon": {
+        "list": ["homing_soulmass", "white_dragon_breath", "soul_stream", "flashsword", "soul_spear"]
     },
 }
 
@@ -579,16 +583,16 @@ reward_first_rooms = [
 
 # Chamber Rewards
 chamber_rewards = { # todo: make use of the chance section
-    "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
-    "humanity": { "chance": 1, "min": 2, "max": 4 },
-    "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
-    "demon_titanite": { "chance": 0.75, "min": 1, "max": 2 },
+    # "great_soul": { "chance": 1, "min": 2000, "max": 5000 },
+    # "humanity": { "chance": 1, "min": 2, "max": 4 },
+    # "titanite_chunk": { "chance": 0.75, "min": 2, "max": 3 },
+    # "demon_titanite": { "chance": 0.75, "min": 1, "max": 2 },
 
     # "sunlight_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "darkwraith_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "chaos_summon": { "chance": 0.75, "min": 1, "max": 1 },
     # "darkmoon_summon": { "chance": 0.75, "min": 1, "max": 1 },
-    # "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
+    "velkas_tome": { "chance": 0.5, "min": 1, "max": 1 },
 
     # "vendor": { "chance": 0.5, "min": 1, "max": 1 },
 }

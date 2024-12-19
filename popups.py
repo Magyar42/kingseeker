@@ -671,6 +671,26 @@ class BoonsMenu:
         self.enable_player_control()
         player_inputs["light attack"] = False
 
+# Modifiers Menu # TODO FINISH!!!!
+class ModifiersMenu:
+    def __init__(self, enable_player_control):
+        self.display_surface = pygame.display.get_surface()
+        self.font16 = pygame.font.Font(UI_FONT, 16)
+        self.font14 = pygame.font.Font(UI_FONT, 14)
+        self.font12 = pygame.font.Font(UI_FONT, 12)
+
+        self.enable_player_control = enable_player_control
+
+        self.boon_icons = []
+        self.big_boon_frame = pygame.image.load("assets/graphics/ui/interface/big_box.png")
+        self.big_boon_frame_selected = pygame.image.load("assets/graphics/ui/interface/big_box_selected.png")
+    
+    def display(self, options):
+        pass
+
+    def generate_modifiers(self):
+        pass
+
 # Pause Menu
 class pauseMenu:
     def __init__(self, exit_effect):

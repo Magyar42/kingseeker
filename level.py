@@ -23,7 +23,7 @@ from bloodstain import Bloodstain
 from weapon import Hurtboxes
 from npc import NPC
 from interactable_items import SummonSign, ResourceItem, PerkPillar
-from popups import BoonsMenu, HumanityPowers, LevelUp, WeaponsSelection
+from popups import BoonsMenu, HumanityPowers, LevelUp, WeaponsSelection, ModifiersMenu
 
 class Level:
     def __init__(self, map_id, exit):
@@ -76,14 +76,17 @@ class Level:
 
         self.ui = UI()
         self.boons_menu = BoonsMenu(self.boons_postmenu)
+        self.modifiers_menu = ModifiersMenu(self.modifiers_postmenu)
         self.humanity_menu = HumanityPowers(self.enable_player_control)
         self.levelup_menu = LevelUp(self.enable_player_control)
         self.weapons_menu = WeaponsSelection(self.enable_player_control)
         self.boons_menu_open = False
+        self.modifiers_menu_open = False
         self.humanity_menu_open = False
         self.levelup_menu_open = False
         self.weapons_menu_open = False
         self.boon_options = None
+        self.modifier_options = None
 
         # self.upgrade = Upgrades(self.player, self.toggle_menu)
         self.bloodstain_present = False
@@ -560,18 +563,36 @@ class Level:
         self.player.resting = True
         self.player.any_interface_open = True
 
-        if type == "perks":
-            self.humanity_menu_open = True
-        elif type == "levels":
-            self.levelup_menu_open = True
-        elif type == "weapons":
-            self.weapons_menu_open = True
+        match type:
+            case "perks": self.humanity_menu_open = True
+            case "levels": self.levelup_menu_open = True
+            case "weapons": self.weapons_menu_open = True
+            case "bonfire": self.bonfire_effect()
         print("Perk pillar activated!")
+
+    def bonfire_effect(self):
+        current_channel = pygame.mixer.find_channel(True)
+        current_channel.play(self.bonfire_sound)
+
+        self.player.direction.x = 0
+        self.player.direction.y = 0
+
+        restore_estus()
+        self.player.health_increase = player_data['dependent_variables']["health"]
+        self.player.stamina_target = player_data['dependent_variables']["stamina"]
+        self.player.mana_target = player_data['dependent_variables']["mana"]
+
+        self.player.resting = False
+        self.player.any_interface_open = False
     
     def summon_sign_effect(self, covenant):
         self.lock_player()
-        self.boons_menu_open = True
-        self.boon_options = self.boons_menu.generate_boons(covenant)
+        if covenant != "velka":
+            self.boons_menu_open = True
+            self.boon_options = self.boons_menu.generate_boons(covenant)
+        else:
+            self.modifiers_menu_open = True
+            self.modifier_options = self.modifiers_menu.generate_modifiers()
         print(f"{covenant} summon sign activated!")
     
     # Prevents player movement and prevents TAB menu toggle
@@ -585,6 +606,7 @@ class Level:
     def enable_player_control(self):
         self.player.resting = False
         self.boons_menu_open = False
+        self.modifiers_menu_open = False
         self.humanity_menu_open = False
         self.levelup_menu_open = False
         self.weapons_menu_open = False
@@ -594,6 +616,12 @@ class Level:
         self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
 
         self.player.trigger_boons_update = True
+        self.enable_player_control()
+
+    def modifiers_postmenu(self):
+        self.animation_player.create_particles("aura", self.player.rect.center, [self.visible_sprites], "ambient")
+
+        # self.player.trigger_boons_update = True
         self.enable_player_control()
     
     def activated_message_effect(self, id, pos):
@@ -774,6 +802,7 @@ class Level:
         self.check_enemy_spawns()
 
         if self.boons_menu_open: self.boons_menu.display(self.boon_options)
+        if self.modifiers_menu_open: self.modifiers_menu.display(self.modifier_options)
         if self.humanity_menu_open: self.humanity_menu.display()
         if self.levelup_menu_open: self.levelup_menu.display()
         if self.weapons_menu_open: self.weapons_menu.display()

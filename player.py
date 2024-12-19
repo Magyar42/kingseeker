@@ -402,7 +402,7 @@ class Player(Entity):
                         # spell cast
                         # todo: spell effect
                         if player_inputs["cast spell"] and not self.casting_spell and control_flags["can_cast_spells"]:
-                            if player_core_info["spells"][str(self.spell_index+1)] != None:
+                            if player_core_info["spells"][str(self.spell_index+1)] != "None":
                                 # todo: check stamina/mana cost and take away as needed
                                 if self.stamina_target - self.stamina_magic_mult >= 0:
                                     self.stamina_target -= self.stamina_magic_mult
