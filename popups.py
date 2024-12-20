@@ -671,7 +671,7 @@ class BoonsMenu:
         self.enable_player_control()
         player_inputs["light attack"] = False
 
-# Modifiers Menu # TODO FINISH!!!!
+# Modifiers Menu
 class ModifiersMenu:
     def __init__(self, enable_player_control):
         self.display_surface = pygame.display.get_surface()
@@ -680,16 +680,67 @@ class ModifiersMenu:
         self.font12 = pygame.font.Font(UI_FONT, 12)
 
         self.enable_player_control = enable_player_control
-
-        self.boon_icons = []
-        self.big_boon_frame = pygame.image.load("assets/graphics/ui/interface/big_box.png")
-        self.big_boon_frame_selected = pygame.image.load("assets/graphics/ui/interface/big_box_selected.png")
-    
-    def display(self, options):
-        pass
+        self.mods_icons = []
 
     def generate_modifiers(self):
-        pass
+        # todo: change to select various covenant + general list
+        mods_list = velka_boons_modifiers["warriors_of_sunlight"]["list"]
+        values_list = velka_boons_modifiers["warriors_of_sunlight"]["values"]
+        mods_choices = []
+
+        # Find 4 random options from trimmed list
+        for selection in range(4):
+            new_mod = choice(mods_list)
+            mods_choices.append(new_mod)
+            mods_list.remove(new_mod)
+
+        self.mods_icons = []
+        for current_mod in mods_choices:
+            # current_mod_surf = pygame.image.load(f"assets/graphics/ui/interface_icons/modifiers/{current_mod}.png")
+            current_mod_surf = pygame.image.load("assets/graphics/ui/interface_icons/modifiers/unknown.png")
+            self.mods_icons.append(current_mod_surf)
+        
+        return mods_choices
+
+    def display(self, options_list):
+        prev_width = 0
+        for num, mod in enumerate(options_list):
+            added_width = self.modifiers_details(mod, num, prev_width)
+            prev_width += added_width
+    
+    def modifiers_details(self, mod, num, added_width):
+        # Background
+        bg_rect_size = (60, 60)
+
+        x = (self.display_surface.get_size()[0] // 2) - (bg_rect_size[0] // 2) + added_width - (7*60) // 2
+        y = (self.display_surface.get_size()[1] // 2) - 240
+
+        main_rect = pygame.Rect(x, y, bg_rect_size[0], bg_rect_size[1])
+
+        # Icon + BG [Updates with hover]
+        # icon_surface = self.mods_icons[num]
+        icon_surface = pygame.image.load("assets/graphics/ui/interface_icons/modifiers/unknown.png")
+        icon_rect = icon_surface.get_rect(topleft = main_rect.topleft)
+        self.display_surface.blit(icon_surface, icon_rect)
+
+        pos = pygame.mouse.get_pos()
+        hit = main_rect.collidepoint(pos)
+        if hit:
+            if player_inputs["light attack"]:
+                createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green_dark")
+                self.add_mod(mod) # If LMB pressed, select mod # todo: add several choices
+            else:
+                createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "green")
+        else:
+            createUI(self.display_surface, bg_rect_size[0], bg_rect_size[1], (x, y), "dark")
+        
+        return bg_rect_size[1] + 60
+
+    def add_mod(self, modifier):
+        player_core_info["modifiers"]["list"].append(modifier)
+        # todo: append number
+        self.enable_player_control()
+        player_inputs["light attack"] = False
 
 # Pause Menu
 class pauseMenu:

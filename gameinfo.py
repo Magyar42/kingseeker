@@ -156,6 +156,10 @@ player_core_info = {
     "boons": {
         "list": ["boon_5", "boon_6", "boon_9", "boon_11"],
     },
+    "modifiers":{
+        "list": [""],
+        "values": [""],
+    },
     "spells": {
         "1": "None", "2": "None", "3": "None",
     },
